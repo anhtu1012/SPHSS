@@ -1,0 +1,34 @@
+.section-delivery-address {
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #202124;
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  vertical-align: middle;
+  gap: 20px;
+  &_delivery {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  &_take-away {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  &_start-button {
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 20px 30px;
+    background-color: #e4002b;
+    border: 1px solid #e4002b;
+    line-height: 20px;
+    border-radius: 25px;
+  }
+}
