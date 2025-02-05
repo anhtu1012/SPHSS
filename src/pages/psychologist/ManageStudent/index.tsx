@@ -1,5 +1,5 @@
 function ManageStudent() {
-  return <div>ManageStudent</div>;
+  return <div>Manage Student</div>;
 }
 
 export default ManageStudent;
