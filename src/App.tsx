@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { UserRole } from "./models/enum";
 import ManageStudent from "./pages/parent/ManageStudent";
 import ManageSurvey from "./pages/psychologist/ManageSurvey";
+import ManageStudentPsy from "./pages/psychologist/ManageStudent";
 import NotFound from "./pages/404";
 
 function App() {
@@ -105,7 +106,7 @@ function App() {
       children: [
         {
           path: "manage-student",
-          element: <ManageUser />,
+          element: <ManageStudentPsy />,
         },
         {
           path: "manage-survey",
