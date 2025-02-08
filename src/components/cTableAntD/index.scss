@@ -1,0 +1,27 @@
+.ant-table-thead {
+  .ant-table-column-has-sorters,
+  th {
+    background: #ec744a !important;
+    color: white !important;
+    font-weight: 600 !important;
+  }
+}
+
+// Border toàn table
+.ant-table-wrapper .ant-table.ant-table-bordered {
+  border-color: #ec744a !important;
+}
+
+.ant-table-wrapper .ant-table.ant-table-bordered > .ant-table-container {
+  border-inline-start: 1px solid #ec744a !important;
+}
+
+// Border giữa các cột
+.ant-table-wrapper .ant-table.ant-table-bordered .ant-table-tbody > tr > td {
+  border-color: #ec744a !important;
+}
+
+// Border cho header
+.ant-table-wrapper .ant-table.ant-table-bordered .ant-table-thead > tr > th {
+  border-color: #ec744a !important;
+}
