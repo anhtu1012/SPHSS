@@ -140,9 +140,8 @@ function ManageTemplate({
 
   const fetchItem = async () => {
     try {
-      const id = "All";
-      const res = await api.get(`${apiURI}/${id}`);
-      setDataSource(res.data.user);
+      const res = await api.get(`${apiURI}`);
+      setDataSource(res.data.data);
       setFetching(false);
       onError("");
     } catch (error: any) {
