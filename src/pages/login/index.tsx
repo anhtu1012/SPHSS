@@ -2,32 +2,32 @@
 import { Button, Divider, Form, Input } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
+// import { FaArrowRight } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { /*Link,*/ useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { LoginFormValues, RegisterFormValues } from "../../models/login";
+import { LoginFormValues /*RegisterFormValues*/ } from "../../models/login";
 import { login } from "../../redux/features/userSlice";
-import { loginUser, register } from "../../services/auth/api";
+import { loginUser /*register*/ } from "../../services/auth/api";
 import "./index.scss";
 
 const Login = () => {
-  const [rightPanelActive, setRightPanelActive] = useState(false);
+  // const [rightPanelActive, setRightPanelActive] = useState(false);
   const [signInForm] = useForm();
-  const [signUpForm] = useForm();
+  // const [signUpForm] = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loginError, setLoginError] = useState("");
-  const handleSignUpClick = () => {
-    signInForm.resetFields();
-    setLoginError("");
-    setRightPanelActive(true);
-  };
+  // const handleSignUpClick = () => {
+  //   signInForm.resetFields();
+  //   setLoginError("");
+  //   setRightPanelActive(true);
+  // };
 
-  const handleSignInClick = () => {
-    signUpForm.resetFields();
-    setRightPanelActive(false);
-  };
+  // const handleSignInClick = () => {
+  //   signUpForm.resetFields();
+  //   setRightPanelActive(false);
+  // };
 
   const handleLogin = async (values: LoginFormValues) => {
     try {
@@ -57,22 +57,22 @@ const Login = () => {
     }
   };
 
-  const handleRegister = async (values: RegisterFormValues) => {
-    try {
-      const data = {
-        username: values.username,
-        password: values.password,
-        firstName: values.firstName,
-        lastName: values.lastName,
-      };
-      const res = await register(data);
-      toast.success(res.data.message);
-      signUpForm.resetFields();
-      setRightPanelActive(false);
-    } catch (error: any) {
-      toast.error(error.response.data.message);
-    }
-  };
+  // const handleRegister = async (values: RegisterFormValues) => {
+  //   try {
+  //     const data = {
+  //       username: values.username,
+  //       password: values.password,
+  //       firstName: values.firstName,
+  //       lastName: values.lastName,
+  //     };
+  //     const res = await register(data);
+  //     toast.success(res.data.message);
+  //     signUpForm.resetFields();
+  //     setRightPanelActive(false);
+  //   } catch (error: any) {
+  //     toast.error(error.response.data.message);
+  //   }
+  // };
   return (
     // <div className="body">
     //   <div
