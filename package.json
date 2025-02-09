@@ -16,8 +16,10 @@
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "firebase": "^11.1.0",
     "i18next": "^24.2.1",
+    "projectswd2025": "file:",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.4.0",
@@ -26,7 +28,9 @@
     "react-router-dom": "^7.1.1",
     "react-toastify": "^11.0.2",
     "redux-persist": "^6.0.0",
-    "sass": "^1.83.1"
+    "sass": "^1.83.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
