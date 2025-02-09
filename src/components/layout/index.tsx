@@ -1,12 +1,13 @@
 import { Outlet } from "react-router-dom";
 import Footer from "../footer";
 import Header from "../header";
+import "./layout.module.scss";
 
 function Layout() {
   return (
-    <div style={{ overflow: "hidden" }}>
+    <div>
       <Header />
-      <div style={{ marginTop: "80px" }}>
+      <div>
         <Outlet />
       </div>
       <Footer />

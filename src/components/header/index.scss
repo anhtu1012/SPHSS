@@ -1,0 +1,16 @@
+.header{
+    background-color:#E4E5E8;
+}
+.logo {
+  display: flex;
+  padding: 5px 0 5px 100px;
+  align-items: center;
+  gap: 10px;
+
+}
+
+p {
+  color: var(--txt, #1a1a1a);
+  font-size: 30px;
+  font-weight: 550;
+}
