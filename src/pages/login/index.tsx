@@ -287,9 +287,9 @@ const Login = () => {
           layout={"vertical"}
         >
           <Form.Item
-            label="Email"
-            name="email"
-            rules={[{ required: true, message: "Vui lòng nhập email!" }]}
+            label="Username"
+            name="username"
+            rules={[{ required: true, message: "Vui lòng nhập username!" }]}
             validateStatus={loginError ? "error" : ""}
             normalize={(value) => value.trim()}
             style={{ marginBottom: "50px" }}
@@ -299,7 +299,7 @@ const Login = () => {
             // username
             // input
           >
-            <Input className="input" placeholder="email" />
+            <Input className="input" placeholder="username" />
           </Form.Item>
 
           <Form.Item

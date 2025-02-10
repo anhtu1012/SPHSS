@@ -33,7 +33,6 @@ function ManageStudent() {
   const handleViewDetails = (student: any) => {
     // student chứa thông tin của học sinh hiện tại
     console.log("Thông tin học sinh: ", student);
-    // Bạn có thể mở modal, chuyển trang, hoặc xử lý khác ở đây.
   };
 
   const dataSource = [
