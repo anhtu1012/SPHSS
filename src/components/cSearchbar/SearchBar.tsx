@@ -1,3 +1,4 @@
+import { Input, Select, Button } from "antd";
 import styles from "./Search.module.scss";
 
 interface SearchField {
@@ -8,7 +9,7 @@ interface SearchField {
 }
 
 interface SearchBarProps {
-  title: string;
+  title?: string;
   fields: SearchField[];
   onSearch: (values: Record<string, string>) => void;
 }
@@ -32,40 +33,20 @@ const SearchBar = ({ title, fields, onSearch }: SearchBarProps) => {
         {fields.map((field) => (
           <div key={field.key} className={styles["search-field"]}>
             {field.type === "text" ? (
-                <input
-                  name={field.key}
-                  type="text"
-                  placeholder={field.placeholder}
-                  className={styles["search-input"]}
-                />
+              <Input id={field.key} placeholder={field.placeholder} className={styles["search-input"]} />
             ) : (
-              <div className={styles["input-container"]}>
-              <select
-                name={field.key}
-                className={styles["dropdown"]}
-                title={field.placeholder}
-                defaultValue=""
-              >
-                <option value="" disabled hidden>
-                  {field.placeholder}
-                </option>
-                {field.options?.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
+              <Select
+                id={field.key}
+                className={styles["search-input"]}
+                placeholder={field.placeholder}
+                options={field.options?.map((option) => ({ label: option, value: option }))}
+              />
             )}
           </div>
         ))}
-        <button
-          type="button"
-          className={styles["btn-view"]}
-          onClick={handleSearch}
-        >
+        <Button type="primary" className={styles["btn-view"]} onClick={handleSearch}>
           Xem
-        </button>
+        </Button>
       </div>
     </div>
   );
