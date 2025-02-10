@@ -7,7 +7,6 @@
   }
 }
 
-// Border toàn table
 .ant-table-wrapper .ant-table.ant-table-bordered {
   border-color: #ec744a !important;
 }
@@ -16,7 +15,6 @@
   border-inline-start: 1px solid #ec744a !important;
 }
 
-// Border giữa các cột
 .ant-table-wrapper .ant-table.ant-table-bordered .ant-table-tbody > tr > td {
   border-color: #ec744a !important;
 }
@@ -25,3 +23,42 @@
 .ant-table-wrapper .ant-table.ant-table-bordered .ant-table-thead > tr > th {
   border-color: #ec744a !important;
 }
+
+
+// Đổi màu số trang và các nút pagination
+.ant-pagination .ant-pagination-item {
+  border-color: #ec744a !important;
+}
+
+.ant-pagination .ant-pagination-item a {
+  color: #ec744a !important;
+}
+
+// Đổi màu cho trang đang được chọn
+.ant-pagination .ant-pagination-item-active{
+  background-color: #ec744a !important;
+  border-color: #ec744a !important;
+}
+
+.ant-pagination .ant-pagination-item-active a {
+  color: white !important;
+}
+
+// Đổi màu các nút điều hướng (trái/phải)
+.ant-pagination .ant-pagination-prev .ant-pagination-item-link,
+.ant-pagination .ant-pagination-next .ant-pagination-item-link {
+  color: #ec744a !important;
+  border-color: #ec744a !important;
+}
+
+.ant-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
+.ant-pagination .ant-pagination-next:hover .ant-pagination-item-link{
+  background-color: #ec744a !important;
+  color: white !important;
+}
+
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  text-align: center !important;
+}
+
