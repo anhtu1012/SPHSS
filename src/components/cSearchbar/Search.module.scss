@@ -1,0 +1,85 @@
+.search-bar {
+    display: flex;
+    align-items: center; 
+    gap: 10px;
+    padding: 10px;
+    width: 100%;
+    max-width: 900px;
+  }
+  
+  .title {
+    font-weight: bold;
+    color: #ea580c;
+    white-space: nowrap; 
+  }
+  
+  .search-fields {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 0px;
+    padding: 0 3px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: white;
+    width: 100%;
+  }
+  
+  .search-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .search-input,
+  .dropdown {
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    margin: 10px;
+  }
+  
+  .search-field:not(:first-child)::before {
+    content: "|";
+    position: absolute;
+    left: -5px; /* Căn sát với field */
+    color: #d1d5db;
+    font-weight: bold;
+    padding: 0 2px;
+  }
+  
+  .input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .icon {
+    color: #9ca3af;
+    font-size: 16px;
+    margin: 10px;
+  }
+  
+  .btn-view {
+    background-color: #ec744a;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  .dropdown {
+    color: gray; /* Ban đầu màu placeholder là xám */
+  }
+  
+  /* Khi user chọn giá trị, đổi sang màu đen */
+  .dropdown:focus,
+  .dropdown:not([value=""]) {
+    color: black;
+  }
+  
