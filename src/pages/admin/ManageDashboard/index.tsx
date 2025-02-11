@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Button } from "antd";
 import {
   LineChart,
   Line,
@@ -14,6 +13,8 @@ import AntDComponent from "../../../components/cTableAntD";
 import SearchBar from "../../../components/cSearchbar/SearchBar";
 import styles from "./manageDashboard.module.scss";
 import dayjs from "dayjs";
+import Cbutton from "../../../components/cButton";
+import PopupInfoConsult from "../ManageUser/PopupViewInfoConsult";
 
 interface StudentRecord {
   key: string;
@@ -22,29 +23,6 @@ interface StudentRecord {
   diagnosis: string;
   note: string;
 }
-
-const columns = [
-  { title: "MSSV", dataIndex: "mssv", key: "mssv" },
-  {
-    title: "Ngày chuẩn đoán",
-    dataIndex: "date",
-    key: "date",
-    render: (date: string) => dayjs(date).format("DD/MM/YYYY"),
-  },
-  { title: "Chuẩn đoán", dataIndex: "diagnosis", key: "diagnosis" },
-  {
-    title: "Xem chi tiết",
-    key: "action",
-    render: () => (
-      <div className={styles.buttonContainer}>
-        <Button type="primary" className={styles.customButton}>
-          Xem
-        </Button>
-      </div>
-    ),
-  },
-  { title: "Ghi chú", dataIndex: "note", key: "note" },
-];
 
 const chartData = [
   {
@@ -101,6 +79,39 @@ function ManageDashboard() {
   const [showTable, setShowTable] = useState(false);
   const [data, setData] = useState<StudentRecord[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedConsult, setSelectedConsult] = useState(null);
+
+  const showModal = (record: any) => {
+    setSelectedConsult(record);
+    setIsModalOpen(true);
+  };
+  
+  const columns = [
+    { title: "MSSV", dataIndex: "mssv", key: "mssv" },
+    {
+      title: "Ngày chuẩn đoán",
+      dataIndex: "date",
+      key: "date",
+      render: (date: string) => dayjs(date).format("DD/MM/YYYY"),
+    },
+    { title: "Chuẩn đoán", dataIndex: "diagnosis", key: "diagnosis" },
+    {
+      title: "Xem chi tiết",
+      dataIndex: "action",
+      key: "action",
+      render: (_: any, record: StudentRecord) => (
+  
+        <Cbutton
+          origin={{ bgcolor: "#ec744a", hoverBgColor: "#ff7875" }}
+          onClick={() => showModal(record)}
+        >
+          Xem
+        </Cbutton>
+      ),
+    },
+    { title: "Ghi chú", dataIndex: "note", key: "note" },
+  ];
 
   const handleSearch = async (values: Record<string, string>) => {
     console.log("Tìm kiếm:", values);
@@ -217,6 +228,13 @@ function ManageDashboard() {
           <p className={styles.message}>Không có dữ liệu</p>
         )
       ) : null}
+      {selectedConsult && (
+        <PopupInfoConsult
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          consultData={selectedConsult}
+        />
+      )}
     </div>
   );
 }

@@ -20,6 +20,7 @@ import ManageTimeslot from "./pages/psychologist/ManageTimeslot";
 import ManageBlog from "./pages/psychologist/ManageBlog";
 import ManageReport from "./pages/psychologist/ManageReport";
 import ReportDetail from "./pages/psychologist/ManageReport/[id]";
+import UserDetail from "./pages/admin/ManageUser/UserDetail";
 
 function App() {
   const { Manager, Parent, Psychologist } = UserRole;
@@ -71,6 +72,10 @@ function App() {
         {
           path: "manage-user",
           element: <ManageUser />,
+        },
+        {
+          path: "manage-user/detail",
+          element: <UserDetail />,
         },
       ],
     },

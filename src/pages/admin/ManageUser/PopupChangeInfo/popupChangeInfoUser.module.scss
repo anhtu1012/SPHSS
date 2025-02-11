@@ -1,0 +1,116 @@
+.modalTitle{
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    color: #51B748;
+}
+
+.formGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formGrid > div {
+  display: flex;
+  gap: 16px;
+}
+
+.formGrid > div:last-child {
+  flex-direction: column;
+}
+
+.formGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.required {
+    color: red;
+    margin-left: 4px;
+    font-weight: bold;
+  }
+  
+
+.fullWidth {
+  width: 100%;
+  gap: 4px !important;
+}
+
+.inputField {
+  width: 100%;
+  border: 1px solid #ec744a;
+  border-radius: 4px;
+  padding: 4px;
+  background-color: #ec744a;
+  color: white;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.inputField:focus {
+  color: black;
+  background-color: #ffffff;
+}
+
+.customModal {
+  max-width: 800px;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.saveButton {
+    background-color: #08509F !important; 
+    color: white !important; 
+    border: none !important; 
+    padding: 8px 16px; 
+    border-radius: 4px; 
+    transition: background-color 0.3s ease;
+  }
+  
+  .saveButton:hover {
+    background-color: #3e8feb !important; 
+  }
+  
+:global(.ant-select-selector) {
+  width: 100%;
+  border: 1px solid #ec744a;
+  border-radius: 4px;
+  padding: 4px;
+}
+:global(.ant-select-selection-item) {
+  color: white;
+  transition: color 0.3s ease;
+}
+
+:global(.ant-select-focused .ant-select-selection-item) {
+  color: black !important;
+}
+
+.inputField[readonly] {
+    background-color: #ef9777; 
+    cursor: not-allowed; 
+    color: #ffffff; 
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}
+
+.errorText {
+  color: red;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.shaking {
+  animation: shake 0.3s ease-in-out 3;
+}

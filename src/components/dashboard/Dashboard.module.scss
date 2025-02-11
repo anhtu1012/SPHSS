@@ -14,16 +14,15 @@
 
 .main_content {
   flex: 1;
-  margin: 16px;
   padding: 24px;
   overflow-y: auto;
-  scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+  scrollbar-width: none;
   -ms-overflow-style: none; 
 }
 
 
 .main_content::-webkit-scrollbar {
-  display: none; /* Ẩn thanh cuộn trên Chrome, Safari */
+  display: none; 
 }
 
 .layout {

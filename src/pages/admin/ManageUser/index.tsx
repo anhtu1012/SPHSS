@@ -3,6 +3,7 @@ import SearchBar from "../../../components/cSearchbar/SearchBar";
 import { useState } from "react";
 import { Button } from "antd";
 import styles from "./manageUser.module.scss";
+import { useNavigate } from "react-router-dom";
 
 interface StudentRecord {
   key: string;
@@ -11,7 +12,7 @@ interface StudentRecord {
   type: string;
 }
 
-const columns = [
+const columns = (navigate: (path: string) => void) => [
   { title: "Tài khoản", dataIndex: "user", key: "user" },
   { title: "Trạng thái", dataIndex: "status", key: "status" },
   { title: "Loại tài khoản", dataIndex: "type", key: "type" },
@@ -20,7 +21,11 @@ const columns = [
     key: "action",
     render: () => (
       <div className={styles.buttonContainer}>
-        <Button type="primary" className={styles.customButton}>
+        <Button
+          type="primary"
+          className={styles.customButton}
+          onClick={() => navigate("detail")}
+        >
           Xem hồ sơ
         </Button>
       </div>
@@ -29,6 +34,7 @@ const columns = [
 ];
 
 function ManageUser() {
+  const navigate = useNavigate();
   const [data, setData] = useState<StudentRecord[]>([
     {
       key: "1",
@@ -79,9 +85,7 @@ function ManageUser() {
   const [loading, setLoading] = useState(false);
 
   const handleSearch = (values: Record<string, string>) => {
-    console.log("Tìm kiếm:", values);
     setLoading(true);
-
     setTimeout(() => {
       const filteredData = data.filter(
         (item) =>
@@ -91,11 +95,12 @@ function ManageUser() {
             : true) &&
           (values.type && values.type !== "Tất cả" ? item.type === values.type : true)
       );
-
-      setData(filteredData);
+  
+      setData(filteredData.length ? filteredData : []); 
       setLoading(false);
     }, 1000);
   };
+  
 
   return (
     <div>
@@ -122,7 +127,7 @@ function ManageUser() {
       ) : (
         <div className={styles.tableContainer}>
           <p>Danh sách người dùng</p>
-          <AntDComponent dataSource={data} columns={columns} />
+          <AntDComponent dataSource={data} columns={columns(navigate)} />
         </div>
       )}
     </div>
