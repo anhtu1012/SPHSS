@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+
 import Cbutton from "../../../../components/cButton";
 import AntDComponent from "../../../../components/cTableAntD";
 import { ColumnType } from "antd/es/table";
@@ -7,7 +7,6 @@ import {
   PhoneOutlined,
   MailOutlined,
   HomeOutlined,
-  ArrowLeftOutlined,
 } from "@ant-design/icons";
 import styles from "./userProfile.module.scss";
 import { Descriptions } from "antd";
@@ -17,7 +16,6 @@ import PopupChangeStatus from "../PopupStatusUser";
 import PopupChangeInfoUser from "../PopupChangeInfo";
 
 function UserProfile() {
-  const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedConsult, setSelectedConsult] = useState(null);
