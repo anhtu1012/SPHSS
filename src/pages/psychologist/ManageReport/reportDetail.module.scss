@@ -1,0 +1,57 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 15px;
+  > div > p {
+    font-size: 20px;
+    color: #323232 !important;
+    font-weight: 400;
+  }
+  .firstInfo {
+    p:first-child {
+      font-weight: 500;
+    }
+  }
+}
+
+.content {
+  > p:first-child {
+    font-weight: 500;
+    padding-bottom: 5px;
+  }
+  > p {
+    font-size: 20px;
+    color: #323232 !important;
+    font-weight: 400;
+    padding-bottom: 5px;
+  }
+  .radioGroup {
+    display: flex;
+  }
+  > ul > p {
+    font-size: 20px;
+    color: #323232 !important;
+    font-weight: 400;
+    padding-bottom: 5px;
+  }
+  > ul > ul > p {
+    font-size: 20px;
+    color: #323232 !important;
+    font-weight: 400;
+    padding-bottom: 5px;
+  }
+}
+
+ul {
+  list-style: disc;
+  padding-left: 20px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+ul ul {
+  list-style: circle;
+  padding-left: 20px;
+  margin-top: 5px;
+  padding-bottom: 5px;
+}

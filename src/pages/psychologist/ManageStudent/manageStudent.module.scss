@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 15px;
+  > div > p {
+    font-size: 20px;
+    color: #323232 !important;
+    font-weight: 400;
+  }
+  .firstInfo {
+    p:first-child {
+      font-weight: 500;
+    }
+  }
+}
