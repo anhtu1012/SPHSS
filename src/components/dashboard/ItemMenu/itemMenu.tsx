@@ -15,6 +15,7 @@ import styles from "./itemMenu.module.scss";
 import { FaRegFileAlt } from "react-icons/fa";
 import { AiOutlineSchedule } from "react-icons/ai";
 import { TbReportAnalytics } from "react-icons/tb";
+import { GrSchedule } from "react-icons/gr";
 
 const { Manager, Parent, Psychologist } = UserRole;
 
@@ -59,9 +60,14 @@ const getMenuItems = (roleId: string) => {
   } else if (roleId === Psychologist) {
     return [
       {
-        label: "Lịch khám",
+        label: "Quản lý lịch hẹn",
         key: "/psychologist/manage-timeslot",
         icon: <AiOutlineSchedule />,
+      },
+      {
+        label: "Danh sách lịch hẹn",
+        key: "/psychologist/manage-survey",
+        icon: <GrSchedule />,
       },
       {
         label: "Blogs",
@@ -72,11 +78,6 @@ const getMenuItems = (roleId: string) => {
         label: "Danh sách học sinh",
         key: "/psychologist/manage-student",
         icon: <FaRegFileAlt />,
-      },
-      {
-        label: "Manage Survey",
-        key: "/psychologist/manage-survey",
-        icon: <PieChartOutlined />,
       },
       {
         label: "Báo cáo",

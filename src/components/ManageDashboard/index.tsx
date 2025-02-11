@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/prefer-as-const */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Button,
   Form,
@@ -22,6 +21,7 @@ import { MdAutoDelete } from "react-icons/md";
 import { PlusOutlined } from "@ant-design/icons";
 import uploadFile from "../../utils/upload";
 import { ColumnType } from "antd/es/table";
+import "./ManaeDashboard.module.scss";
 
 export interface Column extends ColumnType<any> {
   title: string;
@@ -211,7 +211,7 @@ function ManageTemplate({
           }}
           style={{ background: "green", color: "white" }}
         >
-          Create New {title}
+          Thêm mới {title}
         </Button>
       </div>
       <Table

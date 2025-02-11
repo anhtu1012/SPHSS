@@ -1,7 +1,10 @@
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { Image, Radio } from "antd";
+import { Flex, Image, Radio } from "antd";
 import { useParams } from "react-router-dom";
 import styles from "./reportDetail.module.scss";
+import Atus from "../../../assets/vtos.jpg";
+import { CheckboxGroupProps } from "antd/es/checkbox";
+import Cbutton from "../../../components/cButton";
 
 function ReportDetail() {
   const { id } = useParams();
@@ -16,10 +19,26 @@ function ReportDetail() {
     status: "Đã thanh toán", // This should be fetched from the backend
   };
 
+  const options: CheckboxGroupProps<string>["options"] = [
+    { label: "Nhẹ", value: "1" },
+    { label: "Trung bình", value: "2" },
+    { label: "Nặng", value: "3" },
+  ];
+
   return (
     <>
       <div className={styles.container}>
-        <Image alt="ATUS" />
+        <Image
+          alt="ATUS"
+          src={Atus}
+          width={100}
+          height={100}
+          style={{
+            borderRadius: "50%",
+            objectFit: "cover",
+          }}
+        />
+
         <div className={styles.firstInfo}>
           <p>Tên: {student.name}</p>
           <p>Số điện thoại: {student.phone}</p>
@@ -49,13 +68,11 @@ function ReportDetail() {
       </div>
       <div className={styles.content}>
         <p>Báo cáo tư vấn tâm lý</p>
-        <p className={styles.radioGroup}>
+        <p>
           <div> Mức độ nghiêm trọng: </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Radio>Nhẹ</Radio>
-            <Radio>Trung bình</Radio>
-            <Radio>Nặng</Radio>
-          </div>
+          <Flex vertical gap="middle" style={{ paddingTop: "5px" }}>
+            <Radio.Group block options={options} defaultValue="1" />
+          </Flex>
         </p>
         <p>Nhận xét của bác sĩ:</p>
         <p>
@@ -101,6 +118,15 @@ function ReportDetail() {
             </ul>
           </li>
         </ul>
+      </div>
+      <div
+        style={{
+          paddingTop: "10px",
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Cbutton>Lưu báo cáo</Cbutton>
       </div>
     </>
   );

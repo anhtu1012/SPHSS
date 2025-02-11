@@ -1,0 +1,29 @@
+/* Set the border color for the entire table */
+.ant-table-wrapper .ant-table.ant-table-bordered {
+  border-color: #ec744a !important;
+}
+
+/* Ensure the left and right borders of the table are visible */
+.ant-table-wrapper .ant-table.ant-table-bordered > .ant-table-container {
+  border-inline-start: 1px solid #ec744a !important;
+  border-inline-end: 1px solid #ec744a !important;
+}
+
+/* Add border between each column */
+.ant-table-wrapper .ant-table.ant-table-bordered .ant-table-tbody > tr > td,
+.ant-table-wrapper .ant-table.ant-table-bordered .ant-table-thead > tr > th {
+  border-right: 1px solid #ec744a !important;
+  border-left: 1px solid #ec744a !important;
+}
+
+/* Ensure the last column has a border */
+.ant-table-wrapper .ant-table.ant-table-bordered .ant-table-tbody > tr > td:last-child,
+.ant-table-wrapper .ant-table.ant-table-bordered .ant-table-thead > tr > th:last-child {
+  border-right: 1px solid #ec744a !important;
+}
+
+/* Ensure the first column has a border */
+.ant-table-wrapper .ant-table.ant-table-bordered .ant-table-tbody > tr > td:first-child,
+.ant-table-wrapper .ant-table.ant-table-bordered .ant-table-thead > tr > th:first-child {
+  border-left: 1px solid #ec744a !important;
+}
