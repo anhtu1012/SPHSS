@@ -11,26 +11,79 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { UserRole } from "../../../models/enum";
-import styles from "./itemMenu.module.scss"; 
+import styles from "./itemMenu.module.scss";
+import { FaRegFileAlt } from "react-icons/fa";
+import { AiOutlineSchedule } from "react-icons/ai";
+import { TbReportAnalytics } from "react-icons/tb";
 
 const { Manager, Parent, Psychologist } = UserRole;
 
 const getMenuItems = (roleId: string) => {
   if (roleId === Manager) {
     return [
-      { label: "Tổng quan", key: "/manager/dashboard", icon: <LineChartOutlined /> },
-      { label: "Quản lý người dùng", key: "/manager/manage-user", icon: <UsergroupAddOutlined /> },
-      { label: "Chi tiết hiệu quả tư vấn", key: "/manager/detail-effect-consult", icon: <RadarChartOutlined /> },
-      { label: "Các chương trình hỗ trợ", key: "/manager/list-support-program", icon: <ProfileOutlined /> },
-      { label: "Quản lý khảo sát", key: "/manager/manage-survey", icon: <FormOutlined /> },
+      {
+        label: "Tổng quan",
+        key: "/manager/dashboard",
+        icon: <LineChartOutlined />,
+      },
+      {
+        label: "Quản lý người dùng",
+        key: "/manager/manage-user",
+        icon: <UsergroupAddOutlined />,
+      },
+      {
+        label: "Chi tiết hiệu quả tư vấn",
+        key: "/manager/detail-effect-consult",
+        icon: <RadarChartOutlined />,
+      },
+      {
+        label: "Các chương trình hỗ trợ",
+        key: "/manager/list-support-program",
+        icon: <ProfileOutlined />,
+      },
+      {
+        label: "Quản lý khảo sát",
+        key: "/manager/manage-survey",
+        icon: <FormOutlined />,
+      },
       { label: "Log-out", key: "/login", icon: <LogoutOutlined /> },
     ];
   } else if (roleId === Parent) {
-    return [{ label: "Manage Student", key: "/parent/manage-student", icon: <PieChartOutlined /> }];
+    return [
+      {
+        label: "Manage Student",
+        key: "/parent/manage-student",
+        icon: <PieChartOutlined />,
+      },
+    ];
   } else if (roleId === Psychologist) {
     return [
-      { label: "Manage Student", key: "/psychologist/manage-student", icon: <PieChartOutlined /> },
-      { label: "Manage Survey", key: "/psychologist/manage-survey", icon: <PieChartOutlined /> },
+      {
+        label: "Lịch khám",
+        key: "/psychologist/manage-timeslot",
+        icon: <AiOutlineSchedule />,
+      },
+      {
+        label: "Blogs",
+        key: "/psychologist/manage-blog",
+        icon: <AiOutlineSchedule />,
+      },
+      {
+        label: "Danh sách học sinh",
+        key: "/psychologist/manage-student",
+        icon: <FaRegFileAlt />,
+      },
+      {
+        label: "Manage Survey",
+        key: "/psychologist/manage-survey",
+        icon: <PieChartOutlined />,
+      },
+      {
+        label: "Báo cáo",
+        key: "/psychologist/manage-report",
+        icon: <TbReportAnalytics />,
+      },
+      { label: "Đăng xuất", key: "/login", icon: <LogoutOutlined /> },
     ];
   }
   return [];

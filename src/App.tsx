@@ -15,8 +15,11 @@ import ManageDashboard from "./pages/admin/ManageDashboard";
 import ManageEffectConsult from "./pages/admin/ManageEffectConsult";
 import ManageProgram from "./pages/admin/ManageProgram";
 import ManageSurveyStudent from "./pages/admin/ManageSurveyStudent";
-
-
+import StudentDetail from "./pages/psychologist/ManageStudent/[id]";
+import ManageTimeslot from "./pages/psychologist/ManageTimeslot";
+import ManageBlog from "./pages/psychologist/ManageBlog";
+import ManageReport from "./pages/psychologist/ManageReport";
+import ReportDetail from "./pages/psychologist/ManageReport/[id]";
 
 function App() {
   const { Manager, Parent, Psychologist } = UserRole;
@@ -55,7 +58,7 @@ function App() {
         },
         {
           path: "detail-effect-consult",
-          element: <ManageEffectConsult/>,
+          element: <ManageEffectConsult />,
         },
         {
           path: "list-support-program",
@@ -68,7 +71,7 @@ function App() {
         {
           path: "manage-user",
           element: <ManageUser />,
-        }
+        },
       ],
     },
     {
@@ -114,12 +117,32 @@ function App() {
       ),
       children: [
         {
+          path: "manage-timeslot",
+          element: <ManageTimeslot />,
+        },
+        {
+          path: "manage-blog",
+          element: <ManageBlog />,
+        },
+        {
           path: "manage-student",
           element: <ManageStudentPsy />,
         },
         {
+          path: "manage-student/:id",
+          element: <StudentDetail />,
+        },
+        {
           path: "manage-survey",
           element: <ManageSurvey />,
+        },
+        {
+          path: "manage-report",
+          element: <ManageReport />,
+        },
+        {
+          path: "manage-report/:id",
+          element: <ReportDetail />,
         },
       ],
     },
