@@ -1,0 +1,44 @@
+.popupFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.customModal {
+  max-width: 400px !important; 
+}
+
+.modalTitle {
+  text-align: center;
+  font-weight: bold;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.lockButton {
+  background-color: rgb(201, 52, 52) !important;
+  color: white !important;
+}
+
+.unlockButton {
+  background-color: #51B748 !important;
+  color: white !important;
+}
+
+.lockConfirmButton {
+  background-color: rgb(206, 3, 3) !important;
+  color: white  !important;
+}
+
+.unlockConfirmButton {
+  background-color: rgb(2, 154, 2) !important;
+  color: white !important;
+}
+
+.cancelButton {
+  background-color: gray !important;
+  color: white !important;
+}
