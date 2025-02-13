@@ -1,3 +1,8 @@
+$primary-color: #ec744a;
+$secondary-color: #08509f;
+$disabled-color: #d9d9d9;
+$text-color: #ffffff;
+
 .doctor__detail {
   &__container {
     height: 30%;
@@ -8,7 +13,7 @@
 
   &__section1 {
     &__container {
-      width: 90%;
+      width: 95%;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -25,9 +30,12 @@
         font-weight: 500;
       }
 
+      &__description {
+      }
+
       &__img__container {
-        width: 30%;
-        height: 30%;
+        width: 80%;
+        height: 80%;
         border-radius: 50%;
         overflow: hidden;
         img {
@@ -60,6 +68,8 @@
       }
 
       &__dropdown {
+        text-decoration: underline $primary-color 2px;
+        text-underline-offset: 5px;
       }
 
       &__option {
@@ -76,13 +86,33 @@
           padding: 10px;
           border-radius: 10px;
           font-weight: 500;
+          cursor: pointer;
+
+          &:hover {
+            filter: brightness(90%);
+          }
         }
+      }
+    }
+  }
+
+  &__description {
+    &__title {
+      margin-bottom: 2%;
+    }
+
+    &__info__list {
+      margin-bottom: 2%;
+      margin-left: 3%;
+      li {
+        font-size: 1rem;
       }
     }
   }
 
   &__student__feedback {
     &__container {
+      margin-bottom: 40px;
     }
 
     &__title {

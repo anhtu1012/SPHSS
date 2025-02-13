@@ -171,7 +171,7 @@ function App() {
       ),
       children: [
         {
-          path: "psychologist-detail",
+          path: "psychologist-detail/:id",
           element: <PsychologistDetail />,
         },
       ],

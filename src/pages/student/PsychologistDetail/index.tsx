@@ -1,9 +1,42 @@
-import { Divider, Dropdown } from "antd";
+import { Divider, Dropdown, Space } from "antd";
 import doctorImg from "../../../assets/doctor_1.png";
 import "./index.scss";
 import Time from "./Time";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { useParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { getTimeSlotByDoctorId } from "../../../services/student/PsychologistDetail/api";
+import { toast } from "react-toastify";
+
+type TimeSlotType = {
+  startTime: string;
+  endTime: string;
+};
 
 const PsychologistDetail = () => {
+  const { id } = useParams();
+  const [timeSlotList, setTimeSlotList] = useState<TimeSlotType[]>([]);
+  const handleFetchDoctorTimeSlot = useCallback(async () => {
+    try {
+      const res = await getTimeSlotByDoctorId(id as string);
+      const data = res.data.data;
+      if (data.length <= 0) {
+        toast.warning("Bác sĩ này chưa có lịch khám nào");
+      } else {
+        const newTimeSLotList = data.map((timeSlot: any) => ({
+          startTime: timeSlot.start_time,
+          endTime: timeSlot.end_time,
+        }));
+        setTimeSlotList(newTimeSLotList);
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data || "Lỗi khi fetch data");
+    }
+  }, []);
+
+  useEffect(() => {
+    handleFetchDoctorTimeSlot();
+  }, [handleFetchDoctorTimeSlot]);
   return (
     <div className="doctor__detail__container">
       {/* doctor basic information & schedule */}
@@ -17,6 +50,11 @@ const PsychologistDetail = () => {
             <div className="doctor__detail__section1__basic__info__name">
               Bác sĩ Chuyên khoa | Nguyễn Tường Vũ
             </div>
+            <div className="doctor__detail__section1__basic__info__description">
+              25 năm kinh nghiệm về Ngoại Chấn thương Chỉnh hình Trưởng khoa
+              Chấn thương Chỉnh hình, Y học Thể thao, Bệnh viện Đa khoa Nam Sài
+              Gòn Bác sĩ nhận khám mọi độ tuổi
+            </div>
             <div className="doctor__detail__section1__basic__info__location">
               📍Thành phố Hồ Chí Minh
             </div>
@@ -28,11 +66,16 @@ const PsychologistDetail = () => {
             Lịch tư vấn
           </div>
           <Dropdown className="doctor__detail__section1__schedule__dropdown">
-            Thứ 2-19/1
+            <Space>
+              Thứ 2-19/1
+              <span>
+                <MdOutlineKeyboardArrowDown />
+              </span>
+            </Space>
           </Dropdown>
           <div className="doctor__detail__section1__schedule__option__list">
-            {Array.from({ length: 20 }).map((_, index) => (
-              <Time key={index} startTime="08:00" endTime="10:00" />
+            {timeSlotList.map((timeSlot, index) => (
+              <Time key={index} {...timeSlot} />
             ))}
           </div>
         </div>
@@ -45,8 +88,10 @@ const PsychologistDetail = () => {
       />
       {/* doctor detail information*/}
       <div>
-        <h2>Bác sĩ Chuyên khoa | Nguyễn Tường Vũ</h2>
-        <ul>
+        <h2 className="doctor__detail__description__title">
+          Bác sĩ Chuyên khoa | Nguyễn Tường Vũ
+        </h2>
+        <ul className="doctor__detail__description__info__list">
           <li>
             Nhiều năm kinh nghiệm trong khám và điều trị các bệnh lý Nội - Ngoại
             Thần kinh
@@ -57,9 +102,11 @@ const PsychologistDetail = () => {
           <li>Bác sĩ nhận khám từ 10 tuổi</li>
         </ul>
 
-        <h2>Khám và điều trị</h2>
-        <h3>Khám và điều trị các rối loạn:</h3>
-        <ul>
+        <h2 className="doctor__detail__description__title">Khám và điều trị</h2>
+        <h3 className="doctor__detail__description__title">
+          Khám và điều trị các rối loạn:
+        </h3>
+        <ul className="doctor__detail__description__info__list">
           <li>Đau nửa đầu Thần kinh</li>
           <li>Rối loạn tiền đình</li>
           <li>Parkinson</li>
@@ -72,8 +119,10 @@ const PsychologistDetail = () => {
           </li>
           <li>Hội chứng mất trí nhớ thường xuyên</li>
         </ul>
-        <h3>Phẫu thuật bệnh lý ngoại biên</h3>
-        <ul>
+        <h3 className="doctor__detail__description__title">
+          Phẫu thuật bệnh lý ngoại biên
+        </h3>
+        <ul className="doctor__detail__description__info__list">
           <li>Máu tụ DMC (dưới màng cứng) mạn tính và các CTSN</li>
           <li>Ghép sọ tự thân, nhân tạo </li>
           <li>U da đầu lành tính</li>
@@ -81,8 +130,10 @@ const PsychologistDetail = () => {
           <li>Hội chứng ống cổ tay</li>
           <li>TVĐD thắt lưng</li>
         </ul>
-        <h3>Xạ phẫu Gamma Knife</h3>
-        <ul>
+        <h3 className="doctor__detail__description__title">
+          Xạ phẫu Gamma Knife
+        </h3>
+        <ul className="doctor__detail__description__info__list">
           <li>
             Dị dạng mạch máu não: AVM, Cavernoma, dò DM màng cứng xoang hang
           </li>
@@ -93,14 +144,18 @@ const PsychologistDetail = () => {
             khác đi kèm
           </li>
         </ul>
-        <h3>Điều trị các bệnh lý về Nội Thần kinh thông thường</h3>
-        <ul>
+        <h3 className="doctor__detail__description__title">
+          Điều trị các bệnh lý về Nội Thần kinh thông thường
+        </h3>
+        <ul className="doctor__detail__description__info__list">
           <li>Mất ngủ</li>
           <li>Đau đầu</li>
           <li>Đau lưng</li>
         </ul>
-        <h3>Quá trình công tác</h3>
-        <ul>
+        <h3 className="doctor__detail__description__title">
+          Quá trình công tác
+        </h3>
+        <ul className="doctor__detail__description__info__list">
           <li>
             Chuyên tư vấn và trực tiếp điều trị xạ phẫu Gamma Knife về các bệnh
             lý trong não (Các loại u não, dị dạng mạch máu não), đau dây thần
