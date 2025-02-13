@@ -21,9 +21,10 @@ import ManageBlog from "./pages/psychologist/ManageBlog";
 import ManageReport from "./pages/psychologist/ManageReport";
 import ReportDetail from "./pages/psychologist/ManageReport/[id]";
 import UserDetail from "./pages/admin/ManageUser/UserDetail";
+import PsychologistDetail from "./pages/student/PsychologistDetail";
 
 function App() {
-  const { Manager, Parent, Psychologist } = UserRole;
+  const { Manager, Parent, Psychologist, Student } = UserRole;
   const router = createBrowserRouter([
     {
       path: "/login",
@@ -148,6 +149,30 @@ function App() {
         {
           path: "manage-report/:id",
           element: <ReportDetail />,
+        },
+      ],
+    },
+    {
+      path: "/student",
+      element: (
+        <ConfigProvider
+          theme={{
+            components: {
+              Layout: {
+                siderBg: "#001529",
+              },
+            },
+          }}
+        >
+          <ProtectedRoute allowedRoles={Student}>
+            <Layout />
+          </ProtectedRoute>
+        </ConfigProvider>
+      ),
+      children: [
+        {
+          path: "psychologist-detail/:id",
+          element: <PsychologistDetail />,
         },
       ],
     },
