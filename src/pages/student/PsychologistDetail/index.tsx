@@ -1,12 +1,12 @@
-import { Divider, Dropdown, Space } from "antd";
+import { Divider } from "antd";
 import doctorImg from "../../../assets/doctor_1.png";
 import "./index.scss";
 import Time from "./Time";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { getTimeSlotByDoctorId } from "../../../services/student/PsychologistDetail/api";
 import { toast } from "react-toastify";
+import PlaceholderTime from "./PlaceholderTime";
 
 type TimeSlotType = {
   startTime: string;
@@ -37,6 +37,24 @@ const PsychologistDetail = () => {
   useEffect(() => {
     handleFetchDoctorTimeSlot();
   }, [handleFetchDoctorTimeSlot]);
+
+  const currentDate = new Date();
+  const currentDay = currentDate.getDate();
+  const currentMonth = currentDate.getMonth() + 1;
+  const formattedDate = `${currentDay
+    .toString()
+    .padStart(2, "0")}/${currentMonth.toString().padStart(2, "0")}`;
+  const daysOfWeek = [
+    "Chủ nhật",
+    "Thứ hai",
+    "Thứ ba",
+    "Thứ tư",
+    "Thứ năm",
+    "Thứ sáu",
+    "Thứ bảy",
+  ];
+  const currentDayOfWeek = daysOfWeek[currentDate.getDay()];
+
   return (
     <div className="doctor__detail__container">
       {/* doctor basic information & schedule */}
@@ -65,15 +83,15 @@ const PsychologistDetail = () => {
           <div className="doctor__detail__section1__schedule__title">
             Lịch tư vấn
           </div>
-          <Dropdown className="doctor__detail__section1__schedule__dropdown">
-            <Space>
-              Thứ 2-19/1
-              <span>
-                <MdOutlineKeyboardArrowDown />
-              </span>
-            </Space>
-          </Dropdown>
+          <div className="doctor__detail__section1__schedule__dropdown">
+            {currentDayOfWeek} - {formattedDate}
+            <span>&nbsp;</span>
+          </div>
           <div className="doctor__detail__section1__schedule__option__list">
+            {!timeSlotList.length &&
+              Array.from({ length: 4 }).map((_, index) => (
+                <PlaceholderTime key={index} />
+              ))}
             {timeSlotList.map((timeSlot, index) => (
               <Time key={index} {...timeSlot} />
             ))}

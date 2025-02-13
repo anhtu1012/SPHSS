@@ -13,7 +13,7 @@ $text-color: #ffffff;
 
   &__section1 {
     &__container {
-      width: 95%;
+      width: 100%;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -91,6 +91,14 @@ $text-color: #ffffff;
           &:hover {
             filter: brightness(90%);
           }
+        }
+
+        &__placeholder {
+          background-color: #e4e5e8;
+          color: #e4e5e8;
+          padding: 10px;
+          border-radius: 10px;
+          font-weight: 500;
         }
       }
     }
