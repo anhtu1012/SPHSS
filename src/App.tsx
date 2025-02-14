@@ -23,6 +23,7 @@ import ManageReport from "./pages/psychologist/ManageReport";
 import ReportDetail from "./pages/psychologist/ManageReport/[id]";
 import UserDetail from "./pages/admin/ManageUser/UserDetail";
 import PsychologistDetail from "./pages/student/PsychologistDetail";
+import AiChatBot from "./pages/student/AiChatBot";
 
 function App() {
   const { Manager, Parent, Psychologist, Student } = UserRole;
@@ -178,6 +179,10 @@ function App() {
         {
           path: "psychologist-detail/:id",
           element: <PsychologistDetail />,
+        },
+        {
+          path: "ai-agent",
+          element: <AiChatBot />,
         },
       ],
     },
