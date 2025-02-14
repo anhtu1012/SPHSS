@@ -1,34 +1,325 @@
-.section-delivery-address {
-  padding: 10px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #202124;
-  color: white;
-  font-weight: 700;
-  font-size: 15px;
-  vertical-align: middle;
-  gap: 20px;
-  &_delivery {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+$primary-color: #ec744a;
+$secondary-color: #08509f;
+$disabled-color: #d9d9d9;
+$text-color: #ffffff;
+
+.home {
+  &__container {
+    width: 100%;
   }
-  &_take-away {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+
+  &__banner__img__container {
+    width: 100%;
+    height: 500px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
-  &_start-button {
-    color: #fff;
-    cursor: pointer;
-    font-weight: 700;
-    padding: 20px 30px;
-    background-color: #e4002b;
-    border: 1px solid #e4002b;
-    line-height: 20px;
-    border-radius: 25px;
+
+  &__section__one {
+    &__container {
+      width: 97%;
+      height: 500px;
+      margin: 0 auto;
+      margin-top: 200px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__img__container {
+      width: 45%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    &__content {
+      &__container {
+        width: 45%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      &__title {
+        color: #1c75bc;
+        font-family: Inter;
+        font-size: 40px;
+        font-weight: 500;
+        margin-bottom: 30px;
+
+        &--highlight {
+          font-weight: 700;
+        }
+      }
+
+      &__description {
+        color: #000;
+        font-family: Inter;
+        font-size: 25px;
+        font-weight: 300;
+      }
+
+      &__icon {
+        &__list__container {
+          width: 100%;
+          margin-top: 20px;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-template-rows: repeat(2, auto);
+          gap: 20px;
+          margin-top: 20px;
+        }
+
+        &__container {
+          width: 170px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+
+        &__description {
+          font-family: "Inter";
+        }
+
+        & {
+          height: 70px;
+          width: 70px;
+          border-radius: 50%;
+          background-color: $primary-color;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  &__section__two {
+    &__container {
+      width: 97%;
+      height: 500px;
+      margin: 0 auto;
+      margin-top: 200px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__img__container {
+      width: 45%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    &__content {
+      &__container {
+        width: 45%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      &__title {
+        color: #1c75bc;
+        font-family: Inter;
+        font-size: 40px;
+        font-weight: 500;
+        margin-bottom: 30px;
+      }
+
+      &__description {
+        color: #000;
+        font-family: Inter;
+        font-size: 25px;
+        font-weight: 300;
+
+        &--highlight {
+          font-weight: 700;
+        }
+      }
+
+      &__img {
+        &__list__container {
+          width: 100%;
+          margin-top: 20px;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-template-rows: repeat(2, auto);
+          gap: 20px;
+          margin-top: 20px;
+        }
+
+        &__container {
+          width: 170px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        &__description {
+          font-family: "Inter";
+        }
+
+        & {
+          height: 70px;
+          width: 70px;
+          border-radius: 50%;
+          background-color: $primary-color;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  &__section__three {
+    &__container {
+      width: 97%;
+      height: 500px;
+      margin: 0 auto;
+      margin-top: 200px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__img__container {
+      width: 45%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    &__content {
+      &__container {
+        width: 45%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      &__title {
+        color: #1c75bc;
+        font-family: Inter;
+        font-size: 40px;
+        font-weight: 500;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      &__icon {
+        &__list__container {
+          width: 100%;
+          margin-top: 20px;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-template-rows: auto auto;
+          gap: 20px;
+          margin-top: 20px;
+          justify-items: center; // Center items horizontally
+
+          & > :nth-child(4) {
+            grid-column: span 1.5;
+          }
+          & > :nth-child(5) {
+            grid-column: span 1.5;
+          }
+        }
+
+        &__container {
+          width: 170px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+
+        &__description {
+          font-family: "Inter";
+        }
+
+        & {
+          height: 70px;
+          width: 70px;
+          color: $text-color;
+          font-size: 30px;
+          border-radius: 50%;
+          background-color: $primary-color;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  &__psychologist {
+    &__list {
+      &__container {
+        width: 97%;
+        height: 500px;
+        margin: 0 auto;
+        margin-top: 200px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      &__title {
+        color: #1c75bc;
+        font-family: Inter;
+        font-size: 40px;
+        font-weight: 500;
+        margin-bottom: 30px;
+      }
+
+      & {
+        width: 100%;
+        margin-top: 20px;
+        display: flex;
+        gap: 70px;
+      }
+    }
+
+    &__img__container {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+      & {
+        margin-bottom: 20px;
+      }
+    }
+
+    &__name {
+      text-align: center;
+    }
+
+    & {
+      width: 200px;
+    }
   }
 }

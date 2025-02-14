@@ -1,0 +1,51 @@
+.popupContainer {
+    border-radius: 10px;
+  }
+  
+  .title {
+    text-align: center;
+    color: #ec744a;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  .infoGrid {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  .infoGrid div {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .infoGrid p {
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .highlight {
+    color: #ec744a;
+    font-weight: bold;
+  }
+  
+  .infoDetails p {
+    margin: 5px 0;
+    color: #333;
+    font-size: 15px;
+    gap:1010px;
+  }
+  
+  .infoDetails p {
+    color: #ec744a;
+    
+  }
+  
+  .infoDetails strong {
+    color: black;
+  }
+  

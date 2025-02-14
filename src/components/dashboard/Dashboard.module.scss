@@ -1,25 +1,38 @@
 
-.layout{
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .main_layout {
-    display: flex;
-    flex: 1;
-  }
-  
-  .sidebar {
-    flex: 0 0 20% !important;
-    max-width: 30% !important;
-    min-width: 20% !important; 
-  }
-  
-  
-  .main_content {
-    flex: 8;
-    margin: 16px;
-    padding: 24px;
-  }
-  
+.main_layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  flex: 0 0 20% !important;
+  max-width: 30% !important;
+  min-width: 20% !important;
+  overflow-y: auto;
+}
+
+.main_content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none; 
+}
+
+
+.main_content::-webkit-scrollbar {
+  display: none; 
+}
+
+.layout {
+  height: 100vh; 
+  display: flex;
+  flex-direction: column;
+}
+
+.main_layout {
+  display: flex;
+  flex: 1; 
+  overflow: hidden; 
+}
