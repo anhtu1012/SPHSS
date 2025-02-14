@@ -10,22 +10,29 @@ import Cbutton from "../../../components/cButton";
 import AntDComponent from "../../../components/cTableAntD";
 import { TimeSlotValues } from "../../../models/psy";
 import {
+  createTimeSlot,
   deleteTimeSlot,
   getTimeSlot,
 } from "../../../services/psychologist/api";
+import dayjs from "dayjs";
 
 function ManageTimeslot() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [form] = useForm();
+  const [userID, setUserID] = useState<string>("");
   const [rowData, setRowData] = useState<TimeSlotValues[]>([]);
   const fetchTimeSlot = useCallback(async () => {
     try {
       const res = await getTimeSlot();
+      console.log(res);
+
       const data = res.data.data;
       if (data.length <= 0) {
         toast.warning("Chưa có lịch khám nào");
       }
       setRowData(data);
+      setUserID(data.length > 0 ? data[0].user_id : "");
+      console.log(userID);
     } catch (error: any) {
       toast.error(error.response?.data || "Lỗi khi fetch data");
     }
@@ -36,10 +43,29 @@ function ManageTimeslot() {
     console.log("Thông tin học sinh: ", student);
   };
 
+  const handleCreateTimeslot = useCallback(async () => {
+    try {
+      const values = await form.validateFields();
+      const startTime = dayjs(values.start_time).format("HH:mm");
+      const endTime = dayjs(values.end_time).format("HH:mm");
+      const payload = {
+        user_id: userID,
+        slots: [{ start_time: startTime, end_time: endTime }],
+      };
+      await createTimeSlot(payload);
+      toast.success("Tạo lịch hẹn thành công!");
+      setShowModal(false);
+      fetchTimeSlot();
+      form.resetFields();
+    } catch (error) {
+      toast.error("Lỗi khi tạo lịch hẹn!");
+    }
+  }, [rowData]);
+
   const handleDeleteTimeslot = useCallback(async (id: string) => {
     try {
       await deleteTimeSlot(id);
-      toast.success("Xóa lịch thành công");
+      toast.success("Xóa lịch hẹn thành công");
       fetchTimeSlot();
     } catch (error) {
       toast.error("Lỗi khi delete");
@@ -86,7 +112,7 @@ function ManageTimeslot() {
         <div style={{ display: "flex", gap: "12px" }}>
           <AiOutlineEdit
             size={30}
-            color="orange"
+            style={{ color: "orange", cursor: "pointer" }}
             onClick={() => handleViewDetails(record)}
           />
           <Popconfirm
@@ -96,7 +122,7 @@ function ManageTimeslot() {
             okText="Có"
             cancelText="Không"
           >
-            <MdAutoDelete color="red" size={30} />
+            <MdAutoDelete style={{ cursor: "pointer" }} color="red" size={30} />
           </Popconfirm>
         </div>
       ),
@@ -105,7 +131,7 @@ function ManageTimeslot() {
 
   useEffect(() => {
     fetchTimeSlot();
-  }, []);
+  }, [userID]);
 
   return (
     <div>
@@ -149,6 +175,7 @@ function ManageTimeslot() {
             <Button
               type="primary"
               style={{ background: "green", color: "white" }}
+              onClick={() => handleCreateTimeslot()}
             >
               Tạo
             </Button>,
@@ -185,7 +212,11 @@ function ManageTimeslot() {
           </Form>
         </Modal>
       </div>
-      <AntDComponent dataSource={rowData} columns={columns} />
+      <AntDComponent
+        dataSource={rowData}
+        columns={columns}
+        // showOperationColumn={true}
+      />
     </div>
   );
 }

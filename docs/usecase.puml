@@ -1,0 +1,53 @@
+@startuml School Psychology Health Support System
+
+' Actors
+actor Student as "Student"
+actor Parent as "Parent"
+actor Psychologist as "Psychologist"
+actor Manager as "Manager"
+
+rectangle "School Psychology Health Support System" {
+  ' Common Use Cases
+  usecase "Login" as UC1
+  usecase "View Dashboard" as UC2
+  usecase "Logout" as UC3
+
+  ' Manager Use Cases
+  usecase "Manage Users" as UC4
+  usecase "View Consultation Effects" as UC5
+  usecase "Manage Support Programs" as UC6
+  usecase "Manage Surveys" as UC7
+
+  ' Parent Use Cases
+  usecase "Manage Students" as UC8
+
+  ' Psychologist Use Cases
+  usecase "Manage Appointments" as UC9
+  usecase "Manage Blogs" as UC10
+  usecase "View Student List" as UC11
+  usecase "Manage Reports" as UC12
+  usecase "Manage Timeslots" as UC13
+
+  ' Relationships
+  Student --> UC1
+  Parent --> UC1
+  Psychologist --> UC1
+  Manager --> UC1
+
+  Manager --> UC2
+  Manager --> UC3
+  Manager --> UC4
+  Manager --> UC5
+  Manager --> UC6
+  Manager --> UC7
+
+  Parent --> UC8
+
+  Psychologist --> UC9
+  Psychologist --> UC10
+  Psychologist --> UC11
+  Psychologist --> UC12
+  Psychologist --> UC13
+}
+
+@enduml
