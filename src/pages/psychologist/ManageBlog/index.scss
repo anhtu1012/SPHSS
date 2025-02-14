@@ -1,0 +1,48 @@
+.blog {
+  &__container {
+    width: 80%;
+    height: 80%;
+    &__content {
+      display: flex;
+      gap: 15px;
+      align-items: stretch;
+      margin-bottom: 30px;
+      &__title1 {
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      &__title2 {
+        font-size: 16px;
+        font-weight: normal;
+        display: flex;
+        margin-bottom: 5px;
+        color: #464545;
+      }
+      &__title3 {
+        display: flex;
+        justify-content: space-between;
+        flex: 1;
+        &__readMore {
+          color: #08509f;
+          cursor: pointer;
+        }
+        &__edit {
+          color: #939292;
+          cursor: pointer;
+        }
+      }
+    }
+    &__normal {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+    }
+  }
+}
+
+.image-with-border {
+  border-radius: 10px;
+  height: 100%;
+  object-fit: cover;
+}

@@ -24,6 +24,7 @@ import ReportDetail from "./pages/psychologist/ManageReport/[id]";
 import UserDetail from "./pages/admin/ManageUser/UserDetail";
 import PsychologistDetail from "./pages/student/PsychologistDetail";
 import AiChatBot from "./pages/student/AiChatBot";
+import CreateBlog from "./pages/psychologist/CreateBlog";
 
 function App() {
   const { Manager, Parent, Psychologist, Student } = UserRole;
@@ -135,6 +136,10 @@ function App() {
         {
           path: "manage-blog",
           element: <ManageBlog />,
+        },
+        {
+          path: "manage-blog/create-blog",
+          element: <CreateBlog />,
         },
         {
           path: "manage-student",
