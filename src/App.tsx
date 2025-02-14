@@ -15,6 +15,7 @@ import ManageDashboard from "./pages/admin/ManageDashboard";
 import ManageEffectConsult from "./pages/admin/ManageEffectConsult";
 import ManageProgram from "./pages/admin/ManageProgram";
 import ManageSurveyStudent from "./pages/admin/ManageSurveyStudent";
+import ChatApp from "./pages/Deepseek";
 
 
 
@@ -24,6 +25,10 @@ function App() {
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/chat_app",
+      element: <ChatApp />,
     },
     {
       path: "/404",
