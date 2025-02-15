@@ -85,6 +85,10 @@ function App() {
           path: "manage-user/detail",
           element: <UserDetail />,
         },
+        {
+          path: ":section/detail",
+          element: <UserDetail />,
+        },
       ],
     },
     {
