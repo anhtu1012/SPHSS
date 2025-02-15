@@ -44,6 +44,12 @@
   padding-top: 4px;
 }
 
+:global(.ant-select-selection-item) {
+  color: black !important;
+}
+
+
+
 .ant-select-selector:focus,
 .ant-select-selector:hover,
 .ant-select-selector:active,

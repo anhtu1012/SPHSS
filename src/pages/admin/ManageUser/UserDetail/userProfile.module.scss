@@ -44,7 +44,7 @@
   }
   
   .rightProfile {
-    flex: 7;
+    flex: 30%;
     display: flex;
     flex-direction: column;
     gap: 10px; 
@@ -56,7 +56,7 @@
   }
   
   .leftProfile {
-    flex: 3;
+    flex: 70%;
     display: flex;
     flex-direction: column;
   }
@@ -90,4 +90,9 @@
     display: flex;
     justify-content: flex-end; 
   }
+  
+  :global(.ant-rate-star-full) {
+    color: #08509F !important;
+  }
+  
   
