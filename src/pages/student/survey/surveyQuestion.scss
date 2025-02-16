@@ -150,7 +150,7 @@ $card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       background: linear-gradient(
         145deg,
         $primary-color,
-        darken($primary-color, 10%)
+        color.adjust($primary-color, $lightness: -10%)
       );
       color: white;
       border: none;
@@ -333,7 +333,7 @@ $card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
         &:hover {
           background: color.scale($primary-color, $lightness: -10%);
-          background: darken(#ec744a, 10%);
+          background: color.adjust(#ec744a, $lightness: -10%);
         }
       }
 

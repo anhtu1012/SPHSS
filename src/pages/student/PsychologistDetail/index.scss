@@ -168,7 +168,7 @@ $text-color: #ffffff;
         }
 
         &.selected {
-          background-color: darken(#51b748, 10%);
+          background-color: color.adjust(#51b748, $lightness: -10%);
           box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #51b748;
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba($secondary-color, 0.3);
@@ -207,7 +207,7 @@ $text-color: #ffffff;
 
           &:hover,
           &.ant-picker-focused {
-            border-color: darken($primary-color, 10%);
+            border-color: color.adjust($primary-color, $lightness: -10%);
             box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
           }
 
@@ -479,8 +479,8 @@ $text-color: #ffffff;
           border-color: $primary-color;
 
           &:hover {
-            background-color: darken($primary-color, 10%);
-            border-color: darken($primary-color, 10%);
+            background-color: color.adjust($primary-color, $lightness: -10%);
+            border-color: color.adjust($primary-color, $lightness: -10%);
           }
 
           &:disabled {
