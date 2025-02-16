@@ -1,0 +1,31 @@
+.doctors-page {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  &__title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  &__subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+  }
+
+  &__search {
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+  }
+}

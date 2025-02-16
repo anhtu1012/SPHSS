@@ -1,49 +1,65 @@
-import { Divider } from "antd";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Divider, DatePicker } from "antd";
 import doctorImg from "../../../assets/doctor_1.png";
 import "./index.scss";
 import Time from "./Time";
 import { useParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
-import { getTimeSlotByDoctorId } from "../../../services/student/PsychologistDetail/api";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import PlaceholderTime from "./PlaceholderTime";
+import AppointmentForm from "../../../components/AppointmentForm";
+import { mockTimeSlots } from "../../../mock/timeSlots";
+import dayjs from "dayjs";
 
 type TimeSlotType = {
   startTime: string;
   endTime: string;
+  id: string;
 };
 
 const PsychologistDetail = () => {
   const { id } = useParams();
-  const [timeSlotList, setTimeSlotList] = useState<TimeSlotType[]>([]);
-  const handleFetchDoctorTimeSlot = useCallback(async () => {
-    try {
-      const res = await getTimeSlotByDoctorId(id as string);
-      const data = res.data.data;
-      if (data.length <= 0) {
-        toast.warning("Bác sĩ này chưa có lịch khám nào");
-      } else {
-        const newTimeSLotList = data.map((timeSlot: any) => ({
-          startTime: timeSlot.start_time,
-          endTime: timeSlot.end_time,
-        }));
-        setTimeSlotList(newTimeSLotList);
-      }
-    } catch (error: any) {
-      toast.error(error.response?.data || "Lỗi khi fetch data");
-    }
-  }, []);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedSlot, setSelectedSlot] = useState<TimeSlotType | null>(null);
+  const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
 
   useEffect(() => {
-    handleFetchDoctorTimeSlot();
-  }, [handleFetchDoctorTimeSlot]);
+    setSelectedDate(new Date());
+  }, []);
 
-  const currentDate = new Date();
-  const currentDay = currentDate.getDate();
-  const currentMonth = currentDate.getMonth() + 1;
-  const formattedDate = `${currentDay
-    .toString()
-    .padStart(2, "0")}/${currentMonth.toString().padStart(2, "0")}`;
+  const handleTimeSlotClick = (timeSlot: TimeSlotType) => {
+    if (!selectedDate) {
+      toast.warning("Vui lòng chọn ngày tư vấn trước");
+      return;
+    }
+    setSelectedSlot(timeSlot);
+    setIsAppointmentModalOpen(true);
+  };
+
+  const handleAppointmentSubmit = async (values: any) => {
+    toast.success("Đặt lịch tư vấn thành công!");
+    console.log("Appointment booked:", {
+      doctorId: id,
+      timeSlotId: selectedSlot!.id,
+      date: values.appointmentDate.toDate(),
+      fullName: values.fullName,
+      phone: values.phone,
+      email: values.email,
+      notes: values.notes,
+    });
+    setIsAppointmentModalOpen(false);
+  };
+
+  const handleDateChange = (date: any) => {
+    if (date && dayjs(date).isValid()) {
+      setSelectedDate(date.toDate());
+    }
+  };
+
+  const disabledDate = (current: any) => {
+    return current && current < dayjs().startOf("day");
+  };
+
+  const currentDate = dayjs();
   const daysOfWeek = [
     "Chủ nhật",
     "Thứ hai",
@@ -53,13 +69,11 @@ const PsychologistDetail = () => {
     "Thứ sáu",
     "Thứ bảy",
   ];
-  const currentDayOfWeek = daysOfWeek[currentDate.getDay()];
 
   return (
     <div className="doctor__detail__container">
-      {/* doctor basic information & schedule */}
       <div className="doctor__detail__section1__container">
-        {/* basic info */}
+        {/* Basic info section - unchanged */}
         <div className="doctor__detail__section1__basic__info__container">
           <div className="doctor__detail__section1__basic__info__img__container">
             <img src={doctorImg} alt="doctor_img" />
@@ -78,23 +92,56 @@ const PsychologistDetail = () => {
             </div>
           </div>
         </div>
-        {/* schedule */}
-        <div className="doctor__detail__section1__schedule__container">
-          <div className="doctor__detail__section1__schedule__title">
-            Lịch tư vấn
+
+        {/* Modified schedule section with pricing */}
+        <div className="doctor__detail__schedule__wrapper">
+          <div className="doctor__detail__section1__schedule__container">
+            <div className="doctor__detail__section1__schedule__header">
+              <div className="doctor__detail__section1__schedule__title">
+                Lịch tư vấn
+              </div>
+              <div className="doctor__detail__section1__schedule__price">
+                <span className="price-tag">300.000đ</span>
+                <span className="price-duration">/45 phút</span>
+              </div>
+            </div>
+
+            <DatePicker
+              onChange={handleDateChange}
+              className="date-picker"
+              defaultValue={currentDate}
+              format={(value) =>
+                `${daysOfWeek[dayjs(value).day()]} ${dayjs(value).format(
+                  "DD/MM"
+                )}`
+              }
+              disabledDate={disabledDate}
+            />
+
+            <div className="time-slots-container">
+              <div className="time-slots-heading">Chọn giờ tư vấn:</div>
+              <div className="doctor__detail__section1__schedule__option__list">
+                {mockTimeSlots.map((timeSlot, index) => (
+                  <Time
+                    key={index}
+                    {...timeSlot}
+                    isSelected={selectedSlot?.id === timeSlot.id}
+                    onClick={() => handleTimeSlotClick(timeSlot)}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="doctor__detail__section1__schedule__dropdown">
-            {currentDayOfWeek} - {formattedDate}
-            <span>&nbsp;</span>
-          </div>
-          <div className="doctor__detail__section1__schedule__option__list">
-            {!timeSlotList.length &&
-              Array.from({ length: 4 }).map((_, index) => (
-                <PlaceholderTime key={index} />
-              ))}
-            {timeSlotList.map((timeSlot, index) => (
-              <Time key={index} {...timeSlot} />
-            ))}
+
+          {/* New session info card */}
+          <div className="session-info-card">
+            <h3>Thông tin buổi tư vấn</h3>
+            <ul>
+              <li>✓ Thời lượng: 45 phút</li>
+              <li>✓ Tư vấn trực tuyến qua video</li>
+              <li>✓ Chat với bác sĩ trước buổi tư vấn</li>
+              <li>✓ Nhận tài liệu hỗ trợ sau buổi tư vấn</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -228,6 +275,20 @@ const PsychologistDetail = () => {
           </li>
         </ul>
       </div>
+      <AppointmentForm
+        isOpen={isAppointmentModalOpen}
+        onClose={() => {
+          setIsAppointmentModalOpen(false);
+          setSelectedSlot(null);
+        }}
+        doctor={{
+          id: id as string,
+          name: "Bác sĩ Chuyên khoa | Nguyễn Tường Vũ",
+        }}
+        selectedSlot={selectedSlot}
+        selectedDate={selectedDate}
+        onSubmit={handleAppointmentSubmit}
+      />
     </div>
   );
 };

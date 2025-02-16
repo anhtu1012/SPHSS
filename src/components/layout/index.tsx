@@ -7,7 +7,7 @@ function Layout() {
   return (
     <div>
       <Header />
-      <div>
+      <div style={{marginTop:"90px"}}>
         <Outlet />
       </div>
       <Footer />

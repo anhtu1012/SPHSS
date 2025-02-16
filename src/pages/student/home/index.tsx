@@ -4,29 +4,125 @@ import { GiHealthNormal } from "react-icons/gi";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { FaHeadSideVirus } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
+import { motion } from "framer-motion";
+import { useRef } from "react";
 
-import homeBanner from "../../assets/home_banner.png";
-import sectionOne from "../../assets/home_section_1.png";
-import sectionTwo from "../../assets/home_section_2.png";
-import sectionThree from "../../assets/home_section_3.png";
-import fptUniversity from "../../assets/fpt_university.png";
-import fptPolytechnic from "../../assets/fpt_polytechnic.png";
-import fptSchools from "../../assets/fpt_schools.png";
+import homeBanner from "../../../assets/home_banner.png";
+import sectionOne from "../../../assets/home_section_1.png";
+import sectionTwo from "../../../assets/home_section_2.png";
+import sectionThree from "../../../assets/home_section_3.png";
+import fptUniversity from "../../../assets/fpt_university.png";
+import fptPolytechnic from "../../../assets/fpt_polytechnic.png";
+import fptSchools from "../../../assets/fpt_schools.png";
 import "./index.scss";
 import Icon from "./Icon";
 import SchoolImg from "./SchoolImg";
 import Psychologist from "./Psychologist";
 import { psychologistList } from "./mockData";
 import { Carousel } from "antd";
+import DoctorCard from "../../../components/DoctorCard";
+import ProgramCard from "../../../components/ProgramCard";
 
 export default function Home() {
+  // const featuresRef = useRef(null);  
+  const programsRef = useRef(null);
+  const doctorsRef = useRef(null);
+
+  const scrollToSection = (ref: React.RefObject<HTMLElement>) => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const featuredPrograms = [
+    {
+      title: "Tư vấn tâm lý cá nhân",
+      description: "Chương trình tư vấn 1-1 với chuyên gia tâm lý",
+      image: "/program_1.jpg",
+    },
+    {
+      title: "Chương trình tư vấn nhóm",
+      description: "Tham gia các buổi tư vấn nhóm để chia sẻ",
+      image: "/program_2.jpg",
+    },
+    {
+      title: "Workshop Quản lý Stress",
+      description: "Workshop chuyên sâu về quản lý stress",
+      image: "/program_3.jpg",
+    },
+  ];
+
   return (
     <div className="home__container">
-      {/* banner */}
-      <div className="home__banner__img__container">
+      <motion.div
+        className="home__banner__img__container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
         <img src={homeBanner} alt="home_banner" />
-      </div>
-      {/* section 1 */}
+        <div className="home__banner__overlay">
+          <motion.h1
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            Chăm sóc sức khỏe tinh thần
+          </motion.h1>
+          <motion.div
+            className="home__banner__buttons"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.8 }}
+          >
+            <button onClick={() => scrollToSection(programsRef)}>
+              Xem chương trình
+            </button>
+            <button onClick={() => scrollToSection(doctorsRef)}>
+              Tìm bác sĩ
+            </button>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="home__featured__doctors__container"
+        ref={doctorsRef}
+        initial={{ y: 50, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <h2 className="home__featured__doctors__title">
+          Bác sĩ nổi bật
+          <span className="home__featured__doctors__title--highlight">
+            &nbsp;của chúng tôi
+          </span>
+        </h2>
+        <div className="home__featured__doctors__list">
+          {psychologistList.slice(0, 3).map((doctor, index) => (
+            <DoctorCard key={index} {...doctor} />
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="home__featured__programs__container"
+        ref={programsRef}
+        initial={{ y: 50, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <h2 className="home__featured__programs__title">
+          Chương trình tư vấn
+          <span className="home__featured__programs__title--highlight">
+            &nbsp;nổi bật
+          </span>
+        </h2>
+        <div className="home__featured__programs__list">
+          {featuredPrograms.map((program, index) => (
+            <ProgramCard key={index} {...program} />
+          ))}
+        </div>
+      </motion.div>
+
       <div className="home__section__one__container">
         <div className="home__section__one__img__container">
           <img src={sectionOne} alt="section_one" />
@@ -107,6 +203,7 @@ export default function Home() {
           <img src={sectionThree} alt="section_one" />
         </div>
       </div>
+
       <div className="home__psychologist__list__container">
         <div className="home__psychologist__list__title">
           Đội ngũ chuyên viên tâm lý

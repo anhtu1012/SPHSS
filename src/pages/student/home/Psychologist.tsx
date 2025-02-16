@@ -12,7 +12,7 @@ const Psychologist = ({
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/student/psychologist-detail/${id}`);
+    navigate(`/psychologist-detail/${id}`);
   };
 
   return (

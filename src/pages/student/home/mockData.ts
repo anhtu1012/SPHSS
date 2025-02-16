@@ -1,11 +1,11 @@
-import doctor1 from "../../assets/doctor_1.png";
-import doctor2 from "../../assets/doctor_2.png";
-import doctor3 from "../../assets/doctor_3.png";
-import doctor4 from "../../assets/doctor_4.jpg";
-import doctor5 from "../../assets/doctor_5.jpg";
-import doctor6 from "../../assets/doctor_6.jpg";
-import doctor7 from "../../assets/doctor_7.jpg";
-import doctor8 from "../../assets/doctor_8.jpg";
+import doctor1 from "../../../assets/doctor_1.png";
+import doctor2 from "../../../assets/doctor_2.png";
+import doctor3 from "../../../assets/doctor_3.png";
+import doctor4 from "../../../assets/doctor_4.jpg";
+import doctor5 from "../../../assets/doctor_5.jpg";
+import doctor6 from "../../../assets/doctor_6.jpg";
+import doctor7 from "../../../assets/doctor_7.jpg";
+import doctor8 from "../../../assets/doctor_8.jpg";
 
 export const psychologistList = [
   {
