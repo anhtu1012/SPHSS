@@ -18,6 +18,70 @@ $text-color: #ffffff;
     }
   }
 
+  &__banner {
+    &__img__container {
+      position: relative;
+      width: 100%;
+      height: 80vh;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+
+      h1 {
+        font-size: 3.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+    }
+
+    &__buttons {
+      display: flex;
+      gap: 1rem;
+
+      button {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 30px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: transform 0.2s;
+
+        &:first-child {
+          background-color: $primary-color;
+          color: white;
+        }
+
+        &:last-child {
+          background-color: transparent;
+          border: 2px solid white;
+          color: white;
+        }
+
+        &:hover {
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+
   &__section__one {
     &__container {
       width: 97%;
@@ -26,6 +90,11 @@ $text-color: #ffffff;
       margin-top: 200px;
       display: flex;
       justify-content: space-between;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+      }
     }
 
     &__img__container {
@@ -109,6 +178,11 @@ $text-color: #ffffff;
       margin-top: 200px;
       display: flex;
       justify-content: space-between;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+      }
     }
 
     &__img__container {
@@ -197,6 +271,11 @@ $text-color: #ffffff;
       margin-top: 200px;
       display: flex;
       justify-content: space-between;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+      }
     }
 
     &__img__container {
@@ -305,6 +384,11 @@ $text-color: #ffffff;
       border-radius: 50%;
       overflow: hidden;
       cursor: pointer;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
       img {
         width: 100%;
         height: 100%;
@@ -320,6 +404,178 @@ $text-color: #ffffff;
 
     & {
       width: 200px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    &__banner {
+      &__overlay {
+        h1 {
+          font-size: 2.5rem;
+          padding: 0 1rem;
+        }
+      }
+    }
+
+    &__section__one,
+    &__section__two,
+    &__section__three {
+      &__container {
+        flex-direction: column;
+        height: auto;
+        margin-top: 100px;
+
+        > div {
+          width: 100%;
+          margin-bottom: 2rem;
+        }
+      }
+    }
+  }
+}
+
+.home__featured__doctors__container {
+  padding: 40px 0;
+  background: linear-gradient(to bottom, #f8f8f8, white);
+
+  .home__featured__doctors__title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 40px;
+
+    &--highlight {
+      color: #ec744a;
+    }
+  }
+
+  .home__featured__doctors__list {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+
+  .home__featured__doctor__card {
+    width: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .doctor__image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .doctor__info {
+      padding: 20px;
+
+      .doctor__name {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .doctor__specialty {
+        color: #666;
+        margin-bottom: 8px;
+      }
+
+      .doctor__rating {
+        color: #ec744a;
+        font-size: 14px;
+      }
+
+      .doctor__experience {
+        color: #666;
+        margin-top: 8px;
+      }
+    }
+  }
+}
+
+.home__featured__programs__container {
+  padding: 40px 0;
+  background: linear-gradient(to bottom, #f8f8f8, white);
+
+  .home__featured__programs__title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 40px;
+
+    &--highlight {
+      color: #ec744a;
+    }
+  }
+
+  .home__featured__programs__list {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+
+  .home__featured__program__card {
+    width: 350px;
+    border-radius: 12px;
+    background: white;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .program__image__container {
+      height: 200px;
+      overflow: hidden;
+
+      .program__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .program__info {
+      padding: 20px;
+
+      .program__title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .program__description {
+        color: #666;
+        margin-bottom: 15px;
+        line-height: 1.5;
+      }
+
+      .program__details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .program__rating {
+          color: #ec744a;
+          font-size: 14px;
+        }
+
+        .program__price {
+          color: #ec744a;
+          font-weight: bold;
+          font-size: 18px;
+        }
+      }
     }
   }
 }

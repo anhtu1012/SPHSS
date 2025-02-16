@@ -1,0 +1,56 @@
+.program__card {
+  width: 350px;
+  border-radius: 12px;
+  background: white;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  .program__image__container {
+    height: 200px;
+    overflow: hidden;
+
+    .program__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .program__info {
+    padding: 20px;
+
+    .program__title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .program__description {
+      color: #666;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .program__details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .program__rating {
+        color: #ec744a;
+        font-size: 14px;
+      }
+
+      .program__price {
+        color: #ec744a;
+        font-weight: bold;
+        font-size: 18px;
+      }
+    }
+  }
+}

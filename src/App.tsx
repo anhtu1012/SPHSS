@@ -1,33 +1,41 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./components/layout";
-import Dashboard from "./components/dashboard";
-import Home from "./pages/home";
-import Login from "./pages/login";
 import { ConfigProvider } from "antd";
-import ManageUser from "./pages/admin/ManageUser";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Dashboard from "./components/dashboard";
+import Layout from "./components/layout";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { UserRole } from "./models/enum";
-import ManageStudent from "./pages/parent/ManageStudent";
-import ManageSurvey from "./pages/psychologist/ManageSurvey";
-import ManageStudentPsy from "./pages/psychologist/ManageStudent";
 import NotFound from "./pages/404";
 import ManageDashboard from "./pages/admin/ManageDashboard";
 import ManageEffectConsult from "./pages/admin/ManageEffectConsult";
 import ManageProgram from "./pages/admin/ManageProgram";
 import ManageSurveyStudent from "./pages/admin/ManageSurveyStudent";
+import ManageUser from "./pages/admin/ManageUser";
+import UserDetail from "./pages/admin/ManageUser/UserDetail";
 import ChatApp from "./pages/Deepseek";
-import StudentDetail from "./pages/psychologist/ManageStudent/[id]";
-import ManageTimeslot from "./pages/psychologist/ManageTimeslot";
+import Home from "./pages/student/home";
+import Login from "./pages/login";
+import ManageStudent from "./pages/parent/ManageStudent";
+import CreateBlog from "./pages/psychologist/CreateBlog";
 import ManageBlog from "./pages/psychologist/ManageBlog";
 import ManageReport from "./pages/psychologist/ManageReport";
 import ReportDetail from "./pages/psychologist/ManageReport/[id]";
-import UserDetail from "./pages/admin/ManageUser/UserDetail";
-import PsychologistDetail from "./pages/student/PsychologistDetail";
+import ManageStudentPsy from "./pages/psychologist/ManageStudent";
+import StudentDetail from "./pages/psychologist/ManageStudent/[id]";
+import ManageSurvey from "./pages/psychologist/ManageSurvey";
+import ManageTimeslot from "./pages/psychologist/ManageTimeslot";
 import AiChatBot from "./pages/student/AiChatBot";
-import CreateBlog from "./pages/psychologist/CreateBlog";
+import PsychologistDetail from "./pages/student/PsychologistDetail";
+import SurveyQuestion from "./pages/student/survey/[id]";
+import SurveyList from "./pages/student/survey/index";
+import Program from "./pages/student/program/index";
+import ProgramDetail from "./pages/student/program/[id]";
+import UserProfile from "./pages/student/userProfile";
+import Doctors from "./pages/student/doctors";
+import Blog from "./pages/student/blog";
+import Contact from "./pages/student/contact";
 
 function App() {
-  const { Manager, Parent, Psychologist, Student } = UserRole;
+  const { Manager, Parent, Psychologist } = UserRole;
   const router = createBrowserRouter([
     {
       path: "/login",
@@ -48,6 +56,46 @@ function App() {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "psychologist-detail/:id",
+          element: <PsychologistDetail />,
+        },
+        {
+          path: "ai-agent",
+          element: <AiChatBot />,
+        },
+        {
+          path: "survey",
+          element: <SurveyList />,
+        },
+        {
+          path: "survey/:id",
+          element: <SurveyQuestion />,
+        },
+        {
+          path: "/program",
+          element: <Program />,
+        },
+        {
+          path: "/program/:id",
+          element: <ProgramDetail />,
+        },
+        {
+          path: "/user-profile",
+          element: <UserProfile />,
+        },
+        {
+          path: "/doctors",
+          element: <Doctors />,
+        },
+        {
+          path: "/blog",
+          element: <Blog />,
+        },
+        {
+          path: "/contact",
+          element: <Contact />,
         },
       ],
     },
@@ -164,34 +212,6 @@ function App() {
         {
           path: "manage-report/:id",
           element: <ReportDetail />,
-        },
-      ],
-    },
-    {
-      path: "/student",
-      element: (
-        <ConfigProvider
-          theme={{
-            components: {
-              Layout: {
-                siderBg: "#001529",
-              },
-            },
-          }}
-        >
-          <ProtectedRoute allowedRoles={Student}>
-            <Layout />
-          </ProtectedRoute>
-        </ConfigProvider>
-      ),
-      children: [
-        {
-          path: "psychologist-detail/:id",
-          element: <PsychologistDetail />,
-        },
-        {
-          path: "ai-agent",
-          element: <AiChatBot />,
         },
       ],
     },
