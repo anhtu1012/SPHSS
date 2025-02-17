@@ -16,6 +16,30 @@
     margin-bottom: 30px;
   }
 
+  &__category {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  &__tagCustom {
+    padding: 8px 13px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  &__selectedTag {
+    background-color: #1890ff;
+    color: white;
+    border-color: #1890ff;
+    transform: translateY(-5px);
+  }
+
   &__search {
     margin-bottom: 40px;
     display: flex;
@@ -30,10 +54,21 @@
 }
 
 .blog-post {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
   &__title {
     font-size: 1.5rem;
     margin-bottom: 10px;
     color: #333;
+  }
+
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }
 
   &__meta {

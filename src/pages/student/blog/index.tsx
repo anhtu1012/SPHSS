@@ -1,11 +1,14 @@
 import { Card, Input, Tag } from "antd";
 import { useState } from "react";
 import "./index.scss";
+import { useNavigate } from "react-router-dom";
 
 const { Search } = Input;
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedTag, setSelectedTag] = useState(null);
+  const navigate = useNavigate();
 
   const blogPosts = [
     {
@@ -26,12 +29,47 @@ const Blog = () => {
       date: "2024-01-10",
       tags: ["Mối quan hệ", "Học đường", "Kỹ năng sống"],
     },
-    // Add more blog posts as needed
+    {
+      id: 3,
+      title: "Xây dựng mối quan hệ lành mạnh trong môi trường học đường",
+      excerpt:
+        "Tìm hiểu cách xây dựng và duy trì các mối quan hệ tích cực với bạn bè và thầy cô...",
+      author: "Dr. Ngô Thiên C",
+      date: "2024-01-10",
+      tags: ["Mối quan hệ", "Học đường", "Kỹ năng sống"],
+    },
+    {
+      id: 4,
+      title: "Xây dựng mối quan hệ lành mạnh trong môi trường học đường",
+      excerpt:
+        "Tìm hiểu cách xây dựng và duy trì các mối quan hệ tích cực với bạn bè và thầy cô...",
+      author: "Dr. Lương Thùy D",
+      date: "2024-01-10",
+      tags: ["Mối quan hệ", "Học đường", "Kỹ năng sống"],
+    },
   ];
 
-  const filteredPosts = blogPosts.filter((post) =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const tagList = [
+    "#Stress",
+    "#Học tập",
+    "#Sức khỏe tinh thần",
+    "#Mối quan hệ",
+    "#Học đường",
+    "#Kỹ năng sống",
+  ];
+
+  const handleClickTag = (tag: any) => {
+    const cleanTag = tag.slice(1);
+    setSelectedTag(selectedTag === cleanTag ? null : cleanTag);
+  };
+
+  const filteredPosts = blogPosts.filter((post) => {
+    const matchesSearch = post.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesTag = selectedTag ? post.tags.includes(selectedTag) : true;
+    return matchesSearch && matchesTag;
+  });
 
   return (
     <div className="blog-page">
@@ -39,6 +77,19 @@ const Blog = () => {
       <p className="blog-page__subtitle">
         Chia sẻ kiến thức và góc nhìn về sức khỏe tinh thần
       </p>
+      <div className="blog-page__category">
+        {tagList.map((tag) => (
+          <Tag
+            key={tag}
+            className={`blog-page__tagCustom ${
+              selectedTag === tag.slice(1) ? "blog-page__selectedTag" : ""
+            }`}
+            onClick={() => handleClickTag(tag)}
+          >
+            {tag}
+          </Tag>
+        ))}
+      </div>
 
       <div className="blog-page__search">
         <Search
@@ -50,7 +101,11 @@ const Blog = () => {
 
       <div className="blog-page__grid">
         {filteredPosts.map((post) => (
-          <Card key={post.id} className="blog-post">
+          <Card
+            key={post.id}
+            className="blog-post"
+            onClick={() => navigate(`/blog/${post.id}`, { state: post })}
+          >
             <h2 className="blog-post__title">{post.title}</h2>
             <p className="blog-post__meta">
               Bởi {post.author} •{" "}

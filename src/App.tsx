@@ -33,6 +33,7 @@ import UserProfile from "./pages/student/userProfile";
 import Doctors from "./pages/student/doctors";
 import Blog from "./pages/student/blog";
 import Contact from "./pages/student/contact";
+import BlogDetail from "./pages/student/blog/[id]";
 
 function App() {
   const { Manager, Parent, Psychologist } = UserRole;
@@ -92,6 +93,10 @@ function App() {
         {
           path: "/blog",
           element: <Blog />,
+        },
+        {
+          path: "/blog/:id",
+          element: <BlogDetail />,
         },
         {
           path: "/contact",
