@@ -7,8 +7,8 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import AppointmentForm from "../../../components/AppointmentForm";
-import { mockTimeSlots } from "../../../mock/timeSlots";
 import dayjs from "dayjs";
+import { getTimeSlotByDoctorId } from "../../../services/student/PsychologistDetail/api";
 
 type TimeSlotType = {
   startTime: string;
@@ -21,6 +21,7 @@ const PsychologistDetail = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<TimeSlotType | null>(null);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  const [timeSlotList, setTimeSlotList] = useState<TimeSlotType[]>([]);
 
   useEffect(() => {
     setSelectedDate(new Date());
@@ -49,6 +50,19 @@ const PsychologistDetail = () => {
     setIsAppointmentModalOpen(false);
   };
 
+  const handleGetTimeSlot = async () => {
+    const res = await getTimeSlotByDoctorId(id as string);
+    const resTimeSlotList = res.data.data.map(
+      (timeSlot: any, index: number) => ({
+        startTime: timeSlot.start_time,
+        endTime: timeSlot.end_time,
+        id: index,
+      })
+    );
+
+    setTimeSlotList(resTimeSlotList);
+  };
+
   const handleDateChange = (date: any) => {
     if (date && dayjs(date).isValid()) {
       setSelectedDate(date.toDate());
@@ -69,6 +83,10 @@ const PsychologistDetail = () => {
     "Thứ sáu",
     "Thứ bảy",
   ];
+
+  useEffect(() => {
+    handleGetTimeSlot();
+  }, []);
 
   return (
     <div className="doctor__detail__container">
@@ -121,7 +139,7 @@ const PsychologistDetail = () => {
             <div className="time-slots-container">
               <div className="time-slots-heading">Chọn giờ tư vấn:</div>
               <div className="doctor__detail__section1__schedule__option__list">
-                {mockTimeSlots.map((timeSlot, index) => (
+                {timeSlotList.map((timeSlot, index) => (
                   <Time
                     key={index}
                     {...timeSlot}

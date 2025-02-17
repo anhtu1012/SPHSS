@@ -20,10 +20,7 @@ $text-color: #ffffff;
       width: 100%;
       margin: 0 auto;
       transition: transform 0.3s ease;
-
-      &:hover {
-        transform: translateY(-5px);
-      }
+      margin-top: 120px;
     }
 
     &__basic__info {
@@ -31,6 +28,7 @@ $text-color: #ffffff;
         width: 100%;
         height: 50%;
         display: flex;
+        justify-content: space-between;
         margin-bottom: 20px;
         background: #ffffff;
         border-radius: 15px;
@@ -40,6 +38,7 @@ $text-color: #ffffff;
 
         &:hover {
           box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+          transform: translateY(-2px);
         }
       }
 
@@ -57,26 +56,16 @@ $text-color: #ffffff;
       }
 
       &__img__container {
-        width: 200px;
-        height: 200px;
         border-radius: 50%;
         overflow: hidden;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease;
-
-        &:hover {
-          transform: scale(1.05);
-        }
 
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           transition: transform 0.3s ease;
-
-          &:hover {
-            transform: scale(1.1);
-          }
         }
       }
 
@@ -168,10 +157,11 @@ $text-color: #ffffff;
         }
 
         &.selected {
-          background-color: darken(#51b748, 10%);
+          background-color: color.adjust(#51b748, $lightness: -10%);
           box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #51b748;
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba($secondary-color, 0.3);
+          color: $text-color;
         }
 
         &__price {
@@ -207,7 +197,7 @@ $text-color: #ffffff;
 
           &:hover,
           &.ant-picker-focused {
-            border-color: darken($primary-color, 10%);
+            border-color: color.adjust($primary-color, $lightness: -10%);
             box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
           }
 
@@ -244,6 +234,7 @@ $text-color: #ffffff;
 
     &__info__list {
       margin: 15px 0 30px 20px;
+      list-style-type: none;
 
       li {
         font-size: 1rem;
@@ -454,6 +445,11 @@ $text-color: #ffffff;
   .ant-modal-content {
     border-radius: 12px;
 
+    button {
+      top: 20px;
+      right: 25px;
+    }
+
     .ant-modal-header {
       border-radius: 12px 12px 0 0;
       background-color: $primary-color;
@@ -461,6 +457,7 @@ $text-color: #ffffff;
       .ant-modal-title {
         color: white;
         font-size: 1.25rem;
+        margin-left: 15px;
       }
     }
 
@@ -479,8 +476,8 @@ $text-color: #ffffff;
           border-color: $primary-color;
 
           &:hover {
-            background-color: darken($primary-color, 10%);
-            border-color: darken($primary-color, 10%);
+            background-color: color.adjust($primary-color, $lightness: -10%);
+            border-color: color.adjust($primary-color, $lightness: -10%);
           }
 
           &:disabled {
