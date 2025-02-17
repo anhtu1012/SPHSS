@@ -8,6 +8,10 @@ import {
 } from "@ant-design/icons";
 import { DatePicker, Form, Input, Modal } from "antd";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
+// import { selectUser } from "../../redux/features/userSlice";
+// import { User } from "../../models/user";
+import { RootState } from "../../redux/RootReducer";
 
 // Define or import DoctorType and TimeSlotType
 interface DoctorType {
@@ -40,10 +44,13 @@ const AppointmentForm = ({
   onSubmit,
 }: AppointmentFormProps) => {
   const [form] = Form.useForm();
+  const user = useSelector((state: RootState) => state.user) as any | null;
 
   if (!selectedSlot) {
     return null;
   }
+
+  console.log(user);
 
   return (
     <Modal
@@ -83,7 +90,11 @@ const AppointmentForm = ({
           label="Họ và tên"
           rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
         >
-          <Input prefix={<UserOutlined />} placeholder="Nhập họ và tên" />
+          <Input
+            prefix={<UserOutlined />}
+            placeholder="Nhập họ và tên"
+            defaultValue={`${user ? user.firstName + " " + user.lastName : ""}`}
+          />
         </Form.Item>
 
         <Form.Item
@@ -91,7 +102,11 @@ const AppointmentForm = ({
           label="Số điện thoại"
           rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}
         >
-          <Input prefix={<PhoneOutlined />} placeholder="Nhập số điện thoại" />
+          <Input
+            prefix={<PhoneOutlined />}
+            placeholder="Nhập số điện thoại"
+            defaultValue={`${user ? user.phone : ""}`}
+          />
         </Form.Item>
 
         <Form.Item
@@ -102,7 +117,11 @@ const AppointmentForm = ({
             { type: "email", message: "Email không hợp lệ" },
           ]}
         >
-          <Input prefix={<MailOutlined />} placeholder="Nhập email" />
+          <Input
+            prefix={<MailOutlined />}
+            placeholder="Nhập email"
+            defaultValue={`${user ? user.email : ""}`}
+          />
         </Form.Item>
 
         <Form.Item
