@@ -10,7 +10,6 @@ import styles from "./ManageEffectConsult.module.scss";
 interface DataType {
   key: string;
   name: string;
-  email: string;
   id: string;
   status: string;
   rating: number; 
@@ -23,7 +22,6 @@ const ManageEffectConsult = () => {
     {
       key: "1",
       name: "Nguyen Van A",
-      email: "nguyenvana@gmail.com",
       id: "YA623",
       status: "active",
       rating: 4,
@@ -31,7 +29,6 @@ const ManageEffectConsult = () => {
     {
       key: "2",
       name: "dsbfsfbfs",
-      email: "dsbfsfbfs@gmail.com",
       id: "YA001",
       status: "active",
       rating: 3,
@@ -39,7 +36,6 @@ const ManageEffectConsult = () => {
     {
       key: "3",
       name: "Nguyen Van B",
-      email: "nguyenvanb@gmail.com",
       id: "YA003",
       status: "active",
       rating: 5,
@@ -47,7 +43,6 @@ const ManageEffectConsult = () => {
     {
       key: "4",
       name: "bndf",
-      email: "bndf@gmail.com",
       id: "YA056",
       status: "active",
       rating: 2,
@@ -55,7 +50,6 @@ const ManageEffectConsult = () => {
     {
       key: "5",
       name: "Nguyen gn r fgn A",
-      email: "nguyengnrfgn@gmail.com",
       id: "YA678",
       status: "inactive",
       rating: 4,
@@ -87,8 +81,6 @@ const ManageEffectConsult = () => {
       render: (_, record) => (
         <div className={styles.userInfoContainer}>
           <span className={styles.userName}>{record.name}</span>
-          <br />
-          {record.email}
           <br />
           <span className={styles.userId}>{record.id}</span>
         </div>

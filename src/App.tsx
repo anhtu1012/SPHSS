@@ -34,6 +34,7 @@ import Doctors from "./pages/student/doctors";
 import Blog from "./pages/student/blog";
 import Contact from "./pages/student/contact";
 import BlogDetail from "./pages/student/blog/[id]";
+import ManageProgramDetail from "./pages/admin/ManageProgram/ViewProgram";
 
 function App() {
   const { Manager, Parent, Psychologist } = UserRole;
@@ -125,6 +126,10 @@ function App() {
         {
           path: "list-support-program",
           element: <ManageProgram />,
+        },
+        {
+          path: "list-support-program/view",
+          element: <ManageProgramDetail />,
         },
         {
           path: "manage-survey",

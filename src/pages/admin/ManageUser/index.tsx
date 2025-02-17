@@ -9,7 +9,6 @@ import { ColumnsType } from "antd/es/table";
 interface StudentRecord {
   key: string;
   user: string;
-  email: string;
   id: string;
   status: string;
   type: string;
@@ -26,8 +25,6 @@ function ManageUser() {
       render: (_, record) => (
         <div className={styles.userInfoContainer}>
           <span className={styles.userName}>{record.user || "N/A"}</span>
-          <br />
-          {record.email || "Chưa cập nhật"}
           <br />
           <span className={styles.userId}>{record.id || "Chưa có ID"}</span>
         </div>
@@ -55,17 +52,15 @@ function ManageUser() {
     {
       key: "1",
       user: "NGUYEN VAN A",
-      email: "nguyenvana@gmail.com",
       id: "YA623",
       status: "Đang hoạt động",
       type: "Học/sinh viên",
     },
-    { key: "2", user: "TRAN THI B",      email: "nguyenvana@gmail.com",
+    { key: "2", user: "TRAN THI B", 
       id: "YA623", status: "Tạm dừng", type: "Phụ huynh" },
     {
       key: "3",
       user: "LE VAN C",
-      email: "nguyenvana@gmail.com",
       id: "YA623",
       status: "Đang hoạt động",
       type: "Tư vấn viên",
@@ -73,7 +68,6 @@ function ManageUser() {
     {
       key: "4",
       user: "PHAM THI D",
-      email: "nguyenvana@gmail.com",
       id: "YA623",
       status: "Tạm dừng",
       type: "Học/sinh viên",
@@ -81,27 +75,24 @@ function ManageUser() {
     {
       key: "5",
       user: "HOANG VAN E",
-      email: "nguyenvana@gmail.com",
       id: "YA623",
       status: "Đang hoạt động",
       type: "Phụ huynh",
     },
-    { key: "6", user: "DO THI F",email: "nguyenvana@gmail.com",
+    { key: "6", user: "DO THI F",
       id: "YA623", status: "Tạm dừng", type: "Tư vấn viên" },
     {
       key: "7",
       user: "VU VAN G",
-      email: "nguyenvana@gmail.com",
       id: "YA623",
       status: "Đang hoạt động",
       type: "Học/sinh viên",
     },
-    { key: "8", user: "BUI THI H", email: "nguyenvana@gmail.com",
+    { key: "8", user: "BUI THI H",
       id: "YA623",status: "Tạm dừng", type: "Phụ huynh" },
     {
       key: "9",
       user: "DANG VAN I",
-      email: "nguyenvana@gmail.com",
       id: "YA623",
       status: "Đang hoạt động",
       type: "Tư vấn viên",
@@ -109,7 +100,6 @@ function ManageUser() {
     {
       key: "10",
       user: "CAO THI J",
-      email: "nguyenvana@gmail.com",
       id: "YA623",
       status: "Tạm dừng",
       type: "Học/sinh viên",
