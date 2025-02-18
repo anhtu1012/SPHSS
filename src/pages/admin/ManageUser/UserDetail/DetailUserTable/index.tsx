@@ -58,8 +58,6 @@ const UserProfileTable: React.FC<UserProfileTableProps> = ({ accountType, showMo
             render: (rating) => <Rate disabled value={rating || 0} />,
           },
         ];
-
-  // ✅ Đã gán data vào dataSource, tránh truyền [] rỗng
   const data =
     ["Học/sinh viên", "Phụ huynh"].includes(accountType)
       ? [

@@ -35,6 +35,7 @@ const PopupChangeUserInfo = ({ isOpen, onClose }: PopupChangeUserInfoProps) => {
       "id",
       "phone",
       "birthDate",
+      "country",
       "address",
     ];
 
