@@ -76,14 +76,27 @@
     margin-bottom: 15px;
   }
 
+  &__img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
   &__excerpt {
     color: #444;
     margin-bottom: 15px;
+    font-size: 1.2rem;
   }
 
   &__tags {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+  }
+
+  &__tagSize {
+    padding: 5px;
+    font-size: 13px;
   }
 }
