@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dropdown, Menu, Pagination, Modal } from "antd";
+import { Dropdown, Menu, Pagination } from "antd";
 import {
   SearchOutlined,
   DeleteOutlined,
