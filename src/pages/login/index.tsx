@@ -42,7 +42,7 @@ const Login = () => {
         navigate("/manager/manage-user");
         toast.success("Successfully Admin");
       } else if (user.roleCode === "R3") {
-        navigate("/psychologist/manage-student");
+        navigate("/psychologist/manage-timeslot");
         toast.success("Successfully Psychologist");
       } else if (user.roleCode === "R2") {
         navigate("/parent/manage-student");

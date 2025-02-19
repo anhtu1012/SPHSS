@@ -84,7 +84,6 @@ const getMenuItems = (roleId: string) => {
         key: "/psychologist/manage-report",
         icon: <TbReportAnalytics />,
       },
-      { label: "Đăng xuất", key: "/login", icon: <LogoutOutlined /> },
     ];
   }
   return [];
