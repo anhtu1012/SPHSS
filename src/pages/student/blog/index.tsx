@@ -1,53 +1,33 @@
 import { Card, Input, Tag } from "antd";
-import { useState } from "react";
-import "./index.scss";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { BlogData } from "../../../models/student";
+import { getBlog } from "../../../services/student/PsychologistDetail/api";
+import "./index.scss";
 
 const { Search } = Input;
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTag, setSelectedTag] = useState(null);
+  const [blogData, setBlogData] = useState<BlogData[]>([]);
   const navigate = useNavigate();
 
-  const blogPosts = [
-    {
-      id: 1,
-      title: "Cách đối phó với stress trong mùa thi",
-      excerpt:
-        "Khám phá các phương pháp hiệu quả để kiểm soát căng thẳng và áp lực trong mùa thi...",
-      author: "Dr. Nguyễn Văn A",
-      date: "2024-01-15",
-      tags: ["Stress", "Học tập", "Sức khỏe tinh thần"],
-    },
-    {
-      id: 2,
-      title: "Xây dựng mối quan hệ lành mạnh trong môi trường học đường",
-      excerpt:
-        "Tìm hiểu cách xây dựng và duy trì các mối quan hệ tích cực với bạn bè và thầy cô...",
-      author: "Dr. Trần Thị B",
-      date: "2024-01-10",
-      tags: ["Mối quan hệ", "Học đường", "Kỹ năng sống"],
-    },
-    {
-      id: 3,
-      title: "Xây dựng mối quan hệ lành mạnh trong môi trường học đường",
-      excerpt:
-        "Tìm hiểu cách xây dựng và duy trì các mối quan hệ tích cực với bạn bè và thầy cô...",
-      author: "Dr. Ngô Thiên C",
-      date: "2024-01-10",
-      tags: ["Mối quan hệ", "Học đường", "Kỹ năng sống"],
-    },
-    {
-      id: 4,
-      title: "Xây dựng mối quan hệ lành mạnh trong môi trường học đường",
-      excerpt:
-        "Tìm hiểu cách xây dựng và duy trì các mối quan hệ tích cực với bạn bè và thầy cô...",
-      author: "Dr. Lương Thùy D",
-      date: "2024-01-10",
-      tags: ["Mối quan hệ", "Học đường", "Kỹ năng sống"],
-    },
-  ];
+  const fetchBlog = useCallback(async () => {
+    try {
+      const res = await getBlog();
+      const data = res.data.data;
+      if (data.length < 0) toast.error("Chưa có blog nào");
+      setBlogData(data);
+    } catch (error: any) {
+      toast.error(error.response?.data || "Lỗi khi fetch data");
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchBlog();
+  }, []);
 
   const tagList = [
     "#Stress",
@@ -55,19 +35,18 @@ const Blog = () => {
     "#Sức khỏe tinh thần",
     "#Mối quan hệ",
     "#Học đường",
-    "#Kỹ năng sống",
+    "#locau",
   ];
 
   const handleClickTag = (tag: any) => {
-    const cleanTag = tag.slice(1);
-    setSelectedTag(selectedTag === cleanTag ? null : cleanTag);
+    setSelectedTag(selectedTag === tag ? null : tag);
   };
 
-  const filteredPosts = blogPosts.filter((post) => {
+  const filteredPosts = blogData.filter((post) => {
     const matchesSearch = post.title
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
-    const matchesTag = selectedTag ? post.tags.includes(selectedTag) : true;
+    const matchesTag = selectedTag ? post.hashtag.includes(selectedTag) : true;
     return matchesSearch && matchesTag;
   });
 
@@ -82,7 +61,7 @@ const Blog = () => {
           <Tag
             key={tag}
             className={`blog-page__tagCustom ${
-              selectedTag === tag.slice(1) ? "blog-page__selectedTag" : ""
+              selectedTag === tag ? "blog-page__selectedTag" : ""
             }`}
             onClick={() => handleClickTag(tag)}
           >
@@ -104,17 +83,22 @@ const Blog = () => {
           <Card
             key={post.id}
             className="blog-post"
-            onClick={() => navigate(`/blog/${post.id}`, { state: post })}
+            onClick={() => navigate(`/blog/${post.id}`, { state: post.id })}
           >
             <h2 className="blog-post__title">{post.title}</h2>
             <p className="blog-post__meta">
-              Bởi {post.author} •{" "}
-              {new Date(post.date).toLocaleDateString("vi-VN")}
+              Bởi {post.user.firstName + " " + post.user.lastName} •{" "}
+              {new Date(post.createdAt).toLocaleDateString("vi-VN")}
             </p>
-            <p className="blog-post__excerpt">{post.excerpt}</p>
+            <img
+              src={post.imgageUrl}
+              alt="Image For Blog"
+              className="blog-post__img"
+            />
+            <p className="blog-post__excerpt">{post.contentMarkdown}</p>
             <div className="blog-post__tags">
-              {post.tags.map((tag) => (
-                <Tag key={tag} color="blue">
+              {post.hashtag.map((tag) => (
+                <Tag key={tag} color="blue" className="blog-post__tagSize">
                   {tag}
                 </Tag>
               ))}
