@@ -4,7 +4,8 @@ export const programList = [
     title: "Tư vấn tâm lý cá nhân",
     description:
       "Chương trình tư vấn 1-1 với chuyên gia tâm lý, giúp bạn giải quyết các vấn đề cá nhân và phát triển bản thân",
-    image: "https://example.com/program1.jpg",
+    image:
+      "https://firebasestorage.googleapis.com/v0/b/pet-management-94cf6.appspot.com/o/program-1.jpg?alt=media&token=4afd4cb5-fa0c-4fdb-931e-85d5d7c50e0f",
     rating: 4.8,
     reviews: 128,
     price: 500000,
@@ -62,7 +63,8 @@ export const programList = [
     title: "Chương trình tư vấn nhóm",
     description:
       "Tham gia các buổi tư vấn nhóm để chia sẻ, học hỏi và phát triển kỹ năng xã hội cùng những người có cùng mối quan tâm",
-    image: "https://example.com/program2.jpg",
+    image:
+      "https://firebasestorage.googleapis.com/v0/b/pet-management-94cf6.appspot.com/o/program-2.webp?alt=media&token=249dc743-4354-48f3-ae5d-ad32e7ea9016",
     rating: 4.6,
     reviews: 95,
     price: 300000,
@@ -111,7 +113,8 @@ export const programList = [
     title: "Workshop Quản lý Stress",
     description:
       "Workshop chuyên sâu về các kỹ thuật quản lý stress và cân bằng cuộc sống học tập",
-    image: "https://example.com/program3.jpg",
+    image:
+      "https://firebasestorage.googleapis.com/v0/b/pet-management-94cf6.appspot.com/o/program-3.jpg?alt=media&token=ae338815-451d-4e25-a420-a5ed40dfe1a5",
     rating: 4.9,
     reviews: 156,
     price: 400000,

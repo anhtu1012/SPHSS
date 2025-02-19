@@ -24,7 +24,7 @@ import DoctorCard from "../../../components/DoctorCard";
 import ProgramCard from "../../../components/ProgramCard";
 
 export default function Home() {
-  // const featuresRef = useRef(null);  
+  // const featuresRef = useRef(null);
   const programsRef = useRef(null);
   const doctorsRef = useRef(null);
 
@@ -36,17 +36,20 @@ export default function Home() {
     {
       title: "Tư vấn tâm lý cá nhân",
       description: "Chương trình tư vấn 1-1 với chuyên gia tâm lý",
-      image: "/program_1.jpg",
+      image:
+        "https://firebasestorage.googleapis.com/v0/b/pet-management-94cf6.appspot.com/o/program-1.jpg?alt=media&token=4afd4cb5-fa0c-4fdb-931e-85d5d7c50e0f",
     },
     {
       title: "Chương trình tư vấn nhóm",
       description: "Tham gia các buổi tư vấn nhóm để chia sẻ",
-      image: "/program_2.jpg",
+      image:
+        "https://firebasestorage.googleapis.com/v0/b/pet-management-94cf6.appspot.com/o/program-2.webp?alt=media&token=249dc743-4354-48f3-ae5d-ad32e7ea9016",
     },
     {
       title: "Workshop Quản lý Stress",
       description: "Workshop chuyên sâu về quản lý stress",
-      image: "/program_3.jpg",
+      image:
+        "https://firebasestorage.googleapis.com/v0/b/pet-management-94cf6.appspot.com/o/program-3.jpg?alt=media&token=ae338815-451d-4e25-a420-a5ed40dfe1a5",
     },
   ];
 
@@ -208,7 +211,7 @@ export default function Home() {
         <div className="home__psychologist__list__title">
           Đội ngũ chuyên viên tâm lý
         </div>
-        <Carousel dots={false} arrows slidesToShow={6}>
+        <Carousel dots={false} arrows slidesToShow={5}>
           {psychologistList.map((psychology, index) => (
             <Psychologist key={index} {...psychology} />
           ))}
