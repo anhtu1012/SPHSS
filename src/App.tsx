@@ -35,6 +35,7 @@ import Blog from "./pages/student/blog";
 import Contact from "./pages/student/contact";
 import BlogDetail from "./pages/student/blog/[id]";
 import ManageProgramDetail from "./pages/admin/ManageProgram/ViewProgram";
+import ManageCreateProgram from "./pages/admin/ManageProgram/CreateProgram";
 
 function App() {
   const { Manager, Parent, Psychologist } = UserRole;
@@ -126,6 +127,10 @@ function App() {
         {
           path: "list-support-program",
           element: <ManageProgram />,
+        },
+        {
+          path: "list-support-program/create-program",
+          element: <ManageCreateProgram />,
         },
         {
           path: "list-support-program/view",

@@ -1,44 +1,68 @@
-.popupFooter {
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
 }
-.customModal {
-  max-width: 400px !important; 
+
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  min-width: 300px;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  width: 35px !important;
+  height: 35px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white !important; /* Đặt nền trắng */
+  border: 2px solid orange !important; /* Viền cam */
+  border-radius: 50% !important; /* Đảm bảo tròn */
+  cursor: pointer;
+  color: orange !important; /* Màu icon */
+  transition: background 0.3s ease, transform 0.2s ease, color 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 0 !important;
+  min-width: unset !important;
+}
+
+.closeButton svg {
+  color: orange !important; /* Màu chữ của icon `X` */
+  stroke: orange !important; /* Màu viền của icon */
+  width: 20px;
+  height: 20px;
+}
+
+.closeButton:hover {
+  background: #ffebcc !important; /* Nền cam nhạt khi hover */
+  color: red !important; /* Màu `X` thành đỏ */
+  transform: scale(1.1);
+}
+
+.closeButton:hover svg {
+  stroke: red !important; /* Đổi màu `X` khi hover */
 }
 
 .modalTitle {
-  text-align: center;
-  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 20px;
 }
 
 .buttonContainer {
   display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.lockButton {
-  background-color: rgb(201, 52, 52) !important;
-  color: white !important;
-}
-
-.unlockButton {
-  background-color: #51B748 !important;
-  color: white !important;
-}
-
-.lockConfirmButton {
-  background-color: rgb(206, 3, 3) !important;
-  color: white  !important;
-}
-
-.unlockConfirmButton {
-  background-color: rgb(2, 154, 2) !important;
-  color: white !important;
-}
-
-.cancelButton {
-  background-color: gray !important;
-  color: white !important;
+  justify-content: space-around;
 }

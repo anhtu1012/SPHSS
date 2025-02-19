@@ -3,6 +3,7 @@
     font-size: 24px;
     font-weight: 600;
     color: #51B748;
+    margin-bottom: 15px;
 }
 
 .formGrid {
@@ -31,7 +32,9 @@
     margin-left: 4px;
     font-weight: bold;
   }
-  
+label{
+  font-weight: bold;
+}
 
 .fullWidth {
   width: 100%;
@@ -43,14 +46,14 @@
   border: 1px solid #ec744a;
   border-radius: 4px;
   padding: 4px;
-  background-color: #ec744a;
-  color: white;
+  background-color: #ffffffff;
+  color: #000;
   transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .inputField:focus {
   color: black;
-  background-color: #ffffff;
+  background-color: #f5efed;
 }
 
 .customModal {
@@ -60,7 +63,7 @@
 .footer {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .saveButton {
     background-color: #08509F !important; 
@@ -91,9 +94,9 @@
 }
 
 .inputField[readonly] {
-    background-color: #ef9777; 
+    background-color: #fcf3f0; 
     cursor: not-allowed; 
-    color: #ffffff; 
+    color: #000000; 
 }
 
 @keyframes shake {

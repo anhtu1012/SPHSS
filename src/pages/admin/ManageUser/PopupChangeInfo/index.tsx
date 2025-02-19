@@ -52,9 +52,6 @@ const PopupChangeUserInfo = ({ isOpen, onClose }: PopupChangeUserInfoProps) => {
 
   return (
     <Modal
-      title={
-        <h2 className={styles.modalTitle}>THAY ĐỔI THÔNG TIN NGƯỜI DÙNG</h2>
-      }
       open={isOpen}
       onCancel={onClose}
       footer={null}
@@ -62,6 +59,7 @@ const PopupChangeUserInfo = ({ isOpen, onClose }: PopupChangeUserInfoProps) => {
       width={800}
       style={{ top: "5%" }}
     >
+      <h2 className={styles.modalTitle}>THAY ĐỔI THÔNG TIN NGƯỜI DÙNG</h2>
       <div className={styles.formGrid}>
         <div className={styles.formGroups}>
           <div className={styles.formGroup}>
@@ -191,7 +189,7 @@ const PopupChangeUserInfo = ({ isOpen, onClose }: PopupChangeUserInfoProps) => {
           </div>
         </div>
         <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-          <label>
+          <label >
             Địa chỉ <span className={styles.required}>*</span>
           </label>
           <Input

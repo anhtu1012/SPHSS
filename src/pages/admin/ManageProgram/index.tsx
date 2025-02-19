@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dropdown, Menu, Pagination, Modal } from "antd";
+import { Dropdown, Menu, Pagination } from "antd";
 import {
   SearchOutlined,
   DeleteOutlined,
@@ -9,6 +9,7 @@ import {
 import SearchBar from "../../../components/cSearchbar/SearchBar";
 import styles from "./ManageProgram.module.scss";
 import { useNavigate } from "react-router-dom";
+import Cbutton from "../../../components/cButton";
 
 interface DataType {
   key: string;
@@ -91,17 +92,19 @@ const ManageProgram = () => {
       status: "active",
     },
   ]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [programToDelete, setProgramToDelete] = useState<DataType | null>(null);
+
   const handleSearch = (values: Record<string, string>) => {
     setLoading(true);
     setTimeout(() => {
       const filteredData = data.filter(
         (item) =>
-          (values.name ? item.name.includes(values.name) : true) && // Sửa item.user thành item.name
+          (values.name ? item.name.includes(values.name) : true) && 
           (values.status && values.status !== "Tất cả"
             ? item.status === values.status
             : true)
       );
-
       setData(filteredData.length ? filteredData : []);
       setLoading(false);
     }, 1000);
@@ -111,21 +114,30 @@ const ManageProgram = () => {
   const endIndex = startIndex + pageSize;
   const currentData = data.slice(startIndex, endIndex);
 
-  const handleDelete = (programName: string, programKey: string) => {
-    Modal.confirm({
-      title: "Xác nhận xóa",
-      content: `Bạn có muốn xóa "${programName}" không?`,
-      okText: "Xóa",
-      okType: "danger",
-      cancelText: "Hủy",
-      onOk: () => {
-        setData((prev) => prev.filter((item) => item.key !== programKey));
-      },
-    });
+  const openDeleteModal = (program: DataType) => {
+    setProgramToDelete(program);
+    setShowDeleteModal(true);
   };
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setProgramToDelete(null);
+  };
+
+  const confirmDelete = () => {
+    if (programToDelete) {
+      setData((prev) => prev.filter((item) => item.key !== programToDelete.key));
+      closeDeleteModal();
+    }
+  };
+  const handleNavigate = () => {
+    navigate("create-program");
+  };
+
 
   return (
     <div>
+      <div className={styles.headerLine}>
       <SearchBar
         fields={[
           { key: "name", placeholder: "Tên chương trình", type: "text" },
@@ -138,7 +150,13 @@ const ManageProgram = () => {
         ]}
         onSearch={handleSearch}
       />
-
+      <Cbutton
+          className={styles.navigateButton}
+          onClick={handleNavigate}
+        >
+          Tạo chương trình
+        </Cbutton>
+      </div>
       {loading ? (
         <p className={styles.message}>Đang tải dữ liệu...</p>
       ) : (
@@ -151,7 +169,7 @@ const ManageProgram = () => {
                   <h3 className={styles.nameProgram}>{item.name}</h3>
                   <ProgramActions
                     onView={() => navigate("view")}
-                    onDelete={() => handleDelete(item.name, item.key)}
+                    onDelete={() => openDeleteModal(item)}
                   />
                 </div>
                 <p className={styles.sitInProgram}>
@@ -180,6 +198,16 @@ const ManageProgram = () => {
                 }
               }}
             />
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && programToDelete && (
+        <div className={styles.customModal}>
+          <div className={styles.modalContent}>
+            <p>Bạn muốn xóa "{programToDelete.name}" không?</p>
+            <Cbutton onClick={confirmDelete} className={styles.deleteBtn}>Xóa</Cbutton>
+            <Cbutton onClick={closeDeleteModal} className={styles.cancelBtn}>Hủy</Cbutton>
           </div>
         </div>
       )}

@@ -1,46 +1,27 @@
-import { Modal, Input, Upload, message } from "antd";
-import { useState } from "react";
-import styles from "./EditProgram.module.scss";
+import styles from "./CreateProgram.module.scss";
+import { Input, Upload, message } from "antd";
 import Cbutton from "../../../../components/cButton";
+import { useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 
-interface ProgramPopupProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const ProgramPopup = ({ isOpen, onClose }: ProgramPopupProps) => {
+function ManageDashboard() {
   const [formData, setFormData] = useState({
-    programName: "KS và những câu chuyện",
-    startDate: "26-08-2024",
-    endDate: "31-12-2025",
-    participants: "SE1702_Fall24",
-    location: "FPT Software",
-    organizerEmail: "fptevent@fpt.vn",
-    contactPhone: "0987654321",
-    detailedContent: "KS là 20 sinh viên điên khùng và thú zị, rất iuiu",
+    programName: "",
+    startDate: "",
+    endDate: "",
+    participants: "",
+    location: "",
+    organizerEmail: "",
+    contactPhone: "",
+    detailedContent: "",
     imageUrl: "",
   });
 
   const [error, setError] = useState("");
   const [isShaking, setIsShaking] = useState(false);
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleImageUpload = (file: any) => {
-    const isImage = file.type.startsWith("image/");
-    if (!isImage) {
-      message.error("Chỉ được tải lên file ảnh!");
-      return false;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      setFormData((prev) => ({ ...prev, imageUrl: reader.result as string }));
-    };
-    reader.readAsDataURL(file);
-    return false; 
   };
 
   const handleSave = () => {
@@ -63,18 +44,26 @@ const ProgramPopup = ({ isOpen, onClose }: ProgramPopupProps) => {
       return;
     }
     setError("");
-    onClose();
+    console.log("Dữ liệu chương trình:", formData);
+  };
+
+  const handleImageUpload = (file: any) => {
+    const isImage = file.type.startsWith("image/");
+    if (!isImage) {
+      message.error("Chỉ được tải lên file ảnh!");
+      return false;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFormData((prev) => ({ ...prev, imageUrl: reader.result as string }));
+    };
+    reader.readAsDataURL(file);
+    return false;
   };
 
   return (
-    <Modal
-      open={isOpen}
-      onCancel={onClose}
-      footer={null}
-      className={styles.customModal}
-      width={900}
-    >
-      <h2 className={styles.modalTitle}>CHỈNH SỬA THÔNG TIN CHƯƠNG TRÌNH</h2>
+    <div>
+      <h2 className={styles.modalTitle}>TẠO CHƯƠNG TRÌNH</h2>
       <div className={styles.formGrid}>
         <div className={styles.formGroups}>
           <div className={styles.formGroup}>
@@ -198,11 +187,11 @@ const ProgramPopup = ({ isOpen, onClose }: ProgramPopupProps) => {
 
       <div className={styles.footer}>
         <Cbutton className={styles.saveButton} onClick={handleSave}>
-          Lưu Thay Đổi
+          Tạo Chương Trình
         </Cbutton>
       </div>
-    </Modal>
+    </div>
   );
-};
+}
 
-export default ProgramPopup;
+export default ManageDashboard;
