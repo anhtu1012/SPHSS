@@ -41,7 +41,7 @@ const AntDComponent = <T extends Record<string, any>>({
         dataSource={dataSource}
         columns={processedColumns}
         bordered={bordered}
-        pagination={{ pageSize: 8 }}
+        pagination={{ pageSize: 7 }}
         scroll={{ x: "max-content" }}
       />
     </>

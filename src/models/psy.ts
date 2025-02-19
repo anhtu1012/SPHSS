@@ -14,8 +14,9 @@ export interface TimeSlotCreateValues {
 }
 
 export interface TimeSlotUpdateValues {
-  start_time: string;
-  end_time: string;
+  start_time?: string;
+  end_time?: string;
+  status?: string;
 }
 
 export interface TimeSlotValues {

@@ -1,7 +1,16 @@
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Popconfirm, TimePicker } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  Popconfirm,
+  Select,
+  TimePicker,
+} from "antd";
 import { useForm } from "antd/es/form/Form";
 import { ColumnType } from "antd/es/table";
+import dayjs from "dayjs";
 import { useCallback, useEffect, useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdAutoDelete } from "react-icons/md";
@@ -13,19 +22,24 @@ import {
   createTimeSlot,
   deleteTimeSlot,
   getTimeSlot,
+  updateTimeSlot,
 } from "../../../services/psychologist/api";
-import dayjs from "dayjs";
 
 function ManageTimeslot() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [form] = useForm();
   const [userID, setUserID] = useState<string>("");
   const [rowData, setRowData] = useState<TimeSlotValues[]>([]);
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const [editingRecord, setEditingRecord] = useState<TimeSlotValues | null>(
+    null
+  );
+  const [statusInit, setStatus] = useState("");
+  console.log(statusInit);
+
   const fetchTimeSlot = useCallback(async () => {
     try {
       const res = await getTimeSlot();
-      console.log(res);
-
       const data = res.data.data;
       if (data.length <= 0) {
         toast.warning("Chưa có lịch khám nào");
@@ -38,9 +52,38 @@ function ManageTimeslot() {
     }
   }, []);
 
-  const handleViewDetails = (student: any) => {
-    // student chứa thông tin của học sinh hiện tại
-    console.log("Thông tin học sinh: ", student);
+  const handleSaveTimeSlot = useCallback(
+    async (id: string) => {
+      try {
+        if (!editingRecord) {
+          toast.error("Không có dữ liệu để cập nhật!");
+          return;
+        }
+        const payload = {
+          start_time: editingRecord.start_time || "",
+          end_time: editingRecord.end_time || "",
+          status: editingRecord.status || "",
+        };
+        console.log("Payload gửi lên:", payload);
+        await updateTimeSlot(id, payload);
+        toast.success("Cập nhật lịch hẹn thành công");
+        setEditingKey(null);
+        setEditingRecord(null);
+        fetchTimeSlot();
+      } catch (error) {
+        toast.error("Lỗi khi cập nhật dữ liệu");
+      }
+    },
+    [editingRecord, fetchTimeSlot]
+  );
+
+  const handleEditDetails = (record: TimeSlotValues) => {
+    setEditingKey(record.time_slot_id);
+    setEditingRecord({ ...record });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingKey(null);
   };
 
   const handleCreateTimeslot = useCallback(async () => {
@@ -72,7 +115,7 @@ function ManageTimeslot() {
     }
   }, []);
 
-  const columns: ColumnType[] = [
+  const columns: ColumnType<TimeSlotValues>[] = [
     {
       title: "Bác sĩ",
       dataIndex: "user",
@@ -81,51 +124,103 @@ function ManageTimeslot() {
     {
       title: "Thời gian bắt đầu",
       dataIndex: "start_time",
+      render: (_, record) =>
+        editingKey === record.time_slot_id ? (
+          <TimePicker
+            value={dayjs(editingRecord?.start_time, "HH:mm")}
+            format="HH:mm"
+            onChange={(time) =>
+              setEditingRecord((prev) =>
+                prev
+                  ? { ...prev, start_time: time?.format("HH:mm") || "" }
+                  : prev
+              )
+            }
+          />
+        ) : (
+          record.start_time
+        ),
     },
     {
       title: "Thời gian kết thúc",
       dataIndex: "end_time",
+      render: (_, record) =>
+        editingKey === record.time_slot_id ? (
+          <TimePicker
+            value={dayjs(editingRecord?.end_time, "HH:mm")}
+            format="HH:mm"
+            onChange={(time) =>
+              setEditingRecord((prev) =>
+                prev ? { ...prev, end_time: time?.format("HH:mm") || "" } : prev
+              )
+            }
+          />
+        ) : (
+          record.end_time
+        ),
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
-      render: (status) => (
-        <span
-          style={{
-            color: status === "Booked" ? "#EC744A" : "#08509F",
-          }}
-        >
-          {status === "Booked" ? (
-            <CloseCircleOutlined />
-          ) : (
-            <CheckCircleOutlined />
-          )}{" "}
-          {status}
-        </span>
-      ),
+      render: (status, record) =>
+        editingKey === record.time_slot_id ? (
+          <Select value={status} onChange={(value) => setStatus(value)}>
+            <Select.Option value="Available">Available</Select.Option>
+            <Select.Option value="Booked">Booked</Select.Option>
+          </Select>
+        ) : (
+          <span
+            style={{
+              color: status === "Booked" ? "#EC744A" : "#08509F",
+            }}
+          >
+            {status === "Booked" ? (
+              <CloseCircleOutlined />
+            ) : (
+              <CheckCircleOutlined />
+            )}{" "}
+            {status}
+          </span>
+        ),
     },
     {
       title: "Chi tiết",
       width: 100,
       align: "center",
-      render: (_, record) => (
-        <div style={{ display: "flex", gap: "12px" }}>
-          <AiOutlineEdit
-            size={30}
-            style={{ color: "orange", cursor: "pointer" }}
-            onClick={() => handleViewDetails(record)}
-          />
-          <Popconfirm
-            title="Xóa lịch hẹn"
-            description="Bạn có chắc chắn muốn xóa lịch hẹn này?"
-            onConfirm={() => handleDeleteTimeslot(record.time_slot_id)}
-            okText="Có"
-            cancelText="Không"
-          >
-            <MdAutoDelete style={{ cursor: "pointer" }} color="red" size={30} />
-          </Popconfirm>
-        </div>
-      ),
+      render: (_, record) =>
+        editingKey === record.time_slot_id ? (
+          <div style={{ display: "flex", gap: "12px" }}>
+            <CheckCircleOutlined
+              style={{ fontSize: "25px", color: "green", cursor: "pointer" }}
+              onClick={() => handleSaveTimeSlot(record.time_slot_id)}
+            />
+            <CloseCircleOutlined
+              style={{ fontSize: "25px", color: "red", cursor: "pointer" }}
+              onClick={handleCancelEdit}
+            />
+          </div>
+        ) : (
+          <div style={{ display: "flex", gap: "12px" }}>
+            <AiOutlineEdit
+              size={30}
+              style={{ color: "orange", cursor: "pointer" }}
+              onClick={() => handleEditDetails(record)}
+            />
+            <Popconfirm
+              title="Xóa lịch hẹn"
+              description="Bạn có chắc chắn muốn xóa lịch hẹn này?"
+              onConfirm={() => handleDeleteTimeslot(record.time_slot_id)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <MdAutoDelete
+                style={{ cursor: "pointer" }}
+                color="red"
+                size={30}
+              />
+            </Popconfirm>
+          </div>
+        ),
     },
   ];
 
@@ -172,13 +267,18 @@ function ManageTimeslot() {
             >
               Hủy
             </Button>,
-            <Button
+            <Cbutton
               type="primary"
-              style={{ background: "green", color: "white" }}
+              origin={{
+                color: "white",
+                bgcolor: "green",
+                hoverBgColor: "white",
+                hoverColor: "green",
+              }}
               onClick={() => handleCreateTimeslot()}
             >
               Tạo
-            </Button>,
+            </Cbutton>,
           ]}
         >
           <Form form={form} labelCol={{ span: 24 }} style={{ rowGap: "16px" }}>
@@ -212,11 +312,7 @@ function ManageTimeslot() {
           </Form>
         </Modal>
       </div>
-      <AntDComponent
-        dataSource={rowData}
-        columns={columns}
-        // showOperationColumn={true}
-      />
+      <AntDComponent dataSource={rowData} columns={columns} />
     </div>
   );
 }
