@@ -1,7 +1,9 @@
 import { Rate } from "antd";
 import "./index.scss";
+import { useNavigate } from "react-router-dom";
 
 interface ProgramCardProps {
+  id: string;
   title: string;
   description: string;
   image: string;
@@ -10,14 +12,21 @@ interface ProgramCardProps {
 }
 
 const ProgramCard = ({
+  id,
   title,
   description,
   image,
   rating = 4,
   price = "500.000đ",
 }: ProgramCardProps) => {
+  const navigate = useNavigate();
   return (
-    <div className="program__card">
+    <div
+      className="program__card"
+      onClick={() => {
+        navigate(`/program/${id}`);
+      }}
+    >
       <div className="program__image__container">
         <img src={image} alt={title} className="program__image" />
       </div>
