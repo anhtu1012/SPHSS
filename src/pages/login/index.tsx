@@ -39,7 +39,7 @@ const Login = () => {
 
       setLoginError("");
       if (user.roleCode === "R4") {
-        navigate("/manager/manage-user");
+        navigate("/manager/dashboard");
         toast.success("Successfully Admin");
       } else if (user.roleCode === "R3") {
         navigate("/psychologist/manage-timeslot");

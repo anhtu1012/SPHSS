@@ -5,51 +5,41 @@ import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 // import "./index.scss";
 // import { createMarkdown, fetchDoctor } from "../../../services/api";
-
 import { useForm } from "antd/es/form/Form";
-import { getMarkDown } from "../../../services/psychologist/api";
-import DisplayMarkdown from "../../../utils/markdown";
+import { toast } from "react-toastify";
+import { getCategory } from "../../../services/psychologist/api";
 
 function CreateBlog() {
   const [contentHTML, setContentHTML] = useState<string>("");
   console.log(contentHTML);
   const [contentMarkdown, setContentMarkdown] = useState<string>("");
   console.log(contentMarkdown);
-  const [doctorData, setDoctorData] = useState<any[]>([]);
+  const [category, setCategory] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = useForm();
   const mdParser = new MarkdownIt();
 
-  const fetchAllDoctors = async () => {
+  const fetchAllCategory = async () => {
     setLoading(true);
-    const choose = "All";
-    console.log(choose);
     try {
-      const res = await getMarkDown();
-      // console.log(res.data.data);
-      const doctors = res.data.data;
-      console.log(doctors);
-
-      setDoctorData(doctors);
-
-      if (doctors.length > 0) {
-        const defaultDoctor = doctors[0];
+      const res = await getCategory();
+      const categories = res.data.data;
+      setCategory(categories);
+      if (categories.length > 0) {
+        const defaultCategory = categories[0];
         form.setFieldsValue({
-          doctorId: defaultDoctor.id,
-          description: defaultDoctor.description,
+          category_id: defaultCategory.categoryId,
         });
       }
       setLoading(false);
     } catch (error: any) {
-      // toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message);
     }
   };
 
   useEffect(() => {
-    fetchAllDoctors();
+    fetchAllCategory();
   }, []);
-
-  console.log(doctorData);
 
   const handleEditorChange = ({
     html,
@@ -84,10 +74,6 @@ function CreateBlog() {
     return optionLower.includes(inputLower);
   };
 
-  // if (loading) {
-  //   return <LoadingTruck />;
-  // }
-
   return (
     <div>
       <Form
@@ -100,13 +86,13 @@ function CreateBlog() {
         }}
       >
         <Form.Item
-          label="Select Doctor"
-          name="doctorId"
-          rules={[{ required: true, message: "Please select a doctor!" }]}
+          label="Chọn danh mục"
+          name="categoryId"
+          rules={[{ required: true, message: "Hãy chọn 1 danh mục" }]}
         >
           <Select
             showSearch
-            placeholder="Select Doctor"
+            placeholder="Chọn danh mục"
             optionFilterProp="children"
             filterOption={fuzzySearch}
             filterSort={(optionA, optionB) =>
@@ -114,24 +100,29 @@ function CreateBlog() {
                 .toLowerCase()
                 .localeCompare(optionB.children.toLowerCase())
             }
+            style={{
+              border: "1px solid rgba(0, 0, 0, 0.1)",
+              borderRadius: "4px",
+              backgroundColor: "white",
+            }}
           >
-            {/* {doctorData.map((data) => (
-              <Option key={data.id} value={data.id}>
-                {`${data.firstName} ${data.lastName} `}
-              </Option>
-            ))} */}
+            {category.map((data) => (
+              <Select.Option key={data.categoryId} value={data.categoryId}>
+                {data.name}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
 
         <Form.Item
-          label="Description"
+          label="Mô tả"
           name="description"
-          rules={[{ required: true, message: "Please enter a description!" }]}
+          rules={[{ required: true, message: "Hãy nhập mô tả!" }]}
         >
-          <Input.TextArea placeholder="Enter description" />
+          <Input.TextArea placeholder="Hãy nhập mô tả" />
         </Form.Item>
 
-        <Form.Item label="Content">
+        <Form.Item label="Nội dung">
           <MdEditor
             style={{ height: "500px" }}
             renderHTML={(text: string) => mdParser.render(text)}
@@ -141,17 +132,10 @@ function CreateBlog() {
 
         <Form.Item>
           <Button loading={loading} type="primary" htmlType="submit">
-            Submit
+            Đăng
           </Button>
         </Form.Item>
       </Form>
-      {/* {doctorData.map()} */}
-
-      <DisplayMarkdown
-        content={
-          "**DDL** : data definition (Định nghĩa dữ liệu)\n+ **Create** + database : tạo ra database\n+ <a>Rename</a> : đổi tên\n+ <a>Alter</a> : đặt ràng buộc \n+ <a>Drop + database</a>:  vứt luôn bảng database"
-        }
-      />
     </div>
   );
 }

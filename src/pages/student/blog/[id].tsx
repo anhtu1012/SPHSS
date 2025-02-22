@@ -14,8 +14,6 @@ function BlogDetail() {
     try {
       const res = await getBlogDetail(postId);
       const data = res.data.data;
-      console.log(data);
-
       setBlogDetail(data);
     } catch (error: any) {
       toast.error(error?.response.message || "Lỗi khi lấy data");
