@@ -32,6 +32,7 @@ const PsychologistDetail = () => {
       toast.warning("Vui lòng chọn ngày tư vấn trước");
       return;
     }
+
     setSelectedSlot(timeSlot);
     setIsAppointmentModalOpen(true);
   };
@@ -306,6 +307,7 @@ const PsychologistDetail = () => {
         selectedSlot={selectedSlot}
         selectedDate={selectedDate}
         onSubmit={handleAppointmentSubmit}
+        disabledDate={disabledDate}
       />
     </div>
   );

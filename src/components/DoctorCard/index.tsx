@@ -1,7 +1,9 @@
 import { Rate } from "antd";
 import "./index.scss";
+import { useNavigate } from "react-router-dom";
 
 interface DoctorCardProps {
+  id: string | number;
   img: string;
   name: string;
   specialty?: string;
@@ -10,14 +12,20 @@ interface DoctorCardProps {
 }
 
 const DoctorCard = ({
+  id,
   img,
   name,
   specialty = "Chuyên gia tâm lý",
   experience = "15 năm kinh nghiệm",
   rating = 5,
 }: DoctorCardProps) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="doctor__card">
+    <div
+      className="doctor__card"
+      onClick={() => navigate(`/psychologist-detail/${id}`)}
+    >
       <img src={img} alt={name} className="doctor__image" />
       <div className="doctor__info">
         <h3 className="doctor__name">{name}</h3>

@@ -33,6 +33,7 @@ interface AppointmentFormProps {
   selectedSlot: TimeSlotType | null;
   selectedDate: Date;
   onSubmit: (values: any) => void;
+  disabledDate: (current: any) => boolean;
 }
 
 const AppointmentForm = ({
@@ -42,6 +43,7 @@ const AppointmentForm = ({
   selectedSlot,
   selectedDate,
   onSubmit,
+  disabledDate,
 }: AppointmentFormProps) => {
   const [form] = Form.useForm();
   const user = useSelector((state: RootState) => state.user) as any | null;
@@ -133,6 +135,7 @@ const AppointmentForm = ({
             className="appointment-date-picker"
             format="DD/MM/YYYY"
             prefix={<CalendarOutlined />}
+            disabledDate={disabledDate}
           />
         </Form.Item>
 

@@ -266,6 +266,65 @@ $card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   }
 
+  &__info {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: $card-shadow;
+    margin-bottom: 2rem;
+    text-align: left;
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+
+    &__title {
+      font-size: 1.5rem;
+      color: $secondary-color;
+      margin-bottom: 1rem;
+      color: #08509f;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    &__text {
+      font-size: 1.1rem;
+      color: #444;
+      line-height: 1.6;
+      line-height: 1.6;
+      color: #444;
+    }
+  }
+
+  &__detail {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: $card-shadow;
+    margin-bottom: 2rem;
+    text-align: left;
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    &__title {
+      font-size: 1.5rem;
+      color: $secondary-color;
+      margin-bottom: 1rem;
+      color: #08509f;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    &__text {
+      font-size: 1.1rem;
+      color: #444;
+      line-height: 1.6;
+      line-height: 1.6;
+      color: #444;
+    }
+  }
+
   &__recommendations {
     background: white;
     border-radius: 16px;

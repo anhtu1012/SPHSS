@@ -17,9 +17,7 @@ import fptSchools from "../../../assets/fpt_schools.png";
 import "./index.scss";
 import Icon from "./Icon";
 import SchoolImg from "./SchoolImg";
-import Psychologist from "./Psychologist";
 import { psychologistList } from "./mockData";
-import { Carousel } from "antd";
 import DoctorCard from "../../../components/DoctorCard";
 import ProgramCard from "../../../components/ProgramCard";
 
@@ -34,18 +32,21 @@ export default function Home() {
 
   const featuredPrograms = [
     {
+      id: "1",
       title: "Tư vấn tâm lý cá nhân",
       description: "Chương trình tư vấn 1-1 với chuyên gia tâm lý",
       image:
         "https://firebasestorage.googleapis.com/v0/b/pet-management-94cf6.appspot.com/o/program-1.jpg?alt=media&token=4afd4cb5-fa0c-4fdb-931e-85d5d7c50e0f",
     },
     {
+      id: "2",
       title: "Chương trình tư vấn nhóm",
       description: "Tham gia các buổi tư vấn nhóm để chia sẻ",
       image:
         "https://firebasestorage.googleapis.com/v0/b/pet-management-94cf6.appspot.com/o/program-2.webp?alt=media&token=249dc743-4354-48f3-ae5d-ad32e7ea9016",
     },
     {
+      id: "3",
       title: "Workshop Quản lý Stress",
       description: "Workshop chuyên sâu về quản lý stress",
       image:
@@ -205,17 +206,6 @@ export default function Home() {
         <div className="home__section__three__img__container">
           <img src={sectionThree} alt="section_one" />
         </div>
-      </div>
-
-      <div className="home__psychologist__list__container">
-        <div className="home__psychologist__list__title">
-          Đội ngũ chuyên viên tâm lý
-        </div>
-        <Carousel dots={false} arrows slidesToShow={5}>
-          {psychologistList.map((psychology, index) => (
-            <Psychologist key={index} {...psychology} />
-          ))}
-        </Carousel>
       </div>
     </div>
   );
