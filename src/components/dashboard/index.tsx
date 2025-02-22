@@ -10,6 +10,7 @@ import Footer from "../footer";
 import styles from "./Dashboard.module.scss";
 import ItemMenu from "./ItemMenu/itemMenu";
 import { UserRole } from "../../models/enum";
+import AdminHeader from "../header/AdminHeader";
 
 const { Content, Sider } = Layout;
 
@@ -22,6 +23,8 @@ const Dashboard: React.FC = () => {
     switch (user.roleCode) {
       case UserRole.Psychologist:
         return <PsychologistHeader />;
+      case UserRole.Manager:
+        return <AdminHeader />;
       default:
         return <Header />;
     }

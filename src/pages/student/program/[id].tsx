@@ -1,7 +1,9 @@
-import { useParams } from "react-router-dom";
-import { Rate, Divider, Avatar } from "antd";
 import { CalendarOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { Avatar, Divider, Rate } from "antd";
+import { useLocation, useParams } from "react-router-dom";
 
+import { useCallback, useEffect, useState } from "react";
+import { getProgramDetail } from "../../../services/psychologist/api";
 import "./detail.scss";
 import { programList } from "./mockData";
 
@@ -46,8 +48,26 @@ interface ProgramDetail {
 }
 
 function ProgramDetail() {
+  const [programDetail, setProgramDetail] = useState();
+  console.log(programDetail);
+  const location = useLocation();
+  const programId = location.state;
   const { id } = useParams();
   const program = programList.find((p: ProgramDetail) => p.id === id);
+
+  const getDetail = useCallback(async () => {
+    try {
+      const res = await getProgramDetail(programId);
+      const data = res.data.data;
+      setProgramDetail(data);
+    } catch (error) {
+      // toast.error("Không tìm thấy chương trình!");
+    }
+  }, []);
+
+  useEffect(() => {
+    getDetail();
+  }, []);
 
   if (!program) {
     return <div>Program not found</div>;

@@ -46,3 +46,30 @@ export interface AppointmentData {
 export interface AppointmentUpdateValue {
   status: string;
 }
+
+export interface BlogData {
+  contentHtml: string;
+  contentMarkdown: string;
+  imgageUrl: string;
+  title: string;
+  hashtag: string[];
+  description: string;
+  user_id: number;
+  category_id: number;
+}
+
+export interface ProgramData {
+  programId: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  targetAudience: string;
+  location: string;
+  organizerEmail: string;
+  contactPhone: string;
+  imageUrl: string;
+  price: number;
+  rating: number;
+  categoryId: string;
+}
