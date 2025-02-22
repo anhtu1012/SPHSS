@@ -1,32 +1,14 @@
-import { LogoutOutlined } from "@ant-design/icons";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout, selectUser } from "../../redux/features/userSlice";
-import { Logo } from "../Icons";
-import "./index.scss";
+import { LogoutOutlined } from "@ant-design/icons";
+import { Logo } from "../../../components/Icons";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectUser } from "../../../redux/features/userSlice";
 import { FaUserCircle } from "react-icons/fa";
-import { UserRole } from "../../models/enum";
 
-function Header() {
-  const [activeItem, setActiveItem] = useState("home");
+const AdminHeader = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-
-  const menuItems = [
-    { key: "home", label: "Trang chủ", path: "/" },
-    { key: "survey", label: "Khảo sát tâm lý", path: "/survey" },
-    { key: "program", label: "Chương trình", path: "/program" },
-    { key: "doctors", label: "Đội ngũ bác sĩ", path: "/doctors" },
-    { key: "blog", label: "Blog", path: "/blog" },
-    { key: "contact", label: "Liên hệ", path: "/contact" },
-  ];
-
-  const handleMenuClick = (key: string, path: string) => {
-    setActiveItem(key);
-    navigate(path);
-  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -40,22 +22,6 @@ function Header() {
           <Logo />
           <span>YAG HEALTH</span>
         </div>
-
-        {(user as any).roleCode == UserRole.Student && (
-          <nav className="header__nav">
-            {menuItems.map((item) => (
-              <div
-                key={item.key}
-                className={`header__nav__item ${
-                  activeItem === item.key ? "active" : ""
-                }`}
-                onClick={() => handleMenuClick(item.key, item.path)}
-              >
-                {item.label}
-              </div>
-            ))}
-          </nav>
-        )}
 
         <div className="header__actions">
           {user ? (
@@ -90,6 +56,6 @@ function Header() {
       </div>
     </header>
   );
-}
+};
 
-export default Header;
+export default AdminHeader;

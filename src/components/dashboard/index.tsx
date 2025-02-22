@@ -21,9 +21,7 @@ const Dashboard: React.FC = () => {
         <Sider className={styles.sidebar} theme="light">
           {user && <ItemMenu roleId={user.roleCode} />}
         </Sider>
-        <Content
-          className={styles.main_content}
-        >
+        <Content className={styles.main_content}>
           <Outlet />
         </Content>
       </Layout>

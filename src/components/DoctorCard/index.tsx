@@ -3,7 +3,7 @@ import "./index.scss";
 import { useNavigate } from "react-router-dom";
 
 interface DoctorCardProps {
-  id: string;
+  id: string | number;
   img: string;
   name: string;
   specialty?: string;
