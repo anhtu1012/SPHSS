@@ -8,16 +8,27 @@ import { toast } from "react-toastify";
 import AntDComponent from "../../../components/cTableAntD";
 import { AppointmentData } from "../../../models/psy";
 import {
-  getAppointment,
+  getAppointmentsByPsychologist,
   updateStatusAppointment,
 } from "../../../services/psychologist/api";
 import { formatDate } from "../../../utils/dateUtils";
+import { RootState } from "../../../redux/RootReducer";
+import { useSelector } from "react-redux";
 
 function ManageSurvey() {
   const [rowData, setRowData] = useState<AppointmentData[]>([]);
+  const [userID, setUserID] = useState("");
+  const user = useSelector((state: RootState) => state.user) as any | null;
+
+  useEffect(() => {
+    if (user && user.id) {
+      setUserID(user.id);
+    }
+  }, [user]);
+
   const fetchAppointment = useCallback(async () => {
     try {
-      const res = await getAppointment();
+      const res = await getAppointmentsByPsychologist(userID);
       const data = res.data.data;
       if (data.length <= 0) {
         toast.warning("Chưa có lịch hẹn nào");
@@ -26,7 +37,11 @@ function ManageSurvey() {
     } catch (error: any) {
       toast.error(error.response?.data || "Lỗi khi fetch data");
     }
-  }, []);
+  }, [userID]);
+
+  useEffect(() => {
+    fetchAppointment();
+  }, [fetchAppointment, userID]);
 
   const handleUpdateStatus = useCallback(async (id: string, status: string) => {
     const res = await updateStatusAppointment(id, { status });
@@ -41,8 +56,7 @@ function ManageSurvey() {
   const columns: ColumnType[] = [
     {
       title: "Học sinh nhận tư vấn",
-      dataIndex: "user",
-      render: (user) => `${user.firstName} ${user.lastName}`,
+      dataIndex: "fullName",
     },
     {
       title: "Ngày tư vấn",
@@ -51,13 +65,11 @@ function ManageSurvey() {
     },
     {
       title: "Thời gian bắt đầu",
-      dataIndex: "timeSlot",
-      render: (timeSlot) => `${timeSlot.start_time}`,
+      dataIndex: "start_time",
     },
     {
       title: "Thời gian kết thúc",
-      dataIndex: "timeSlot",
-      render: (timeSlot) => `${timeSlot.end_time}`,
+      dataIndex: "end_time",
     },
     {
       title: "Trạng thái",
@@ -107,10 +119,6 @@ function ManageSurvey() {
       ),
     },
   ];
-
-  useEffect(() => {
-    fetchAppointment();
-  }, []);
 
   return (
     <div>

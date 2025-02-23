@@ -30,17 +30,12 @@ export interface TimeSlotValues {
 
 export interface AppointmentData {
   appointment_id: string;
-  user_id: string;
-  time_slot_id: string;
-  date: string;
+  fullName: string;
+  start_time: string;
+  end_time: string;
   status: string;
-  user: User;
-  timeSlot: {
-    time_slot_id: string;
-    start_time: string;
-    end_time: string;
-    status: string;
-  };
+  date: string;
+  linkMeeting: string;
 }
 
 export interface AppointmentUpdateValue {

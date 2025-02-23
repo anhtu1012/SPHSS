@@ -1,80 +1,40 @@
-import { useState } from "react";
-import { Descriptions, Tabs, Modal } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import { Descriptions, Tabs, TabsProps } from "antd";
+import ProgramHistory from "./programHistory";
+import SurveyHistory from "./surveyHistory";
 import "./userProfile.scss";
-
-const { TabPane } = Tabs;
+import BookingHistory from "./bookingHistory";
 
 const UserProfile = () => {
-  const [activeTab, setActiveTab] = useState("surveys");
-  const [selectedSurvey, setSelectedSurvey] = useState<{
-    id: number;
-    title: string;
-    date: string;
-    responses: { question: string; answer: string; score: number }[];
-  } | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Mock data for survey responses
-  const surveyResponses = [
+  const items: TabsProps["items"] = [
     {
-      id: 1,
-      title: "Khảo sát trầm cảm",
-      date: "05/01/2023",
-      responses: [
-        {
-          question: "Bạn có thường xuyên cảm thấy buồn không?",
-          answer: "Thỉnh thoảng",
-          score: 2,
-        },
-        {
-          question: "Bạn có gặp khó khăn khi ngủ không?",
-          answer: "Hiếm khi",
-          score: 1,
-        },
-        {
-          question: "Bạn có cảm thấy mệt mỏi và thiếu năng lượng không?",
-          answer: "Thường xuyên",
-          score: 3,
-        },
-      ],
+      key: "1",
+      label: "Lịch sử khảo sát",
+      children: (
+        <>
+          <SurveyHistory />
+        </>
+      ),
     },
     {
-      id: 2,
-      title: "Khảo sát lo âu",
-      date: "10/02/2023",
-      responses: [
-        {
-          question: "Bạn có thường xuyên cảm thấy căng thẳng không?",
-          answer: "Thường xuyên",
-          score: 3,
-        },
-        {
-          question: "Bạn có hay lo lắng về tương lai không?",
-          answer: "Rất thường xuyên",
-          score: 4,
-        },
-      ],
+      key: "2",
+      label: "Lịch sử chương trình",
+      children: (
+        <>
+          <ProgramHistory />
+        </>
+      ),
+    },
+    {
+      key: "3",
+      label: "Lịch hẹn khám",
+      children: (
+        <>
+          <BookingHistory />
+        </>
+      ),
     },
   ];
-
-interface SurveyResponse {
-    question: string;
-    answer: string;
-    score: number;
-}
-
-interface Survey {
-    id: number;
-    title: string;
-    date: string;
-    responses: SurveyResponse[];
-}
-
-const showSurveyDetail = (survey: Survey) => {
-    setSelectedSurvey(survey);
-    setIsModalOpen(true);
-};
 
   return (
     <div className="user-profile">
@@ -120,57 +80,9 @@ const showSurveyDetail = (survey: Survey) => {
         </div>
 
         <div className="user-profile__right-panel">
-          <Tabs activeKey={activeTab} onChange={setActiveTab}>
-            <TabPane tab="Lịch sử khảo sát" key="surveys">
-              <div className="user-profile__survey-list">
-                {surveyResponses.map((survey) => (
-                  <div
-                    key={survey.id}
-                    className="survey-list-item"
-                    onClick={() => showSurveyDetail(survey)}
-                  >
-                    <div className="survey-list-item__title">
-                      {survey.title}
-                    </div>
-                    <div className="survey-list-item__date">{survey.date}</div>
-                  </div>
-                ))}
-              </div>
-            </TabPane>
-            <TabPane tab="Lịch sử chương trình" key="programs">
-              <div className="user-profile__tab-content">
-                <h3>Lịch sử tham gia chương trình</h3>
-                <ul>
-                  <li>Chương trình A - 01/01/2023</li>
-                  <li>Chương trình B - 15/02/2023</li>
-                  <li>Chương trình C - 20/03/2023</li>
-                </ul>
-              </div>
-            </TabPane>
-          </Tabs>
+          <Tabs defaultActiveKey="1" items={items} />
         </div>
       </div>
-
-      <Modal
-        title={selectedSurvey?.title}
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
-        footer={null}
-        width={700}
-      >
-        {selectedSurvey && (
-          <div className="survey-detail-modal">
-            {selectedSurvey.responses.map((response, index) => (
-              <div key={index} className="survey-detail-modal__item">
-                <div className="question">{response.question}</div>
-                <div className="answer">
-                  Trả lời: {response.answer} (Điểm: {response.score})
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </Modal>
     </div>
   );
 };

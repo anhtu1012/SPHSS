@@ -238,7 +238,7 @@ function ManageTimeslot() {
         }}
       >
         <p style={{ color: "#888", fontSize: "15px", paddingTop: "15px" }}>
-          Lịch hẹn
+          Thời gian
         </p>
         <Cbutton
           onClick={() => {

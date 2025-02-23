@@ -60,7 +60,7 @@ const getMenuItems = (roleId: string) => {
   } else if (roleId === Psychologist) {
     return [
       {
-        label: "Quản lý lịch hẹn",
+        label: "Quản lý thời gian",
         key: "/psychologist/manage-timeslot",
         icon: <AiOutlineSchedule />,
       },
