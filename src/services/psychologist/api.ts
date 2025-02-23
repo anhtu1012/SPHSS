@@ -6,7 +6,7 @@ import {
   TimeSlotUpdateValues,
 } from "../../models/psy";
 
-// Quản lý Lịch hẹn
+// Quản lý thời gian
 export const getTimeSlot = () => {
   return api.get("/api/timeSlot");
 };
@@ -23,9 +23,24 @@ export const deleteTimeSlot = (id: string) => {
   return api.delete(`/api/timeSlot/${id}`);
 };
 
-// Danh sách lịch khám với học sinh
-export const getAppointment = () => {
-  return api.get("/api/appointments");
+// Danh sách lịch hẹn với học sinh
+export const getAppointmentsByPsychologist = (
+  id: string,
+  studentId?: string,
+  status?: string,
+  timeSlotId?: string
+) => {
+  let url = `/api/appointmentsByPychologist?user_id=${id}`;
+  if (studentId !== undefined) {
+    url += `&student_id=${studentId}`;
+  }
+  if (status !== undefined) {
+    url += `&status=${status}`;
+  }
+  if (timeSlotId !== undefined) {
+    url += `&time_slot_id=${timeSlotId}`;
+  }
+  return api.get(url);
 };
 
 export const updateStatusAppointment = (
