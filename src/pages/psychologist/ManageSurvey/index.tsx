@@ -77,7 +77,7 @@ function ManageSurvey() {
     {
       title: "Trạng thái",
       dataIndex: "status",
-      render: (status, record) => {
+      render: (status) => {
         let color = "#08509F";
         let icon = <CheckCircleOutlined />;
 
