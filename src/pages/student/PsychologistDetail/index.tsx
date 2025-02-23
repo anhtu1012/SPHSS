@@ -12,7 +12,6 @@ import {
   createAppointment,
   getTimeSlotByDoctorId,
 } from "../../../services/student/PsychologistDetail/api";
-import { RootState } from "../../../redux/RootReducer";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/features/userSlice";
 
