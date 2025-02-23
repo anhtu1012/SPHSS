@@ -11,3 +11,7 @@ export const getBlog = () => {
 export const getBlogDetail = (id: string) => {
   return api.get(`/api/markdowns/${id}`);
 };
+
+export const createAppointment = (payload: any) => {
+  return api.post(`/api/appointments-array`, payload);
+};

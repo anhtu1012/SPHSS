@@ -8,7 +8,12 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import AppointmentForm from "../../../components/AppointmentForm";
 import dayjs from "dayjs";
-import { getTimeSlotByDoctorId } from "../../../services/student/PsychologistDetail/api";
+import {
+  createAppointment,
+  getTimeSlotByDoctorId,
+} from "../../../services/student/PsychologistDetail/api";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../redux/features/userSlice";
 
 type TimeSlotType = {
   startTime: string;
@@ -22,7 +27,7 @@ const PsychologistDetail = () => {
   const [selectedSlot, setSelectedSlot] = useState<TimeSlotType | null>(null);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
   const [timeSlotList, setTimeSlotList] = useState<TimeSlotType[]>([]);
-
+  const currentUser = useSelector(selectUser) as any;
   useEffect(() => {
     setSelectedDate(new Date());
   }, []);
@@ -38,7 +43,6 @@ const PsychologistDetail = () => {
   };
 
   const handleAppointmentSubmit = async (values: any) => {
-    toast.success("Đặt lịch tư vấn thành công!");
     console.log("Appointment booked:", {
       doctorId: id,
       timeSlotId: selectedSlot!.id,
@@ -47,8 +51,33 @@ const PsychologistDetail = () => {
       phone: values.phone,
       email: values.email,
       notes: values.notes,
+      user_id: currentUser.id,
     });
-    setIsAppointmentModalOpen(false);
+
+    const payload = {
+      user_id: currentUser.id,
+      appointments: [
+        {
+          time_slot_id: selectedSlot!.id + 1,
+          notes: values.notes,
+          date: values.appointmentDate.toDate(),
+        },
+      ],
+    };
+
+    try {
+      const res = await createAppointment(payload);
+      if (res.data.data) {
+        toast.success("Đặt lịch tư vấn thành công!");
+        setSelectedSlot(null);
+        setIsAppointmentModalOpen(false);
+      } else {
+        toast.error("Đặt lịch tư vấn thất bại!");
+      }
+    } catch (error) {
+      toast.error("Đặt lịch tư vấn thất bại!");
+      console.error("Error creating appointment:", error);
+    }
   };
 
   const handleGetTimeSlot = async () => {

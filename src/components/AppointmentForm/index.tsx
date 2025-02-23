@@ -68,6 +68,9 @@ const AppointmentForm = ({
         layout="vertical"
         onFinish={onSubmit}
         initialValues={{
+          fullName: user ? `${user.firstName} ${user.lastName}` : "",
+          phone: user ? user.phone : "",
+          email: user ? user.email : "",
           appointmentDate: dayjs(selectedDate),
         }}
       >
@@ -92,11 +95,7 @@ const AppointmentForm = ({
           label="Họ và tên"
           rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
         >
-          <Input
-            prefix={<UserOutlined />}
-            placeholder="Nhập họ và tên"
-            defaultValue={`${user ? user.firstName + " " + user.lastName : ""}`}
-          />
+          <Input prefix={<UserOutlined />} placeholder="Nhập họ và tên" />
         </Form.Item>
 
         <Form.Item
@@ -104,11 +103,7 @@ const AppointmentForm = ({
           label="Số điện thoại"
           rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}
         >
-          <Input
-            prefix={<PhoneOutlined />}
-            placeholder="Nhập số điện thoại"
-            defaultValue={`${user ? user.phone : ""}`}
-          />
+          <Input prefix={<PhoneOutlined />} placeholder="Nhập số điện thoại" />
         </Form.Item>
 
         <Form.Item
@@ -119,11 +114,7 @@ const AppointmentForm = ({
             { type: "email", message: "Email không hợp lệ" },
           ]}
         >
-          <Input
-            prefix={<MailOutlined />}
-            placeholder="Nhập email"
-            defaultValue={`${user ? user.email : ""}`}
-          />
+          <Input prefix={<MailOutlined />} placeholder="Nhập email" />
         </Form.Item>
 
         <Form.Item

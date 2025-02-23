@@ -43,15 +43,18 @@ function ManageSurvey() {
     fetchAppointment();
   }, [fetchAppointment, userID]);
 
-  const handleUpdateStatus = useCallback(async (id: string, status: string) => {
-    const res = await updateStatusAppointment(id, { status });
-    if (res) {
-      toast.success("Cập nhật trạng thái thành công");
-      fetchAppointment();
-    } else {
-      toast.error("Cập nhật trạng thái thất bại");
-    }
-  }, []);
+  const handleUpdateStatus = useCallback(
+    async (id: string, status: string) => {
+      const res = await updateStatusAppointment(id, { status });
+      if (res) {
+        toast.success(res?.data.message);
+        fetchAppointment();
+      } else {
+        toast.error("Cập nhật trạng thái thất bại");
+      }
+    },
+    [rowData]
+  );
 
   const columns: ColumnType[] = [
     {
@@ -101,19 +104,31 @@ function ManageSurvey() {
         <div style={{ display: "flex", gap: "12px" }}>
           <TiTickOutline
             size={30}
-            style={{ cursor: "pointer" }}
-            color="orange"
-            onClick={() =>
-              handleUpdateStatus(record.appointment_id, "Approved")
+            style={
+              record.status == "Pending"
+                ? { cursor: "pointer" }
+                : { cursor: "not-allowed", opacity: 0.3 }
             }
+            color="orange"
+            onClick={() => {
+              if (record.status == "Pending") {
+                handleUpdateStatus(record.appointment_id, "Approved");
+              }
+            }}
           />
           <ImCross
             color="red"
             size={20}
-            style={{ marginTop: "5px", cursor: "pointer" }}
-            onClick={() =>
-              handleUpdateStatus(record.appointment_id, "Cancelled")
+            style={
+              record.status != "Cancelled"
+                ? { marginTop: "5px", cursor: "pointer" }
+                : { marginTop: "5px", cursor: "not-allowed", opacity: 0.3 }
             }
+            onClick={() => {
+              if (record.status != "Cancelled") {
+                handleUpdateStatus(record.appointment_id, "Cancelled");
+              }
+            }}
           />
         </div>
       ),
