@@ -41,6 +41,7 @@ const ProgramActions = ({
 
   return (
     <Dropdown overlay={menu} trigger={["click"]}>
+      {/* chưa css đc nên dùng không dùng Cbutton */}
       <button
         className="more-button"
         onClick={(e) => e.preventDefault()}
@@ -100,7 +101,7 @@ const ManageProgram = () => {
     setTimeout(() => {
       const filteredData = data.filter(
         (item) =>
-          (values.name ? item.name.includes(values.name) : true) && 
+          (values.name ? item.name.includes(values.name) : true) &&
           (values.status && values.status !== "Tất cả"
             ? item.status === values.status
             : true)
@@ -126,7 +127,9 @@ const ManageProgram = () => {
 
   const confirmDelete = () => {
     if (programToDelete) {
-      setData((prev) => prev.filter((item) => item.key !== programToDelete.key));
+      setData((prev) =>
+        prev.filter((item) => item.key !== programToDelete.key)
+      );
       closeDeleteModal();
     }
   };
@@ -134,26 +137,24 @@ const ManageProgram = () => {
     navigate("create-program");
   };
 
-
   return (
     <div>
       <div className={styles.headerLine}>
-      <SearchBar
-        fields={[
-          { key: "name", placeholder: "Tên chương trình", type: "text" },
-          {
-            key: "status",
-            placeholder: "Trạng thái",
-            type: "dropdown",
-            options: ["Đang hoạt động", "Tạm dừng", "Tất cả"],
-          },
-        ]}
-        onSearch={handleSearch}
-      />
-      <Cbutton
-          className={styles.navigateButton}
-          onClick={handleNavigate}
-        >
+        <div className={styles.searchBarName}>
+          <SearchBar
+            fields={[
+              { key: "name", placeholder: "Tên chương trình", type: "text" },
+              {
+                key: "status",
+                placeholder: "Trạng thái",
+                type: "dropdown",
+                options: ["Đang hoạt động", "Tạm dừng", "Tất cả"],
+              },
+            ]}
+            onSearch={handleSearch}
+          />
+        </div>
+        <Cbutton className={styles.navigateButton} onClick={handleNavigate}>
           Tạo chương trình
         </Cbutton>
       </div>
@@ -206,8 +207,12 @@ const ManageProgram = () => {
         <div className={styles.customModal}>
           <div className={styles.modalContent}>
             <p>Bạn muốn xóa "{programToDelete.name}" không?</p>
-            <Cbutton onClick={confirmDelete} className={styles.deleteBtn}>Xóa</Cbutton>
-            <Cbutton onClick={closeDeleteModal} className={styles.cancelBtn}>Hủy</Cbutton>
+            <Cbutton onClick={confirmDelete} className={styles.deleteBtn}>
+              Xóa
+            </Cbutton>
+            <Cbutton onClick={closeDeleteModal} className={styles.cancelBtn}>
+              Hủy
+            </Cbutton>
           </div>
         </div>
       )}

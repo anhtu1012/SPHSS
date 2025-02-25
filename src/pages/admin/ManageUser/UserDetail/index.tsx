@@ -9,7 +9,7 @@ import {
 import { Descriptions, Rate } from "antd";
 import { useState } from "react";
 import PopupInfoConsult from "../PopupViewInfoConsult";
-import PopupSurveyDetail from "../PopupSurveyInfo";
+import PopupSurveyDetail from "../../ManageSurveyStudent/PopupDetailSurvey";
 import PopupChangeStatus from "../PopupStatusUser";
 import PopupChangeInfoUser from "../PopupChangeInfo";
 import UserProfileTable from "./DetailUserTable";
@@ -98,7 +98,6 @@ function UserProfile() {
         </div>
       </div>
 
-      {/* Popups */}
       {popupType === "consult" && selectedConsult && (
         <PopupInfoConsult
           isOpen={isModalOpen}
