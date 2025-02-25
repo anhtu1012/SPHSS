@@ -4,16 +4,16 @@ import { useCallback, useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { ImCross } from "react-icons/im";
 import { TiTickOutline } from "react-icons/ti";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import AntDComponent from "../../../components/cTableAntD";
 import { AppointmentData } from "../../../models/psy";
+import { RootState } from "../../../redux/RootReducer";
 import {
   getAppointmentsByPsychologist,
   updateStatusAppointment,
 } from "../../../services/psychologist/api";
 import { formatDate } from "../../../utils/dateUtils";
-import { RootState } from "../../../redux/RootReducer";
-import { useSelector } from "react-redux";
 
 function ManageSurvey() {
   const [rowData, setRowData] = useState<AppointmentData[]>([]);
