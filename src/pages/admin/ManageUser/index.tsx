@@ -149,7 +149,7 @@ function ManageUser() {
         <p className={styles.message}>Đang tải dữ liệu...</p>
       ) : (
         <div className={styles.tableContainer}>
-          <p>Danh sách người dùng</p>
+          <p className={styles.sectionTitle}>Danh sách người dùng</p>
           <AntDComponent dataSource={data} columns={columns} />
         </div>
       )}
