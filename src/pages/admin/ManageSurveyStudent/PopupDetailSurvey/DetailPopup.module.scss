@@ -1,0 +1,50 @@
+.popupContainer {
+  border-radius: 10px;
+}
+
+.title {
+  text-align: center;
+  color: #51B748;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+.infoGrid {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.infoGrid div {
+  flex: 1;
+  text-align: center;
+}
+
+.infoGrid p {
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  font-size: 15px;
+}
+
+.highlight {
+  color: #ec744a;
+  font-weight: bold;
+}
+
+.infoDetails p {
+  margin: 5px 0;
+  color: #333;
+  font-size: 18px;
+  gap:1010px;
+}
+
+.infoDetails p {
+  color: #ec744a;
+  font-size: 15px;
+}
+
+.infoDetails strong {
+  color: black;
+}

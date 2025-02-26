@@ -1,8 +1,13 @@
 .headerLine{
   display:flex;
 }
+.searchBarName {
+  padding: 0 !important;
+  width:100% !important;
+}
+
 .navigateButton{
-  margin: 20px;
+  margin: 11px;
   padding:20px;
   background-color: #0BA02C  !important;
 }
@@ -17,15 +22,12 @@
   text-align: center;
   margin-top: 10px;
 }
-.container {
-  padding: 20px;
-}
 
 .programList {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 16px;
-  margin-top: 20px;
+
 }
 
 .programCard {

@@ -1,0 +1,98 @@
+.backButton Cbutton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .backIcon {
+    margin-right: 8px;
+  }
+  
+  .profileName {
+    display: flex;
+    align-items: center;
+    padding: 20px 00;
+  }
+  
+  .avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    margin-right: 15px;
+  }
+  
+  .profileInfo h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  
+  .profileInfo p {
+    margin: 5px 0 0;
+    color: #666;
+    font-size: 15px;
+  }
+  
+  .mainContent {
+      display: flex;
+      gap: 15px; 
+    }
+    
+    .rightProfile {
+      flex: 30%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px; 
+    }
+    .profileHeader{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .leftProfile {
+      flex: 70%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .infoSection {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .detailsCard, .contactCard {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      p{
+          font-size: 10px;
+      }
+    }
+    
+    .sectionTitle{
+      font-size: 15px;
+      color: #888;
+    }
+    :global(.ant-descriptions-item-label) {
+      color: #e74104 !important;
+      font-weight: bold;
+    }
+    
+    .changeInfo {
+      display: flex;
+      justify-content: flex-end; 
+    }
+    
+    :global(.ant-rate-star-full) {
+      color: #08509F !important;
+    }
+    
+    

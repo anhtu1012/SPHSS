@@ -31,3 +31,12 @@ export interface BlogData {
   user: User;
   category: Category;
 }
+
+export interface UpdateUser {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  gender: string;
+  image: string;
+  email: string;
+}

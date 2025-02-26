@@ -1,7 +1,7 @@
 .footer {
   background-color: #f8f9fa;
-  padding: 2rem 0 1rem;
-  margin-top: 2rem;
+  // padding: 2rem 0 1rem;
+  // margin-top: 2rem;
 
   &__container {
     max-width: 1440px;
@@ -97,7 +97,8 @@
 
   &__bottom {
     border-top: 1px solid #ddd;
-    padding-top: 1.5rem;
+    // padding-top: 1.5rem;
+    padding: 1.2rem 0;
     text-align: center;
     color: #666;
   }

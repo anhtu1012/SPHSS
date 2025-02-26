@@ -22,9 +22,11 @@ const Cbutton: React.FC<CustomButtonProps> = ({
   icon,
   className,
   disabled,
+  htmlType,
 }) => {
   return (
     <Button
+      htmlType={htmlType}
       className={className}
       size={size}
       disabled={disabled}

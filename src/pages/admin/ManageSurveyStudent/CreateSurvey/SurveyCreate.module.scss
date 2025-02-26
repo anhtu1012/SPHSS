@@ -1,0 +1,122 @@
+.container {
+    text-align: center;
+    font-family: Arial, sans-serif;
+  
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+  
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+  
+    .surveyButton {
+      width: 250px;
+    }
+  
+    .addQuestionWrapper {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+  
+    .icon {
+      font-size: 18px;
+      color: #ec744a;
+    }
+  
+    .addQuestionButton {
+      background: none;
+      border: none;
+      color: #ec744a;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+  
+      &:hover {
+        color: #808080;
+      }
+    }
+  
+    .inputContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 250px;
+      align-items: center;
+      position: relative;
+    }
+  
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+  
+    .confirmButton, .cancelButton {
+      border: none;
+      padding: 5px 10px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  
+    .confirmButton {
+      color: white;
+      background-color: #ec744a;
+    }
+  
+    .cancelButton {
+      color: #808080;
+      background: none;
+    }
+  
+    .confirmButton:hover {
+      background-color: rgba(236, 116, 74, 0.8);
+    }
+  
+    .cancelButton:hover {
+      color: black;
+    }
+  
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9); 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .confirmPopup {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 400px;
+      z-index: 1001;
+    }
+  
+    .popupActions {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+
+    .cancelButton{
+        background-color:#c3b9b9 !important;
+    }
+  }
+  
