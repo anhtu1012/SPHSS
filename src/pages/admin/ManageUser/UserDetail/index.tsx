@@ -7,32 +7,65 @@ import {
   HomeOutlined,
 } from "@ant-design/icons";
 import { Descriptions, Rate } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PopupInfoConsult from "../PopupViewInfoConsult";
 import PopupSurveyDetail from "../../ManageSurveyStudent/PopupDetailSurvey";
 import PopupChangeStatus from "../PopupStatusUser";
 import PopupChangeInfoUser from "../PopupChangeInfo";
 import UserProfileTable from "./DetailUserTable";
+import { useParams } from "react-router-dom";
+import { getUserId } from "../../../../services/admin/api";
+import { User } from "../../../../models/admin";
 
 function UserProfile() {
+  const { id } = useParams();
+  const [user, setUser] = useState<User>({} as User);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedConsult, setSelectedConsult] = useState(null);
   const [popupType, setPopupType] = useState<"consult" | "survey" | null>(null);
   const [isStatusPopupOpen, setIsStatusPopupOpen] = useState(false);
   const [isChangeInfoPopupOpen, setIsChangeInfoPopupOpen] = useState(false);
-  const accountType = "Tư vấn viên"; 
-  // const accountType = "Học/sinh viên";
-  // const accountType = "Phụ huynh";
+  const [loading, setLoading] = useState(true);
+
+  const genderMap: Record<string, string> = {
+    male: "Nam",
+    female: "Nữ",
+  };
+  const roleMap: Record<string, string> = {
+    R1: "Student",
+    R2: "Parent",
+    R3: "Psychologist",
+    R4: "Manager",
+  };
 
   const showModal = (record: any) => {
     setSelectedConsult(record);
     setIsModalOpen(true);
-    if (["Học/sinh viên", "Phụ huynh"].includes(accountType)) {
+    if (["R1", "R2"].includes(user.role)) {
       setPopupType("consult");
     } else {
       setPopupType("survey");
     }
   };
+
+  useEffect(() => {
+    if (!id) return;
+    const fetchUser = async () => {
+      try {
+        const response = await getUserId(id);
+        console.log("Dữ liệu từ API:", response.data);
+        setUser(response.data.data as User);
+      } catch (error) {
+        console.error("Lỗi khi lấy thông tin user:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, [id]);
+
+  if (loading) return <p>Đang tải dữ liệu...</p>;
+  if (!user) return <p>Không tìm thấy người dùng</p>;
 
   return (
     <div className={styles.userProfile}>
@@ -44,9 +77,11 @@ function UserProfile() {
                 <UserOutlined />
               </div>
               <div className={styles.profileInfo}>
-                <h2>Tạ Thị Hải Yến</h2>
-                <p>SE170121</p>
-                {accountType === "Tư vấn viên" && (
+                <h2>
+                  {`${user.firstName || ""} ${user.lastName || ""}`.trim()}
+                </h2>
+                <p>{user.userCode}</p>
+                {user.role === "R3" && (
                   <Rate
                     className={styles.customRate}
                     disabled
@@ -57,36 +92,60 @@ function UserProfile() {
             </div>
             <div className={styles.status}>
               <Cbutton onClick={() => setIsStatusPopupOpen(true)}>
-                Đang hoạt động
+                {user.status ? "Đang hoạt động" : "Đã khóa"}
               </Cbutton>
             </div>
           </div>
           <p className={styles.sectionTitle}>
-            {accountType === "Tư vấn viên"
+            {user.role === "R3"
               ? "Danh sách học/sinh viên đã tư vấn"
               : "Lịch sử điều trị tâm lý của học/sinh viên"}
           </p>
-          <UserProfileTable accountType={accountType} showModal={showModal} />
+          {user.role !== "R4" && (
+            <UserProfileTable accountType={user.role} showModal={showModal} />
+          )}
         </div>
         <div className={styles.rightProfile}>
           <div className={styles.infoSection}>
-            <Descriptions title="Thông tin cá nhân" bordered column={1} size="small">
-              <Descriptions.Item label="Sinh nhật">14/09/2003</Descriptions.Item>
-              <Descriptions.Item label="Quốc tịch">Việt Nam</Descriptions.Item>
-              <Descriptions.Item label="Hôn nhân">Độc thân</Descriptions.Item>
-              <Descriptions.Item label="Giới tính">Nữ</Descriptions.Item>
-              <Descriptions.Item label="Loại tài khoản">{accountType}</Descriptions.Item>
-              <Descriptions.Item label="Trường">Đại học FPT HCM</Descriptions.Item>
+            <Descriptions
+              title="Thông tin cá nhân"
+              bordered
+              column={1}
+              size="small"
+            >
+              <Descriptions.Item label="Tên người dùng">
+                {user.username}
+              </Descriptions.Item>
+              <Descriptions.Item label="Giới tính">
+                {genderMap[user.gender] || "Không xác định"}
+              </Descriptions.Item>
+              <Descriptions.Item label="Loại tài khoản">
+                {roleMap[user.role]}
+              </Descriptions.Item>
+              <Descriptions.Item label="Giới thiệu">
+                {user.description}
+              </Descriptions.Item>
             </Descriptions>
-            <Descriptions title="Thông tin liên hệ" bordered column={1} size="small">
-              <Descriptions.Item label={<HomeOutlined style={{ color: "#EC744A" }} />}>
-                Quận 12, TP Hồ Chí Minh
+            <Descriptions
+              title="Thông tin liên hệ"
+              bordered
+              column={1}
+              size="small"
+            >
+              <Descriptions.Item
+                label={<HomeOutlined style={{ color: "#EC744A" }} />}
+              >
+                TP Hồ Chí Minh, Việt Nam
               </Descriptions.Item>
-              <Descriptions.Item label={<PhoneOutlined style={{ color: "#EC744A" }} />}>
-                84987654321
+              <Descriptions.Item
+                label={<PhoneOutlined style={{ color: "#EC744A" }} />}
+              >
+                {user.phone}
               </Descriptions.Item>
-              <Descriptions.Item label={<MailOutlined style={{ color: "#EC744A" }} />}>
-                thy14903@gmail.com
+              <Descriptions.Item
+                label={<MailOutlined style={{ color: "#EC744A" }} />}
+              >
+                {user.email}
               </Descriptions.Item>
             </Descriptions>
           </div>
