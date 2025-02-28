@@ -1,16 +1,16 @@
 import { FaCalendarAlt, FaMapMarkerAlt, FaUsers } from "react-icons/fa";
 import styles from "./ViewProgram.module.scss";
-import { useState } from "react";
-import ProgramPopup from "../PopupEditProgram";
-import Cbutton from "../../../../components/cButton";
+// import { useState } from "react";
+// import ProgramPopup from "../PopupEditProgram";
+// import Cbutton from "../../../../components/cButton";
 import logoKS from "./LOGO_KS.png";
 
 const ManageProgramDetail = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleEditClick = () => {
-    setIsModalOpen(true);
-  };
+  // const handleEditClick = () => {
+  //   setIsModalOpen(true);
+  // };
 
   return (
     <div className={styles.manageProgramDetail}>
@@ -53,15 +53,15 @@ const ManageProgramDetail = () => {
         </div>
       </div>
 
-      <Cbutton
+      {/* <Cbutton
         className={styles.editButton}
         onClick={handleEditClick}
         origin={{ bgcolor: "#EC744A" }}
       >
         Chỉnh sửa thông tin chương trình
-      </Cbutton>
+      </Cbutton> */}
 
-      <ProgramPopup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {/* <ProgramPopup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} /> */}
 
     </div>
   );

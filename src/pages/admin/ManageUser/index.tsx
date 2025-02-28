@@ -37,28 +37,36 @@ function ManageUser() {
   };
 
   const handleSearch = (values: Record<string, string>) => {
-    const searchUsername = values.username?.toLowerCase() || "";
-    const searchEmail = values.email?.toLowerCase() || "";
-  
-    if (!searchUsername && !searchEmail) {
+    const searchName = values.name?.toLowerCase().trim() || "";
+    const searchRole = values.role?.trim(); 
+    if (!searchName && (!searchRole || searchRole === "Tất cả")) {
       setFilteredData(data);
       return;
     }
     const filtered = data.filter((user) => {
-      const matchUsername = user.username?.toLowerCase().includes(searchUsername);
-      const matchEmail = user.email?.toLowerCase().includes(searchEmail);
-      return (searchUsername && matchUsername) || (searchEmail && matchEmail);
+      const fullName = `${user.firstName || ""} ${user.lastName || ""}`
+        .trim()
+        .toLowerCase();
+      const matchName = searchName ? fullName.includes(searchName) : true;
+      const matchRole =
+        searchRole && searchRole !== "Tất cả"
+          ? roleMap[user.roleCode] === searchRole
+          : true;
+      return matchName && matchRole;
     });
     setFilteredData(filtered);
   };
-  
 
   const roleMap: Record<string, string> = {
     R1: "Student",
     R2: "Parent",
     R3: "Psychologist",
     R4: "Manager",
-  }; 
+  };
+  const statusMap: Record<string, string> = {
+    true: "Đang hoạt động",
+    false: "Đã khóa",
+  };
   const columns: ColumnsType<User> = [
     {
       title: "Tài khoản",
@@ -66,7 +74,9 @@ function ManageUser() {
       key: "username",
       render: (_, record) => (
         <div className={styles.userInfoContainer}>
-          <span className={styles.userName}>{record.username || "N/A"}</span>
+          <span className={styles.userName}>
+            {`${record.firstName || ""} ${record.lastName || ""}`.trim()}
+          </span>
           <br />
           <span className={styles.userId}>
             {record.userCode || "Chưa có ID"}
@@ -74,13 +84,17 @@ function ManageUser() {
         </div>
       ),
     },
-    { title: "Email", dataIndex: "email", key: "email" },
-    { title: "Số điện thoại", dataIndex: "phone", key: "phone" },
     {
       title: "Loại tài khoản",
       dataIndex: "role",
       key: "role",
       render: (role) => roleMap[role] || "Unknown",
+    },
+    {
+      title: "Trạng thái tài khoản",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => statusMap[status] || "Unknown",
     },
     {
       title: "Hồ sơ",
@@ -97,13 +111,17 @@ function ManageUser() {
       ),
     },
   ];
-
   return (
     <div>
       <SearchBar
         fields={[
-          { key: "username", placeholder: "Tên người dùng", type: "text" },
-          { key: "email", placeholder: "Tên người dùng", type: "text" },
+          { key: "name", placeholder: "Tên tài khoản", type: "text" },
+          {
+            key: "role",
+            placeholder: "Loại tài khoản",
+            type: "dropdown",
+            options: ["Student", "Parent", "Psychologist", "Manager", "Tất cả"],
+          },
         ]}
         onSearch={handleSearch}
       />
@@ -113,7 +131,7 @@ function ManageUser() {
         <p className={styles.message}>Không có thông tin</p>
       ) : (
         <div className={styles.tableContainer}>
-          <p className={styles.sectionTitle}>Danh sách người dùng</p>
+          <p className={styles.sectionTitle}>Danh sách tất cả người dùng</p>
           <AntDComponent dataSource={filteredData} columns={columns} />
         </div>
       )}
