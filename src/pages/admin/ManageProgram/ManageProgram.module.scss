@@ -1,21 +1,29 @@
-.headerLine{
-  display:flex;
-}
-.searchBarName {
-  padding: 0 !important;
-  width:100% !important;
+.headerLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.navigateButton{
-  margin: 11px;
-  padding:20px;
-  background-color: #0BA02C  !important;
+.searchBarName {
+  width: 100% !important;
 }
+
+.navigateButton {
+  margin: 11px;
+  padding: 10px 20px;
+  background-color: #0BA02C !important;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
 .sectionTitle {
   margin-top: 15px;
   font-size: 15px;
   color: #888;
 }
+
 .message {
   font-size: 12px;
   color: #888;
@@ -25,13 +33,19 @@
 
 .programList {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .programCard {
-  position: relative;
   background-color: #ffffff;
   border: 2px solid #ec744a;
   border-radius: 8px;
@@ -44,25 +58,16 @@
   margin-bottom: 8px;
 }
 
-.sitInProgram {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 10px;
-}
-
-.detail {
-  font-size: 14px;
-  color: #333;
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .more-button {
   background: transparent;
   border: none;
-  padding: 0;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .more-icon {
@@ -70,32 +75,10 @@
   color: black;
 }
 
-.headerRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.nameProgram {
-  margin-bottom: 30px;
-}
-
-.iconPeople {
-  color: #666;
-  margin-right: 5px;
-}
-
 .paginationContainer {
   display: flex;
   justify-content: center;
   margin-top: 20px;
-}
-
-:global(.ant-pagination-item-active) {
-  background-color: #1890ff;
-  border-color: #1890ff;
-  a {
-    color: white;
-  }
 }
 
 .customModal {

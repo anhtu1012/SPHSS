@@ -1,97 +1,84 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Rate } from "antd"; 
+import { Rate } from "antd";
 import SearchBar from "../../../components/cSearchbar/SearchBar";
 import AntDComponent from "../../../components/cTableAntD";
 import Cbutton from "../../../components/cButton";
 import { ColumnsType } from "antd/es/table";
 import styles from "./ManageEffectConsult.module.scss";
-
-interface DataType {
-  key: string;
-  name: string;
-  id: string;
-  status: string;
-  rating: number; 
-}
+import { User } from "../../../models/admin";
+import { getUserRole } from "../../../services/admin/api";
 
 const ManageEffectConsult = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<DataType[]>([
-    {
-      key: "1",
-      name: "Nguyen Van A",
-      id: "YA623",
-      status: "active",
-      rating: 4,
-    },
-    {
-      key: "2",
-      name: "dsbfsfbfs",
-      id: "YA001",
-      status: "active",
-      rating: 3,
-    },
-    {
-      key: "3",
-      name: "Nguyen Van B",
-      id: "YA003",
-      status: "active",
-      rating: 5,
-    },
-    {
-      key: "4",
-      name: "bndf",
-      id: "YA056",
-      status: "active",
-      rating: 2,
-    },
-    {
-      key: "5",
-      name: "Nguyen gn r fgn A",
-      id: "YA678",
-      status: "inactive",
-      rating: 4,
-    },
-  ]);
+  const [data, setData] = useState<User[]>([]);
+  const [filteredData, setFilteredData] = useState<User[]>([]);
 
-  const handleSearch = (values: Record<string, string>) => {
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
     setLoading(true);
-    setTimeout(() => {
-      const filteredData = data.filter(
-        (item) =>
-          (values.name
-            ? item.name.toLowerCase().includes(values.name.toLowerCase())
-            : true) &&
-          (values.status && values.status !== "Tất cả"
-            ? item.status === values.status
-            : true)
-      );
-
-      setData(filteredData.length ? filteredData : []);
-      setLoading(false);
-    }, 1000);
+    try {
+      const response = await getUserRole("R3");
+      console.log("getUser:", response.data);
+      const userList = Array.isArray(response.data.data)
+        ? response.data.data
+        : [];
+      setData(userList);
+      setFilteredData(userList);
+    } catch (error) {
+      console.error("Lỗi danh sách người dùng:", error);
+      setData([]);
+      setFilteredData([]);
+    }
+    setLoading(false);
   };
 
-  const columns: ColumnsType<DataType> = [
+  const handleSearch = (values: Record<string, string>) => {
+    const searchName = values.name?.toLowerCase().trim() || "";
+    const searchStatus = values.status?.trim();
+    if (!searchName && (!searchStatus || searchStatus === "Tất cả")) {
+      setFilteredData(data);
+      return;
+    }
+    const filtered = data.filter((user) => {
+      const fullName = `${user.firstName || ""} ${user.lastName || ""}`
+        .trim()
+        .toLowerCase();
+      const matchName = searchName ? fullName.includes(searchName) : true;
+      const matchStatus =
+        searchStatus && searchStatus !== "Tất cả"
+          ? statusMap[user.status.toString()] === searchStatus
+          : true;
+      return matchName && matchStatus;
+    });
+    setFilteredData(filtered);
+  };
+
+  const statusMap: Record<string, string> = {
+    true: "Đang hoạt động",
+    false: "Đã khóa",
+  };
+
+  const columns: ColumnsType<User> = [
     {
-      title: "Chuyên viên tư vấn",
-      key: "userInfo",
+      title: "Tài khoản",
+      dataIndex: "username",
+      key: "username",
       render: (_, record) => (
         <div className={styles.userInfoContainer}>
-          <span className={styles.userName}>{record.name}</span>
+          <span className={styles.userName}>
+            {`${record.firstName || ""} ${record.lastName || ""}`.trim()}
+          </span>
           <br />
-          <span className={styles.userId}>{record.id}</span>
+          <span className={styles.userId}>
+            {record.userCode || "Chưa có ID"}
+          </span>
         </div>
       ),
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (status) =>
-        status === "active" ? "Đang hoạt động" : "Không hoạt động",
     },
     {
       title: "Đánh giá",
@@ -100,15 +87,23 @@ const ManageEffectConsult = () => {
       render: (rating) => <Rate disabled defaultValue={rating} />,
     },
     {
-      title: "Chi tiết",
+      title: "Trạng thái tài khoản",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => statusMap[status] || "Unknown",
+    },
+    {
+      title: "Hồ sơ",
       key: "action",
-      render: () => (
-        <Cbutton
-          origin={{ bgcolor: "#ec744a", hoverBgColor: "#ff7875" }}
-          onClick={() => navigate("detail")}
-        >
-          Xem chi tiết
-        </Cbutton>
+      render: (_, record) => (
+        <div className={styles.buttonContainer}>
+          <Cbutton
+            origin={{ bgcolor: "#ec744a", hoverBgColor: "#ff7875" }}
+            onClick={() => navigate(`detail/${record.id}`)}
+          >
+            Xem hồ sơ
+          </Cbutton>
+        </div>
       ),
     },
   ];
@@ -122,17 +117,20 @@ const ManageEffectConsult = () => {
             key: "status",
             placeholder: "Trạng thái tài khoản",
             type: "dropdown",
-            options: ["Đang hoạt động", "Tạm dừng", "Tất cả"],
+            options: ["Đang hoạt động", "Đã khóa", "Tất cả"],
           },
         ]}
         onSearch={handleSearch}
       />
+
       {loading ? (
         <p className={styles.message}>Đang tải dữ liệu...</p>
+      ) : filteredData.length === 0 ? (
+        <p className={styles.message}>Không có thông tin</p>
       ) : (
         <div className={styles.tableContainer}>
-          <p className={styles.sectionTitle}>Danh sách chuyên viên tư vấn</p>
-          <AntDComponent dataSource={data} columns={columns} />
+          <p className={styles.sectionTitle}>Danh sách tư vấn viên</p>
+          <AntDComponent dataSource={filteredData} columns={columns} />
         </div>
       )}
     </div>

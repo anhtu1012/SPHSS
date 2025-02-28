@@ -48,6 +48,10 @@ function UserProfile() {
     }
   };
 
+  const updateUserState = (updatedUser: User) => {
+    setUser(updatedUser);
+  };
+
   useEffect(() => {
     if (!id) return;
     const fetchUser = async () => {
@@ -74,7 +78,15 @@ function UserProfile() {
           <div className={styles.profileHeader}>
             <div className={styles.profileName}>
               <div className={styles.avatar}>
-                <UserOutlined />
+                {user.image ? (
+                  <img
+                    src={user.image}
+                    alt="Avatar"
+                    className={styles.userAvatar}
+                  />
+                ) : (
+                  <UserOutlined />
+                )}
               </div>
               <div className={styles.profileInfo}>
                 <h2>
@@ -171,16 +183,20 @@ function UserProfile() {
           surveyData={selectedConsult}
         />
       )}
-      {isStatusPopupOpen && (
+      {isStatusPopupOpen && user && id && (
         <PopupChangeStatus
           isOpen={isStatusPopupOpen}
           onClose={() => setIsStatusPopupOpen(false)}
+          userId={id}
+          currentStatus={Boolean(user.status)}
         />
       )}
-      {isChangeInfoPopupOpen && (
+      {isChangeInfoPopupOpen && user && (
         <PopupChangeInfoUser
           isOpen={isChangeInfoPopupOpen}
           onClose={() => setIsChangeInfoPopupOpen(false)}
+          user={user}
+          onUpdateUser={updateUserState}
         />
       )}
     </div>

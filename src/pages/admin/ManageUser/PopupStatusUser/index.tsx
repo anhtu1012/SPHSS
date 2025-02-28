@@ -1,74 +1,63 @@
 import { useState } from "react";
 import Cbutton from "../../../../components/cButton";
-import { X } from "lucide-react"; // Import icon X từ lucide-react
+import { X } from "lucide-react";
 import styles from "./popupStatusChange.module.scss";
+import { changeUserStatus } from "../../../../services/admin/api";
 
 interface PopupChangeStatusProps {
   isOpen: boolean;
   onClose: () => void;
+  userId: string; 
+  currentStatus: boolean;
 }
 
-const PopupChangeStatus = ({ isOpen, onClose }: PopupChangeStatusProps) => {
-  const [action, setAction] = useState<"lock" | "unlock" | null>(null);
 
-  const handleConfirm = (type: "lock" | "unlock") => {
-    setAction(type);
+const PopupChangeStatus = ({ isOpen, onClose, userId, currentStatus }: PopupChangeStatusProps) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChangeStatus = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const newStatus = !currentStatus; 
+      await changeUserStatus(userId, newStatus); 
+      onClose();
+      window.location.reload();
+    } catch (err) {
+      setError("Lỗi khi thay đổi trạng thái.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleCancel = () => {
-    setAction(null);
-    onClose();
-  };
-
-  if (!isOpen) return null; // Không hiển thị nếu không mở
+  if (!isOpen) return null;
 
   return (
     <div className={styles.overlay}>
       <div className={styles.popup}>
-        <Cbutton className={styles.closeButton} onClick={handleCancel}>
+        <Cbutton className={styles.closeButton} onClick={onClose}>
           <X size={20} />
         </Cbutton>
 
         <div className={styles.modalTitle}>
-          {action === "lock"
-            ? "Bạn muốn khóa tài khoản này?"
-            : action === "unlock"
-            ? "Bạn muốn mở tài khoản này?"
-            : "Bạn có muốn khóa/mở tài khoản này?"}
+          {currentStatus ? "Bạn muốn khóa tài khoản này?" : "Bạn muốn mở tài khoản này?"}
         </div>
+
+        {error && <p className={styles.error}>{error}</p>}
+
         <div className={styles.buttonContainer}>
-          {!action ? (
-            <>
-              <Cbutton
-                className={styles.lockButton}
-                onClick={() => handleConfirm("lock")}
-              >
-                Khóa
-              </Cbutton>
-              <Cbutton
-                className={styles.unlockButton}
-                onClick={() => handleConfirm("unlock")}
-              >
-                Mở
-              </Cbutton>
-            </>
-          ) : (
-            <>
-              <Cbutton
-                className={
-                  action === "lock"
-                    ? styles.lockConfirmButton
-                    : styles.unlockConfirmButton
-                }
-                onClick={handleCancel}
-              >
-                Xác nhận
-              </Cbutton>
-              <Cbutton className={styles.cancelButton} onClick={handleCancel}>
-                Hủy
-              </Cbutton>
-            </>
-          )}
+          <Cbutton
+            className={currentStatus ? styles.lockConfirmButton : styles.unlockConfirmButton}
+            onClick={handleChangeStatus}
+            disabled={loading}
+          >
+            {loading ? "Đang xử lý..." : "Xác nhận"}
+          </Cbutton>
+          <Cbutton className={styles.cancelButton} onClick={onClose} disabled={loading}>
+            Hủy
+          </Cbutton>
         </div>
       </div>
     </div>
