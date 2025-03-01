@@ -14,21 +14,24 @@ import dayjs from "dayjs";
 import { useCallback, useEffect, useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdAutoDelete } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Cbutton from "../../../components/cButton";
 import AntDComponent from "../../../components/cTableAntD";
 import { TimeSlotValues } from "../../../models/psy";
+import { RootState } from "../../../redux/RootReducer";
 import {
   createTimeSlot,
   deleteTimeSlot,
-  getTimeSlot,
+  getTimeSlotByUser,
   updateTimeSlot,
 } from "../../../services/psychologist/api";
 
 function ManageTimeslot() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [form] = useForm();
-  const [userID, setUserID] = useState<string>("");
+  const user = useSelector((state: RootState) => state.user) as any | null;
+  const userID = user.id;
   const [rowData, setRowData] = useState<TimeSlotValues[]>([]);
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [editingRecord, setEditingRecord] = useState<TimeSlotValues | null>(
@@ -39,14 +42,12 @@ function ManageTimeslot() {
 
   const fetchTimeSlot = useCallback(async () => {
     try {
-      const res = await getTimeSlot();
+      const res = await getTimeSlotByUser(userID);
       const data = res.data.data;
       if (data.length <= 0) {
         toast.warning("Chưa có lịch khám nào");
       }
       setRowData(data);
-      setUserID(data.length > 0 ? data[0].user_id : "");
-      console.log(userID);
     } catch (error: any) {
       toast.error(error.response?.data || "Lỗi khi fetch data");
     }
@@ -59,12 +60,24 @@ function ManageTimeslot() {
           toast.error("Không có dữ liệu để cập nhật!");
           return;
         }
-        const payload = {
-          start_time: editingRecord.start_time || "",
-          end_time: editingRecord.end_time || "",
-          status: editingRecord.status || "",
-        };
-        console.log("Payload gửi lên:", payload);
+        const originalRecord = rowData.find((item) => item.time_slot_id === id);
+        if (!originalRecord) return;
+        const payload: Partial<TimeSlotValues> = {};
+        if (editingRecord.start_time !== originalRecord.start_time) {
+          payload.start_time = editingRecord.start_time;
+        }
+        if (editingRecord.end_time !== originalRecord.end_time) {
+          payload.end_time = editingRecord.end_time;
+        }
+        if (editingRecord.status !== originalRecord.status) {
+          payload.status = editingRecord.status;
+        }
+        if (Object.keys(payload).length === 0) {
+          toast.info("Không có thay đổi nào để cập nhật.");
+          setEditingKey(null);
+          setEditingRecord(null);
+          return;
+        }
         await updateTimeSlot(id, payload);
         toast.success("Cập nhật lịch hẹn thành công");
         setEditingKey(null);
@@ -226,7 +239,7 @@ function ManageTimeslot() {
 
   useEffect(() => {
     fetchTimeSlot();
-  }, [userID]);
+  }, []);
 
   return (
     <div>

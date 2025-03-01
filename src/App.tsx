@@ -8,11 +8,12 @@ import NotFound from "./pages/404";
 import ManageDashboard from "./pages/admin/ManageDashboard";
 import ManageEffectConsult from "./pages/admin/ManageEffectConsult";
 import ManageProgram from "./pages/admin/ManageProgram";
+import ManageCreateProgram from "./pages/admin/ManageProgram/CreateProgram";
+import ManageProgramDetail from "./pages/admin/ManageProgram/ViewProgram";
 import ManageSurveyStudent from "./pages/admin/ManageSurveyStudent";
 import ManageUser from "./pages/admin/ManageUser";
 import UserDetail from "./pages/admin/ManageUser/UserDetail";
 import ChatApp from "./pages/Deepseek";
-import Home from "./pages/student/home";
 import Login from "./pages/login";
 import ManageStudent from "./pages/parent/ManageStudent";
 import CreateBlog from "./pages/psychologist/CreateBlog";
@@ -24,21 +25,20 @@ import StudentDetail from "./pages/psychologist/ManageStudent/[id]";
 import ManageSurvey from "./pages/psychologist/ManageSurvey";
 import ManageTimeslot from "./pages/psychologist/ManageTimeslot";
 import AiChatBot from "./pages/student/AiChatBot";
+import Blog from "./pages/student/blog";
+import BlogDetail from "./pages/student/blog/[id]";
+import Contact from "./pages/student/contact";
+import Doctors from "./pages/student/doctors";
+import Home from "./pages/student/home";
+import ProgramDetail from "./pages/student/program/[id]";
+import Program from "./pages/student/program/index";
 import PsychologistDetail from "./pages/student/PsychologistDetail";
 import SurveyQuestion from "./pages/student/survey/[id]";
 import SurveyList from "./pages/student/survey/index";
-import Program from "./pages/student/program/index";
-import ProgramDetail from "./pages/student/program/[id]";
 import UserProfile from "./pages/student/userProfile";
-import Doctors from "./pages/student/doctors";
-import Blog from "./pages/student/blog";
-import Contact from "./pages/student/contact";
-import BlogDetail from "./pages/student/blog/[id]";
-import ManageProgramDetail from "./pages/admin/ManageProgram/ViewProgram";
-import ManageCreateProgram from "./pages/admin/ManageProgram/CreateProgram";
-import ManageSurveyView from "./pages/admin/ManageSurveyStudent/SurveyViewDetail";
 import ManageCreateSurvey from "./pages/admin/ManageSurveyStudent/CreateSurvey";
 import ManageFormSurvey from "./pages/admin/ManageSurveyStudent/CreateSurvey/SurveyForm";
+import PsyProfile from "./pages/psychologist/psyProfile";
 
 function App() {
   const { Manager, Parent, Psychologist } = UserRole;
@@ -153,7 +153,7 @@ function App() {
         },
         {
           path: "manage-survey/view",
-          element: <ManageSurveyView />,
+          element: <ManageSurvey />,
         },
         {
           path: "manage-user",
@@ -238,6 +238,10 @@ function App() {
         {
           path: "manage-report/:id",
           element: <ReportDetail />,
+        },
+        {
+          path: "psy-profile",
+          element: <PsyProfile />,
         },
       ],
     },

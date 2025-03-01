@@ -28,7 +28,7 @@ function PsychologistheaderPsy() {
             <FaUserCircle
               size={20}
               className="headerPsy__user__icon"
-              onClick={() => navigate("/psychologist/profile")}
+              onClick={() => navigate("/psychologist/psy-profile")}
             />
             <LogoutOutlined
               className="headerPsy__logout__icon"

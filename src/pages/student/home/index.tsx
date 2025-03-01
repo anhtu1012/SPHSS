@@ -1,25 +1,25 @@
-import { RiCalendarScheduleLine } from "react-icons/ri";
-import { GiMedicines } from "react-icons/gi";
-import { GiHealthNormal } from "react-icons/gi";
+import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { FaHeadSideVirus } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
-import { motion } from "framer-motion";
-import { useRef } from "react";
+import { GiHealthNormal, GiMedicines } from "react-icons/gi";
+import { RiCalendarScheduleLine } from "react-icons/ri";
 
+import { toast } from "react-toastify";
+import fptPolytechnic from "../../../assets/fpt_polytechnic.png";
+import fptSchools from "../../../assets/fpt_schools.png";
+import fptUniversity from "../../../assets/fpt_university.png";
 import homeBanner from "../../../assets/home_banner.png";
 import sectionOne from "../../../assets/home_section_1.png";
 import sectionTwo from "../../../assets/home_section_2.png";
 import sectionThree from "../../../assets/home_section_3.png";
-import fptUniversity from "../../../assets/fpt_university.png";
-import fptPolytechnic from "../../../assets/fpt_polytechnic.png";
-import fptSchools from "../../../assets/fpt_schools.png";
-import "./index.scss";
+import DoctorCard, { DoctorCardProps } from "../../../components/DoctorCard";
+import ProgramCard from "../../../components/ProgramCard";
+import { getListDoctors } from "../../../services/psychologist/api";
 import Icon from "./Icon";
 import SchoolImg from "./SchoolImg";
-import { psychologistList } from "./mockData";
-import DoctorCard from "../../../components/DoctorCard";
-import ProgramCard from "../../../components/ProgramCard";
+import "./index.scss";
 
 export default function Home() {
   // const featuresRef = useRef(null);
@@ -29,6 +29,19 @@ export default function Home() {
   const scrollToSection = (ref: React.RefObject<HTMLElement>) => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   };
+  const [doctorList, setDoctorList] = useState<DoctorCardProps[]>([]);
+  const getAllDoctor = async () => {
+    try {
+      const res = await getListDoctors("R3");
+      setDoctorList(res.data.data);
+    } catch (error) {
+      toast.error("Lỗi");
+    }
+  };
+
+  useEffect(() => {
+    getAllDoctor();
+  }, []);
 
   const featuredPrograms = [
     {
@@ -101,7 +114,7 @@ export default function Home() {
           </span>
         </h2>
         <div className="home__featured__doctors__list">
-          {psychologistList.slice(0, 3).map((doctor, index) => (
+          {doctorList.slice(0, 3).map((doctor, index) => (
             <DoctorCard key={index} {...doctor} />
           ))}
         </div>

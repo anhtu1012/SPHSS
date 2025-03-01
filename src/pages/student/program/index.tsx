@@ -42,7 +42,7 @@ function Program() {
             className="program__card"
             onClick={() =>
               navigate(`/program/${program.programId}`, {
-                state: program.programId,
+                state: program,
               })
             }
           >
