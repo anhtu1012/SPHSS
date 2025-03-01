@@ -1,4 +1,5 @@
 import { Input, Select, Button } from "antd";
+import { useState } from "react";
 import styles from "./Search.module.scss";
 
 interface SearchField {
@@ -15,37 +16,41 @@ interface SearchBarProps {
 }
 
 const SearchBar = ({ title, fields, onSearch }: SearchBarProps) => {
+  const [searchValues, setSearchValues] = useState<Record<string, string>>({});
+
+  const handleChange = (key: string, value: string) => {
+    setSearchValues((prev) => ({ ...prev, [key]: value }));
+  };
+
   const handleSearch = () => {
-    const values: Record<string, string> = {};
-    fields.forEach((field) => {
-      const element = document.getElementById(field.key) as
-        | HTMLInputElement
-        | HTMLSelectElement;
-      if (element) values[field.key] = element.value;
-    });
-    onSearch(values);
+    console.log("🔍 Giá trị tìm kiếm:", searchValues); // Debug giá trị tìm kiếm
+    onSearch(searchValues);
   };
 
   return (
     <div className={styles["search-bar"]}>
-      <span className={styles["title"]}>{title}</span>
+      {title && <span className={styles["title"]}>{title}</span>}
       <div className={styles["search-fields"]}>
         {fields.map((field) => (
           <div key={field.key} className={styles["search-field"]}>
             {field.type === "text" ? (
-              <Input id={field.key} placeholder={field.placeholder} className={styles["search-input"]} />
+              <Input
+                placeholder={field.placeholder}
+                className={styles["search-input"]}
+                onChange={(e) => handleChange(field.key, e.target.value)}
+              />
             ) : (
               <Select
-                id={field.key}
                 className={styles["search-input"]}
                 placeholder={field.placeholder}
                 options={field.options?.map((option) => ({ label: option, value: option }))}
+                onChange={(value) => handleChange(field.key, value)}
               />
             )}
           </div>
         ))}
         <Button type="primary" className={styles["btn-view"]} onClick={handleSearch}>
-          Xem
+          Tìm kiếm
         </Button>
       </div>
     </div>

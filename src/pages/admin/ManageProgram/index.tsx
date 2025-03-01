@@ -1,36 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dropdown, Menu, Pagination } from "antd";
 import {
   SearchOutlined,
   DeleteOutlined,
   MoreOutlined,
-  UserOutlined,
+  EditOutlined,
+  MoneyCollectOutlined
 } from "@ant-design/icons";
 import SearchBar from "../../../components/cSearchbar/SearchBar";
 import styles from "./ManageProgram.module.scss";
 import { useNavigate } from "react-router-dom";
 import Cbutton from "../../../components/cButton";
-
-interface DataType {
-  key: string;
-  name: string;
-  sitInProgram: string;
-  detail: string;
-  status: string;
-}
+import { Program } from "../../../models/admin";
+import {
+  getAllPrograms,
+  deleteProgramId,
+  updateProgramInfo,
+} from "../../../services/admin/api";
+import EditProgramModal from "./PopupEditProgram";
 
 const ProgramActions = ({
   onView,
   onDelete,
+  onEdit,
 }: {
   onView: () => void;
   onDelete: () => void;
+  onEdit: () => void;
 }) => {
   const menu = (
     <Menu>
       <Menu.Item key="view" onClick={onView} style={{ color: "green" }}>
         <SearchOutlined style={{ marginRight: 8 }} />
         Xem chi tiết
+      </Menu.Item>
+      <Menu.Item key="edit" onClick={onEdit} style={{ color: "#08509f" }}>
+      <EditOutlined style={{ marginRight: 8 }} />
+        Chỉnh sửa
       </Menu.Item>
       <Menu.Item key="delete" onClick={onDelete} style={{ color: "red" }}>
         <DeleteOutlined style={{ marginRight: 8 }} />
@@ -41,7 +47,6 @@ const ProgramActions = ({
 
   return (
     <Dropdown overlay={menu} trigger={["click"]}>
-      {/* chưa css đc nên dùng không dùng Cbutton */}
       <button
         className="more-button"
         onClick={(e) => e.preventDefault()}
@@ -56,66 +61,92 @@ const ProgramActions = ({
 
 const ManageProgram = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(9);
-  const [data, setData] = useState<DataType[]>([
-    {
-      key: "1",
-      name: "HIV và AIDS",
-      sitInProgram: "35 người",
-      detail:
-        "Our collective efforts can foster a healthy and joyful community.",
-      status: "active",
-    },
-    {
-      key: "2",
-      name: "Làm thế nào để giảm mệt mỏi",
-      sitInProgram: "Lớp SE1702",
-      detail:
-        "Our collective efforts can foster a healthy and joyful community. Remember, neither happiness nor good health can be bought, so it's our responsibility to cherish and nurture them in ourselves and in those around us.",
-      status: "active",
-    },
-    {
-      key: "3",
-      name: "Tôi và cơn giận của mình",
-      sitInProgram: "35 người",
-      detail:
-        "Our collective efforts can foster a healthy and joyful community. Remember, neither happiness nor good health can be bought, so it's our responsibility to cherish and nurture them in ourselves and in those around us.",
-      status: "active",
-    },
-    {
-      key: "4",
-      name: "Tăng cường trí nhớ hiệu quả",
-      sitInProgram: "Lớp SE1703",
-      detail:
-        "Improving memory requires a combination of healthy habits, proper nutrition, and mental exercises. Stay curious and keep learning!",
-      status: "active",
-    },
-  ]);
+  const [programs, setPrograms] = useState<Program[]>([]);
+  const [filteredData, setFilteredData] = useState<Program[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [programToDelete, setProgramToDelete] = useState<DataType | null>(null);
+  const [programToDelete, setProgramToDelete] = useState<Program | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [programToEdit, setProgramToEdit] = useState<Program | null>(null);
+
+  const openEditModal = (program: Program) => {
+    setProgramToEdit(program);
+    setShowEditModal(true);
+  };
+
+  const closeEditModal = () => {
+    setShowEditModal(false);
+    setProgramToEdit(null);
+  };
+
+  const handleUpdateProgram = async (values: Partial<Program>) => {
+    if (!programToEdit) return;
+    try {
+      await updateProgramInfo(programToEdit.programId, {
+        ...programToEdit,
+        ...values,
+      });
+      setPrograms((prev) =>
+        prev.map((item) =>
+          item.programId === programToEdit.programId
+            ? { ...item, ...values }
+            : item
+        )
+      );
+      closeEditModal();
+    } catch (error) {
+      console.error("Lỗi khi cập nhật chương trình:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      setLoading(true);
+      try {
+        const response = await getAllPrograms();
+        console.log("API response:", response.data);
+        const programList = response.data.data || [];
+        setPrograms(programList);
+        setFilteredData(programList);
+      } catch (error) {
+        console.error("Lỗi khi tải chương trình:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchPrograms();
+  }, []);
 
   const handleSearch = (values: Record<string, string>) => {
-    setLoading(true);
-    setTimeout(() => {
-      const filteredData = data.filter(
-        (item) =>
-          (values.name ? item.name.includes(values.name) : true) &&
-          (values.status && values.status !== "Tất cả"
-            ? item.status === values.status
-            : true)
-      );
-      setData(filteredData.length ? filteredData : []);
-      setLoading(false);
-    }, 1000);
+    const searchTitle = values.name?.toLowerCase().trim() || "";
+    const searchPrice = values.price?.trim() || "";
+
+    if (!searchTitle && !searchPrice) {
+      setFilteredData(programs); 
+      return;
+    }
+
+    const filtered = programs.filter((program) => {
+      const matchTitle = searchTitle
+        ? program.title.toLowerCase().includes(searchTitle)
+        : true;
+      const matchPrice = searchPrice
+        ? program.price.toString().includes(searchPrice)
+        : true;
+
+      return matchTitle && matchPrice;
+    });
+
+    setFilteredData(filtered);
   };
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentData = data.slice(startIndex, endIndex);
+  const currentData = filteredData.slice(startIndex, endIndex);
 
-  const openDeleteModal = (program: DataType) => {
+  const openDeleteModal = (program: Program) => {
     setProgramToDelete(program);
     setShowDeleteModal(true);
   };
@@ -125,16 +156,18 @@ const ManageProgram = () => {
     setProgramToDelete(null);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (programToDelete) {
-      setData((prev) =>
-        prev.filter((item) => item.key !== programToDelete.key)
-      );
-      closeDeleteModal();
+      try {
+        await deleteProgramId(programToDelete.programId);
+        setPrograms((prev) =>
+          prev.filter((item) => item.programId !== programToDelete.programId)
+        );
+        closeDeleteModal();
+      } catch (error) {
+        console.error("Lỗi khi xóa chương trình:", error);
+      }
     }
-  };
-  const handleNavigate = () => {
-    navigate("create-program");
   };
 
   return (
@@ -144,17 +177,15 @@ const ManageProgram = () => {
           <SearchBar
             fields={[
               { key: "name", placeholder: "Tên chương trình", type: "text" },
-              {
-                key: "status",
-                placeholder: "Trạng thái",
-                type: "dropdown",
-                options: ["Đang hoạt động", "Tạm dừng", "Tất cả"],
-              },
+              { key: "price", placeholder: "Giá vé", type: "text" },
             ]}
             onSearch={handleSearch}
           />
         </div>
-        <Cbutton className={styles.navigateButton} onClick={handleNavigate}>
+        <Cbutton
+          className={styles.navigateButton}
+          onClick={() => navigate("create-program")}
+        >
           Tạo chương trình
         </Cbutton>
       </div>
@@ -162,26 +193,20 @@ const ManageProgram = () => {
         <p className={styles.message}>Đang tải dữ liệu...</p>
       ) : (
         <div className={styles.tagContainer}>
-          <p className={styles.sectionTitle}>Danh sách chương trình</p>
+          <p className={styles.sectionTitle}>Danh sách tất cả chương trình</p>
           <div className={styles.programList}>
             {currentData.map((item) => (
-              <div key={item.key} className={styles.programCard}>
+              <div key={item.programId} className={styles.programCard}>
                 <div className={styles.headerRow}>
-                  <h3 className={styles.nameProgram}>{item.name}</h3>
+                  <h3 className={styles.nameProgram}>{item.title}</h3>
                   <ProgramActions
-                    onView={() => navigate("view")}
+                    onView={() => navigate(`/program/${item.programId}`)}
+                    onEdit={() => openEditModal(item)}
                     onDelete={() => openDeleteModal(item)}
                   />
                 </div>
-                <p className={styles.sitInProgram}>
-                  <UserOutlined className={styles.iconPeople} />
-                  {item.sitInProgram}
-                </p>
-                <p className={styles.detail}>
-                  {item.detail.length > 80
-                    ? item.detail.slice(0, 80) + "..."
-                    : item.detail}
-                </p>
+                <p className={styles.price}><MoneyCollectOutlined /> {item.price}</p>
+                <p className={styles.price}>{item.targetAudience}</p>
               </div>
             ))}
           </div>
@@ -190,7 +215,7 @@ const ManageProgram = () => {
               className={styles.pagination}
               current={currentPage}
               pageSize={pageSize}
-              total={data.length}
+              total={filteredData.length}
               onChange={(page, newPageSize) => {
                 setCurrentPage(page);
                 if (newPageSize !== pageSize) {
@@ -202,11 +227,10 @@ const ManageProgram = () => {
           </div>
         </div>
       )}
-
       {showDeleteModal && programToDelete && (
         <div className={styles.customModal}>
           <div className={styles.modalContent}>
-            <p>Bạn muốn xóa "{programToDelete.name}" không?</p>
+            <p>Bạn muốn xóa "{programToDelete.title}" không?</p>
             <Cbutton onClick={confirmDelete} className={styles.deleteBtn}>
               Xóa
             </Cbutton>
@@ -215,6 +239,14 @@ const ManageProgram = () => {
             </Cbutton>
           </div>
         </div>
+      )}
+      {showEditModal && programToEdit && (
+        <EditProgramModal
+          isOpen={showEditModal}
+          program={programToEdit}
+          onUpdate={handleUpdateProgram}
+          onClose={closeEditModal}
+        />
       )}
     </div>
   );

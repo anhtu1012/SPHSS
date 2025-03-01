@@ -38,6 +38,7 @@ import ManageProgramDetail from "./pages/admin/ManageProgram/ViewProgram";
 import ManageCreateProgram from "./pages/admin/ManageProgram/CreateProgram";
 import ManageSurveyView from "./pages/admin/ManageSurveyStudent/SurveyViewDetail";
 import ManageCreateSurvey from "./pages/admin/ManageSurveyStudent/CreateSurvey";
+import ManageFormSurvey from "./pages/admin/ManageSurveyStudent/CreateSurvey/SurveyForm";
 
 function App() {
   const { Manager, Parent, Psychologist } = UserRole;
@@ -147,6 +148,10 @@ function App() {
           element: <ManageCreateSurvey />,
         },
         {
+          path: "manage-survey/create-survey/form/:id",
+          element: <ManageFormSurvey />,
+        },
+        {
           path: "manage-survey/view",
           element: <ManageSurveyView />,
         },
@@ -155,11 +160,7 @@ function App() {
           element: <ManageUser />,
         },
         {
-          path: "manage-user/detail",
-          element: <UserDetail />,
-        },
-        {
-          path: ":section/detail",
+          path: ":section/detail/:id",
           element: <UserDetail />,
         },
       ],

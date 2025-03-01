@@ -1,29 +1,65 @@
 import { Modal, Input, Upload, message } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./EditProgram.module.scss";
 import Cbutton from "../../../../components/cButton";
 import { UploadOutlined } from "@ant-design/icons";
 
+interface Program {
+  programId: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  targetAudience: string;
+  location: string;
+  organizerEmail: string;
+  contactPhone: string;
+  imageUrl: string;
+  price: string;
+  rating: string;
+  categoryId: string;
+  time: string;
+}
+
 interface ProgramPopupProps {
   isOpen: boolean;
+  program: Program;
+  onUpdate: (values: Partial<Program>) => Promise<void>;
   onClose: () => void;
 }
 
-const ProgramPopup = ({ isOpen, onClose }: ProgramPopupProps) => {
+const ProgramPopup = ({ isOpen, program, onUpdate, onClose }: ProgramPopupProps) => {
   const [formData, setFormData] = useState({
-    programName: "KS và những câu chuyện",
-    startDate: "26-08-2024",
-    endDate: "31-12-2025",
-    participants: "SE1702_Fall24",
-    location: "FPT Software",
-    organizerEmail: "fptevent@fpt.vn",
-    contactPhone: "0987654321",
-    detailedContent: "KS là 20 sinh viên điên khùng và thú zị, rất iuiu",
+    programName: "",
+    startDate: "",
+    endDate: "",
+    participants: "",
+    location: "",
+    organizerEmail: "",
+    contactPhone: "",
+    detailedContent: "",
     imageUrl: "",
   });
 
   const [error, setError] = useState("");
   const [isShaking, setIsShaking] = useState(false);
+
+  // Cập nhật formData khi program thay đổi
+  useEffect(() => {
+    if (program) {
+      setFormData({
+        programName: program.title,
+        startDate: program.startDate,
+        endDate: program.endDate,
+        participants: program.targetAudience,
+        location: program.location,
+        organizerEmail: program.organizerEmail,
+        contactPhone: program.contactPhone,
+        detailedContent: program.description,
+        imageUrl: program.imageUrl,
+      });
+    }
+  }, [program]);
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -40,7 +76,7 @@ const ProgramPopup = ({ isOpen, onClose }: ProgramPopupProps) => {
       setFormData((prev) => ({ ...prev, imageUrl: reader.result as string }));
     };
     reader.readAsDataURL(file);
-    return false; 
+    return false;
   };
 
   const handleSave = () => {
@@ -62,144 +98,58 @@ const ProgramPopup = ({ isOpen, onClose }: ProgramPopupProps) => {
       setTimeout(() => setIsShaking(false), 1000);
       return;
     }
+
     setError("");
-    onClose();
+    onUpdate({
+      title: formData.programName,
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+      targetAudience: formData.participants,
+      location: formData.location,
+      organizerEmail: formData.organizerEmail,
+      contactPhone: formData.contactPhone,
+      description: formData.detailedContent,
+      imageUrl: formData.imageUrl,
+    }).then(() => onClose());
   };
 
   return (
-    <Modal
-      open={isOpen}
-      onCancel={onClose}
-      footer={null}
-      className={styles.customModal}
-      width={900}
-    >
+    <Modal open={isOpen} onCancel={onClose} footer={null} className={styles.customModal} width={900}>
       <h2 className={styles.modalTitle}>CHỈNH SỬA THÔNG TIN CHƯƠNG TRÌNH</h2>
       <div className={styles.formGrid}>
         <div className={styles.formGroups}>
           <div className={styles.formGroup}>
             <label>Tên chương trình</label>
-            <Input
-              className={styles.inputField}
-              placeholder="Nhập tên chương trình"
-              value={formData.programName}
-              onChange={(e) => handleChange("programName", e.target.value)}
-            />
+            <Input className={styles.inputField} placeholder="Nhập tên chương trình" value={formData.programName} onChange={(e) => handleChange("programName", e.target.value)} />
           </div>
         </div>
         <div className={styles.mainDetail}>
           <div className={styles.leftDetail}>
             <div className={styles.formGroup}>
               <label>Ảnh chương trình</label>
-              <Upload
-                customRequest={({ file, onSuccess }) => {
-                  handleImageUpload(file);
-                  onSuccess && onSuccess(file);
-                }}
-                showUploadList={false}
-              >
-                <Cbutton
-                  icon={<UploadOutlined />}
-                  className={styles.uploadButton}
-                >
-                  Tải ảnh lên
-                </Cbutton>
+              <Upload customRequest={({ file, onSuccess }) => { handleImageUpload(file); onSuccess && onSuccess(file); }} showUploadList={false}>
+                <Cbutton icon={<UploadOutlined />} className={styles.uploadButton}>Tải ảnh lên</Cbutton>
               </Upload>
-              {formData.imageUrl && (
-                <img
-                  src={formData.imageUrl}
-                  alt="Program"
-                  className={styles.previewImage}
-                />
-              )}
+              {formData.imageUrl && <img src={formData.imageUrl} alt="Program" className={styles.previewImage} />}
             </div>
           </div>
           <div className={styles.rightDetail}>
-            <div className={styles.formGroups}>
-              <div className={styles.formGroup}>
-                <label>Ngày bắt đầu</label>
-                <Input
-                  className={styles.inputField}
-                  value={formData.startDate}
-                  onChange={(e) => handleChange("startDate", e.target.value)}
-                  placeholder="Chọn ngày bắt đầu"
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Ngày kết thúc</label>
-                <Input
-                  className={styles.inputField}
-                  value={formData.endDate}
-                  onChange={(e) => handleChange("endDate", e.target.value)}
-                  placeholder="Chọn ngày kết thúc"
-                />
-              </div>
+            <div className={styles.formGroup}>
+              <label>Ngày bắt đầu</label>
+              <Input className={styles.inputField} value={formData.startDate} onChange={(e) => handleChange("startDate", e.target.value)} />
             </div>
-            <div className={styles.formGroups}>
-              <div className={styles.formGroup}>
-                <label>Đối tượng tham gia</label>
-                <Input
-                  className={styles.inputField}
-                  value={formData.participants}
-                  onChange={(e) => handleChange("participants", e.target.value)}
-                  placeholder="Nhập đối tượng tham gia"
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Địa điểm tổ chức</label>
-                <Input
-                  className={styles.inputField}
-                  value={formData.location}
-                  onChange={(e) => handleChange("location", e.target.value)}
-                  placeholder="Nhập địa điểm tổ chức"
-                />
-              </div>
-            </div>
-            <div className={styles.formGroups}>
-              <div className={styles.formGroup}>
-                <label>Email đơn vị tổ chức</label>
-                <Input
-                  className={styles.inputField}
-                  value={formData.organizerEmail}
-                  onChange={(e) =>
-                    handleChange("organizerEmail", e.target.value)
-                  }
-                  placeholder="Nhập email tổ chức"
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Di động liên lạc</label>
-                <Input
-                  className={styles.inputField}
-                  value={formData.contactPhone}
-                  onChange={(e) => handleChange("contactPhone", e.target.value)}
-                  placeholder="Nhập số điện thoại"
-                />
-              </div>
+            <div className={styles.formGroup}>
+              <label>Ngày kết thúc</label>
+              <Input className={styles.inputField} value={formData.endDate} onChange={(e) => handleChange("endDate", e.target.value)} />
             </div>
           </div>
         </div>
       </div>
 
-      <div className={styles.belowEdit}>
-        <label>Nội dung chi tiết chương trình</label>
-        <textarea
-          className={styles.inputField}
-          value={formData.detailedContent}
-          onChange={(e) => handleChange("detailedContent", e.target.value)}
-          placeholder="Nhập nội dung chi tiết"
-        />
-      </div>
-      {error && (
-        <p className={`${styles.errorText} ${isShaking ? styles.shaking : ""}`}>
-          {error}
-        </p>
-      )}
+      {error && <p className={`${styles.errorText} ${isShaking ? styles.shaking : ""}`}>{error}</p>}
 
       <div className={styles.footer}>
-        <Cbutton className={styles.saveButton} onClick={handleSave}>
-          Lưu Thay Đổi
-        </Cbutton>
+        <Cbutton className={styles.saveButton} onClick={handleSave}>Lưu Thay Đổi</Cbutton>
       </div>
     </Modal>
   );
