@@ -11,6 +11,10 @@ export const getTimeSlot = () => {
   return api.get("/api/timeSlot");
 };
 
+export const getTimeSlotByUser = (id: string) => {
+  return api.get(`/api/timeSlotByUser?user_id=${id}`);
+};
+
 export const createTimeSlot = (data: TimeSlotCreateValues) => {
   return api.post("/api/timeSlot-array", data);
 };
@@ -74,4 +78,9 @@ export const getProgram = () => {
 
 export const getProgramDetail = (id: string) => {
   return api.get(`/api/program/${id}`);
+};
+
+// Danh sách bác sĩ
+export const getListDoctors = (roleCode: string) => {
+  return api.get(`api/users/${roleCode}`);
 };

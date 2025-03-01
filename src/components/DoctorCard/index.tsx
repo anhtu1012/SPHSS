@@ -2,10 +2,11 @@ import { Rate } from "antd";
 import "./index.scss";
 import { useNavigate } from "react-router-dom";
 
-interface DoctorCardProps {
-  id: string | number;
-  img: string;
-  name: string;
+export interface DoctorCardProps {
+  id: string;
+  image: string;
+  firstName: string;
+  lastName: string;
   specialty?: string;
   experience?: string;
   rating?: number;
@@ -13,8 +14,9 @@ interface DoctorCardProps {
 
 const DoctorCard = ({
   id,
-  img,
-  name,
+  image,
+  firstName,
+  lastName,
   specialty = "Chuyên gia tâm lý",
   experience = "15 năm kinh nghiệm",
   rating = 5,
@@ -26,9 +28,11 @@ const DoctorCard = ({
       className="doctor__card"
       onClick={() => navigate(`/psychologist-detail/${id}`)}
     >
-      <img src={img} alt={name} className="doctor__image" />
+      <img src={image} alt={firstName} className="doctor__image" />
       <div className="doctor__info">
-        <h3 className="doctor__name">{name}</h3>
+        <h3 className="doctor__name">
+          {firstName} {lastName}
+        </h3>
         <p className="doctor__specialty">{specialty}</p>
         <Rate disabled defaultValue={rating} className="doctor__rating" />
         <p className="doctor__experience">{experience}</p>
