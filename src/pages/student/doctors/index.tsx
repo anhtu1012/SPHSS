@@ -1,37 +1,30 @@
 import { Input } from "antd";
-import { useState } from "react";
-import DoctorCard from "../../../components/DoctorCard";
-import doctor1 from "../../../assets/doctor_1.png";
-import doctor2 from "../../../assets/doctor_2.png";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import DoctorCard, { DoctorCardProps } from "../../../components/DoctorCard";
+import { getListDoctors } from "../../../services/psychologist/api";
 import "./index.scss";
 
 const { Search } = Input;
 
 const Doctors = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [doctorList, setDoctorList] = useState<DoctorCardProps[]>([]);
+  const getAllDoctor = async () => {
+    try {
+      const res = await getListDoctors("R3");
+      setDoctorList(res.data.data);
+    } catch (error) {
+      toast.error("Lỗi");
+    }
+  };
 
-  const doctors = [
-    {
-      id: 1,
-      img: doctor1,
-      name: "Dr. Nguyễn Văn A",
-      specialty: "Chuyên gia tâm lý lâm sàng",
-      experience: "15 năm kinh nghiệm",
-      rating: 5,
-    },
-    {
-      id: 2,
-      img: doctor2,
-      name: "Dr. Trần Thị B",
-      specialty: "Chuyên gia tư vấn tâm lý",
-      experience: "12 năm kinh nghiệm",
-      rating: 4.5,
-    },
-    // Add more doctors as needed
-  ];
+  useEffect(() => {
+    getAllDoctor();
+  }, []);
 
-  const filteredDoctors = doctors.filter((doctor) =>
-    doctor.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredDoctors = doctorList.filter((doctor) =>
+    doctor.lastName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
