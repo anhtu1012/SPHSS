@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Divider, DatePicker } from "antd";
-import doctorImg from "../../../assets/doctor_1.png";
 import "./index.scss";
 import Time from "./Time";
 import { useParams } from "react-router-dom";
@@ -14,6 +13,7 @@ import {
 } from "../../../services/student/PsychologistDetail/api";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/features/userSlice";
+import { getUserId } from "../../../services/admin/api";
 
 type TimeSlotType = {
   startTime: string;
@@ -28,8 +28,14 @@ const PsychologistDetail = () => {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
   const [timeSlotList, setTimeSlotList] = useState<TimeSlotType[]>([]);
   const currentUser = useSelector(selectUser) as any;
+  const [doctorInfo, setDoctorInfo] = useState<any>();
   useEffect(() => {
     setSelectedDate(new Date());
+    const fetchDoctor = async () => {
+      const response = await getUserId(id as string);
+      setDoctorInfo(response.data.data as any);
+    };
+    fetchDoctor();
   }, []);
 
   const handleTimeSlotClick = (timeSlot: TimeSlotType) => {
@@ -124,16 +130,14 @@ const PsychologistDetail = () => {
         {/* Basic info section - unchanged */}
         <div className="doctor__detail__section1__basic__info__container">
           <div className="doctor__detail__section1__basic__info__img__container">
-            <img src={doctorImg} alt="doctor_img" />
+            <img src={doctorInfo?.image} alt="doctor_img" />
           </div>
           <div className="doctor__detail__section1__basic__info">
             <div className="doctor__detail__section1__basic__info__name">
-              Bác sĩ Chuyên khoa | Nguyễn Tường Vũ
+              {`${doctorInfo?.firstName} ${doctorInfo?.lastName}`}
             </div>
             <div className="doctor__detail__section1__basic__info__description">
-              25 năm kinh nghiệm về Ngoại Chấn thương Chỉnh hình Trưởng khoa
-              Chấn thương Chỉnh hình, Y học Thể thao, Bệnh viện Đa khoa Nam Sài
-              Gòn Bác sĩ nhận khám mọi độ tuổi
+              {doctorInfo?.description}
             </div>
             <div className="doctor__detail__section1__basic__info__location">
               📍Thành phố Hồ Chí Minh
@@ -202,7 +206,7 @@ const PsychologistDetail = () => {
       {/* doctor detail information*/}
       <div>
         <h2 className="doctor__detail__description__title">
-          Bác sĩ Chuyên khoa | Nguyễn Tường Vũ
+          {`${doctorInfo?.firstName} ${doctorInfo?.lastName}`}
         </h2>
         <ul className="doctor__detail__description__info__list">
           <li>
