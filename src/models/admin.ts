@@ -21,18 +21,36 @@ export interface CategorySurvey {
 }
 
 export interface Program {
-  programId: string;
+  programId: string; 
   title: string;
   description: string;
-  startDate:string;
+  categoryId: number; 
+  startDate: string;
   endDate: string;
+  time: string;
+  frequency: string;
   targetAudience: string;
   location: string;
   organizerEmail: string;
   contactPhone: string;
   imageUrl: string;
-  price: string;
-  rating: string;
-  categoryId: string;
-  time:string;
+  price: number; 
+  rating: number; 
+}
+
+export interface Program2 {
+  title: string;
+  description: string;
+  categoryId: number; 
+  startDate: string;
+  endDate: string;
+  time: string;
+  frequency: string;
+  targetAudience: string;
+  location: string;
+  organizerEmail: string;
+  contactPhone: string;
+  imageUrl: string;
+  price: number; 
+  rating: number; 
 }

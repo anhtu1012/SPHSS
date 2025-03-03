@@ -5,7 +5,9 @@ import {
   DeleteOutlined,
   MoreOutlined,
   EditOutlined,
-  MoneyCollectOutlined
+  MoneyCollectOutlined,
+  UsergroupAddOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 import SearchBar from "../../../components/cSearchbar/SearchBar";
 import styles from "./ManageProgram.module.scss";
@@ -18,6 +20,7 @@ import {
   updateProgramInfo,
 } from "../../../services/admin/api";
 import EditProgramModal from "./PopupEditProgram";
+import dayjs from "dayjs";
 
 const ProgramActions = ({
   onView,
@@ -35,7 +38,7 @@ const ProgramActions = ({
         Xem chi tiết
       </Menu.Item>
       <Menu.Item key="edit" onClick={onEdit} style={{ color: "#08509f" }}>
-      <EditOutlined style={{ marginRight: 8 }} />
+        <EditOutlined style={{ marginRight: 8 }} />
         Chỉnh sửa
       </Menu.Item>
       <Menu.Item key="delete" onClick={onDelete} style={{ color: "red" }}>
@@ -81,6 +84,24 @@ const ManageProgram = () => {
     setProgramToEdit(null);
   };
 
+  const fetchPrograms = async () => {
+    setLoading(true);
+    try {
+      const response = await getAllPrograms();
+      console.log("API response:", response.data);
+      const programList = response.data.data || [];
+      setPrograms(programList);
+      setFilteredData(programList);
+    } catch (error) {
+      console.error("Lỗi khi tải chương trình:", error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPrograms();
+  }, []);
+
   const handleUpdateProgram = async (values: Partial<Program>) => {
     if (!programToEdit) return;
     try {
@@ -88,13 +109,7 @@ const ManageProgram = () => {
         ...programToEdit,
         ...values,
       });
-      setPrograms((prev) =>
-        prev.map((item) =>
-          item.programId === programToEdit.programId
-            ? { ...item, ...values }
-            : item
-        )
-      );
+      await fetchPrograms();
       closeEditModal();
     } catch (error) {
       console.error("Lỗi khi cập nhật chương trình:", error);
@@ -122,12 +137,10 @@ const ManageProgram = () => {
   const handleSearch = (values: Record<string, string>) => {
     const searchTitle = values.name?.toLowerCase().trim() || "";
     const searchPrice = values.price?.trim() || "";
-
     if (!searchTitle && !searchPrice) {
-      setFilteredData(programs); 
+      setFilteredData(programs);
       return;
     }
-
     const filtered = programs.filter((program) => {
       const matchTitle = searchTitle
         ? program.title.toLowerCase().includes(searchTitle)
@@ -135,27 +148,22 @@ const ManageProgram = () => {
       const matchPrice = searchPrice
         ? program.price.toString().includes(searchPrice)
         : true;
-
       return matchTitle && matchPrice;
     });
-
     setFilteredData(filtered);
   };
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
   const currentData = filteredData.slice(startIndex, endIndex);
-
   const openDeleteModal = (program: Program) => {
     setProgramToDelete(program);
     setShowDeleteModal(true);
   };
-
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
     setProgramToDelete(null);
   };
-
   const confirmDelete = async () => {
     if (programToDelete) {
       try {
@@ -191,6 +199,8 @@ const ManageProgram = () => {
       </div>
       {loading ? (
         <p className={styles.message}>Đang tải dữ liệu...</p>
+      ): filteredData.length === 0 ? (
+        <p className={styles.message}>Không có thông tin</p>
       ) : (
         <div className={styles.tagContainer}>
           <p className={styles.sectionTitle}>Danh sách tất cả chương trình</p>
@@ -200,13 +210,30 @@ const ManageProgram = () => {
                 <div className={styles.headerRow}>
                   <h3 className={styles.nameProgram}>{item.title}</h3>
                   <ProgramActions
-                    onView={() => navigate(`/program/${item.programId}`)}
+                    onView={() =>
+                      navigate(
+                        `/manager/list-support-program/view/${item.programId}`, {
+                state: item,
+              }
+                      )
+                    }
                     onEdit={() => openEditModal(item)}
                     onDelete={() => openDeleteModal(item)}
                   />
                 </div>
-                <p className={styles.price}><MoneyCollectOutlined /> {item.price}</p>
-                <p className={styles.price}>{item.targetAudience}</p>
+                <p className={styles.price}>
+                  <MoneyCollectOutlined /> {item.price}
+                </p>
+                <p>
+                  <CalendarOutlined />{" "}
+                  {dayjs(item.startDate).format("DD/MM/YYYY")} -{" "}
+                  {dayjs(item.endDate).format("DD/MM/YYYY")}
+                </p>
+                <p className={styles.price}>
+                  {" "}
+                  <UsergroupAddOutlined />
+                  {item.targetAudience}
+                </p>
               </div>
             ))}
           </div>
