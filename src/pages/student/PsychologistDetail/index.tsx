@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Divider, DatePicker } from "antd";
-import doctorImg from "../../../assets/doctor_1.png";
 import "./index.scss";
 import Time from "./Time";
 import { useParams } from "react-router-dom";
@@ -29,12 +28,12 @@ const PsychologistDetail = () => {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
   const [timeSlotList, setTimeSlotList] = useState<TimeSlotType[]>([]);
   const currentUser = useSelector(selectUser) as any;
-  const [doctorInfo, setDoctorInfo] = useState();
+  const [doctorInfo, setDoctorInfo] = useState<any>();
   useEffect(() => {
     setSelectedDate(new Date());
     const fetchDoctor = async () => {
       const response = await getUserId(id as string);
-      setDoctorInfo(response.data.data);
+      setDoctorInfo(response.data.data as any);
     };
     fetchDoctor();
   }, []);
