@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import React, {
   useState,
   useEffect,
@@ -5,6 +6,7 @@ import React, {
   ChangeEvent,
   KeyboardEvent,
 } from "react";
+import trainingData from "../../data/trainingData.json";
 // import axios from "axios";
 import { Card, Input, Button, Typography } from "antd";
 import {
@@ -22,12 +24,26 @@ interface Message {
   reasoning?: string;
 }
 
-const ChatApp: React.FC = () => {
+interface ChatAppProps {
+  isFloating?: boolean;
+}
+
+const ChatApp: React.FC<ChatAppProps> = ({ isFloating = false }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [isThinking, setIsThinking] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // Thêm tin nhắn chào mừng khi component được mount
+    const welcomeMessage: Message = {
+      role: "assistant",
+      content:
+        "Xin chào! Tôi là trợ lý tâm lý AI. Bạn có thể chia sẻ với tôi bất cứ điều gì đang khiến bạn trăn trở. Tôi luôn ở đây để lắng nghe và hỗ trợ bạn 😊",
+    };
+    setMessages([welcomeMessage]);
+  }, []); // Chỉ chạy một lần khi component mount
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -37,6 +53,47 @@ const ChatApp: React.FC = () => {
     scrollToBottom();
   }, [messages, isTyping, isThinking]);
 
+  const findTrainingResponse = (input: string): string | null => {
+    const normalizedInput = input.toLowerCase().trim();
+    const inputWords = normalizedInput.split(" ");
+
+    // Tạo mảng lưu các kết quả phù hợp và số từ khóa match
+    let matches: { answer: string; matchCount: number }[] = [];
+
+    trainingData.conversations.forEach((conv) => {
+      let matchCount = 0;
+
+      // Kiểm tra từng từ trong câu hỏi chính
+      const questionWords = conv.question.toLowerCase().split(" ");
+      questionWords.forEach((word) => {
+        if (inputWords.includes(word)) matchCount++;
+      });
+
+      // Kiểm tra từng từ trong các câu hỏi tương tự
+      conv.similarQuestions?.forEach((similar) => {
+        const similarWords = similar.toLowerCase().split(" ");
+        let similarMatchCount = 0;
+        similarWords.forEach((word) => {
+          if (inputWords.includes(word)) similarMatchCount++;
+        });
+        // Lấy số match cao nhất giữa câu hỏi chính và câu hỏi tương tự
+        matchCount = Math.max(matchCount, similarMatchCount);
+      });
+
+      // Nếu có ít nhất 1 từ khóa match, thêm vào mảng kết quả
+      if (matchCount > 0) {
+        matches.push({
+          answer: conv.answer,
+          matchCount: matchCount,
+        });
+      }
+    });
+
+    // Sắp xếp theo số từ khóa match giảm dần và lấy câu trả lời có nhiều từ khóa match nhất
+    matches.sort((a, b) => b.matchCount - a.matchCount);
+    return matches.length > 0 ? matches[0].answer : null;
+  };
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
@@ -45,6 +102,22 @@ const ChatApp: React.FC = () => {
     setInput("");
     setIsTyping(true);
     setIsThinking(false);
+
+    // Check training data first
+    const trainedResponse = findTrainingResponse(input);
+    if (trainedResponse) {
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: trainedResponse,
+          },
+        ]);
+        setIsTyping(false);
+      }, 1000);
+      return;
+    }
 
     try {
       const response = await fetch("http://127.0.0.1:11434/api/chat", {
@@ -132,16 +205,23 @@ const ChatApp: React.FC = () => {
     setInput(e.target.value);
   };
 
+  
   return (
-    <div className="chat-container">
-      <h1 style={{ textAlign: "center" }}>
-        <AppstoreAddOutlined /> Nhắn tin cùng trợ lý tư vấn tâm lí 🤖
-      </h1>
+    <div className={`chat-container ${isFloating ? "floating-mode" : ""}`}>
+      {!isFloating && (
+        <h1 style={{ textAlign: "center" }}>
+          <AppstoreAddOutlined /> Nhắn tin cùng trợ lý tư vấn tâm lí 🤖
+        </h1>
+      )}
 
       <Card className="chat-card" bodyStyle={{ padding: 0 }} hoverable>
         <div
           className="messages-list"
-          style={{ maxHeight: "72vh", overflowY: "auto" }}
+          style={{
+            maxHeight: isFloating ? "400px" : "72vh",
+            overflowY: "auto",
+            fontSize: isFloating ? "13px" : "14px",
+          }}
         >
           {messages.map((msg, index) => (
             <div

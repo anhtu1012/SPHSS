@@ -20,6 +20,75 @@
   }
 }
 
+.chat-container.floating-mode {
+  padding: 8px; // Giảm padding
+  height: 100%; // Đảm bảo chiều cao đầy đủ
+
+  .message-card {
+    padding: 6px 10px; // Giảm padding
+    margin-bottom: 6px; // Giảm margin
+    font-size: 12px; // Giảm font size
+
+    .ant-typography {
+      font-size: 12px; // Giảm font size cho text
+    }
+
+    .reasoning-text {
+      font-size: 11px; // Giảm font size cho reasoning
+    }
+
+    .ant-card-body {
+      padding: 6px;
+    }
+  }
+
+  .messages-list {
+    padding: 8px;
+    max-height: 350px !important; // Chiều cao cố định
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 4px; // Thanh scroll nhỏ hơn
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 2px;
+    }
+  }
+
+  .input-container {
+    padding: 6px;
+
+    .input-wrapper {
+      gap: 6px;
+
+      .chat-input {
+        font-size: 12px;
+        height: 32px;
+        padding: 0 12px;
+      }
+
+      .send-button {
+        width: 32px;
+        height: 32px;
+        .anticon {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  // Giảm kích thước cho typing indicator
+  .typing-card {
+    font-size: 12px;
+    padding: 6px 10px;
+    .anticon {
+      font-size: 12px;
+    }
+  }
+}
+
 .chat-card {
   height: 100vh;
   margin-bottom: 25px;
@@ -29,7 +98,7 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 
   .messages-list {
-    padding: 20px;
+    padding: 10px;
     max-height: 100vh;
     overflow-y: auto;
     background-color: #ffffff;
@@ -46,7 +115,7 @@
 
     &::-webkit-scrollbar-thumb {
       background: #888;
-      border-radius: 10px;
+      border-radius: 3px;
 
       &:hover {
         background: #555;
