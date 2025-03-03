@@ -9,7 +9,6 @@ import ManageDashboard from "./pages/admin/ManageDashboard";
 import ManageEffectConsult from "./pages/admin/ManageEffectConsult";
 import ManageProgram from "./pages/admin/ManageProgram";
 import ManageCreateProgram from "./pages/admin/ManageProgram/CreateProgram";
-import ManageProgramDetail from "./pages/admin/ManageProgram/ViewProgram";
 import ManageSurveyStudent from "./pages/admin/ManageSurveyStudent";
 import ManageUser from "./pages/admin/ManageUser";
 import UserDetail from "./pages/admin/ManageUser/UserDetail";
@@ -136,8 +135,8 @@ function App() {
           element: <ManageCreateProgram />,
         },
         {
-          path: "list-support-program/view",
-          element: <ManageProgramDetail />,
+          path: "list-support-program/view/:programId",
+          element: <ProgramDetail />,
         },
         {
           path: "manage-survey",

@@ -1,5 +1,5 @@
 import api from "../../config/axios";
-import { CategorySurvey, User, Program } from "../../models/admin";
+import { CategorySurvey, User, Program, Program2 } from "../../models/admin";
 
 export const getCategory = () => {
   return api.get("/api/category");
@@ -36,6 +36,11 @@ export const getAllPrograms = () => {
 export const deleteProgramId = (programId: string) => {
   return api.delete(`/api/program/${programId}`);
 };
+
 export const updateProgramInfo = (programId: string, data: Program) => {
   return api.put(`/api/program/${programId}`, data);
+};
+
+export const createProgram = (data: Program2) => {
+  return api.post("/api/program", data);
 };
