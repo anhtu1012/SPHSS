@@ -4,6 +4,9 @@ import { useLocation } from "react-router-dom";
 
 import { formatDate } from "../../../utils/dateUtils";
 import "./detail.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../../redux/features/cartSlice";
+import { RootState } from "../../../redux/RootReducer";
 
 // interface Guest {
 //   name: string;
@@ -48,6 +51,14 @@ import "./detail.scss";
 function ProgramDetail() {
   const location = useLocation();
   const program = location.state;
+  const dispatch = useDispatch();
+  const handleAddToCart = () => {
+    dispatch(addToCart(program));
+  };
+  const existProgram = useSelector((state: RootState) => state.cart) as any;
+  const isInCart = existProgram.some(
+    (item: any) => item.programId === program.programId
+  );
 
   if (!program) {
     return <div>Program not found</div>;
@@ -66,6 +77,15 @@ function ProgramDetail() {
             <span>({program.rating} đánh giá)</span>
           </div>
           <p className="program-detail__description">{program.description}</p>
+          <p
+            style={{
+              marginBottom: "1.5rem",
+              color: "#666",
+              fontSize: "1.1rem",
+            }}
+          >
+            Đối tượng: {program.targetAudience}
+          </p>
 
           <div className="program-detail__schedule">
             <div className="schedule-item">
@@ -86,14 +106,28 @@ function ProgramDetail() {
           </div>
 
           <div className="program-detail__price">{program.price} VNĐ</div>
-          <a
-            // href={program.meetLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="program-detail__button"
-          >
-            Tham gia ngay
-          </a>
+          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <a
+              className={`program-detail__addToCart ${
+                isInCart ? "disabled" : ""
+              } `}
+              style={{
+                cursor: isInCart ? "not-allowed" : "pointer",
+                opacity: isInCart ? 0.5 : 1,
+              }}
+              onClick={handleAddToCart}
+            >
+              {isInCart ? "Đã thêm vào giỏ hàng" : "Thêm vào giỏ hàng"}
+            </a>
+            <a
+              // href={program.meetLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="program-detail__button"
+            >
+              Tham gia ngay
+            </a>
+          </div>
         </div>
       </div>
 
@@ -102,23 +136,31 @@ function ProgramDetail() {
       <div className="program-detail__instructor">
         <h2>Người hướng dẫn chính</h2>
         <div className="instructor-info">
-          <Avatar
-            size={100}
-            src={program.instructor[0].instructorImage}
-            alt={program.instructor[0].instructorName}
-          />
-          <div className="instructor-details">
-            <h3>{program.instructor[0].instructorName}</h3>
-            <p className="instructor-title">
-              {program.instructor[0].instructorTitle}
-            </p>
-            <p className="instructor-experience">
-              {program.instructor[0].instructorExperience}
-            </p>
-            <p className="instructor-description">
-              {program.instructor[0].instructorDescription}
-            </p>
-          </div>
+          {program.instructors && program.instructors.length > 0 ? (
+            <>
+              <Avatar
+                size={100}
+                src={program.instructors[0].instructorImage}
+                alt={program.instructors[0].instructorName}
+              />
+              <div className="instructor-details">
+                <h3>{program.instructors[0].instructorName}</h3>
+                <p className="instructor-title">
+                  {program.instructors[0].instructorTitle}
+                </p>
+                <p className="instructor-experience">
+                  {program.instructors[0].instructorExperience}
+                </p>
+                <p className="instructor-description">
+                  {program.instructors[0].instructorDescription}
+                </p>
+              </div>
+            </>
+          ) : (
+            <div style={{ fontWeight: "bold" }}>
+              Chương trình này hiện chưa có người hướng dẫn
+            </div>
+          )}
         </div>
       </div>
 

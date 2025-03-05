@@ -1,17 +1,17 @@
 import { LogoutOutlined } from "@ant-design/icons";
 import { FaUserCircle } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../redux/features/userSlice";
+import { logoutUser } from "../../services/auth/api";
 import { Logo } from "../Icons";
 import "./psyHeader.scss";
 
 function PsychologistheaderPsy() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    // dispatch(logout());
+    await logoutUser();
     navigate("/login");
   };
 

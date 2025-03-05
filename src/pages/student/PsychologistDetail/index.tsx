@@ -1,24 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Divider, DatePicker } from "antd";
-import "./index.scss";
-import Time from "./Time";
+import { DatePicker, Divider } from "antd";
+import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import AppointmentForm from "../../../components/AppointmentForm";
-import dayjs from "dayjs";
+import { selectUser } from "../../../redux/features/userSlice";
+import { getUserId } from "../../../services/admin/api";
 import {
   createAppointment,
   getTimeSlotByDoctorId,
 } from "../../../services/student/PsychologistDetail/api";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../../redux/features/userSlice";
-import { getUserId } from "../../../services/admin/api";
+import "./index.scss";
+import Time from "./Time";
+import SuccessModal from "./SuccessModal";
 
 type TimeSlotType = {
   startTime: string;
   endTime: string;
   id: string;
+};
+type AppointmentDetailsType = {
+  doctorName: string;
+  startTime: string;
+  endTime: string;
+  date: string;
 };
 
 const PsychologistDetail = () => {
@@ -26,6 +33,9 @@ const PsychologistDetail = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<TimeSlotType | null>(null);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [appointmentDetails, setAppointmentDetails] =
+    useState<AppointmentDetailsType>();
   const [timeSlotList, setTimeSlotList] = useState<TimeSlotType[]>([]);
   const currentUser = useSelector(selectUser) as any;
   const [doctorInfo, setDoctorInfo] = useState<any>();
@@ -49,34 +59,28 @@ const PsychologistDetail = () => {
   };
 
   const handleAppointmentSubmit = async (values: any) => {
-    console.log("Appointment booked:", {
-      doctorId: id,
-      timeSlotId: selectedSlot!.id,
-      date: values.appointmentDate.toDate(),
-      fullName: values.fullName,
-      phone: values.phone,
-      email: values.email,
-      notes: values.notes,
-      user_id: currentUser.id,
-    });
-
     const payload = {
       user_id: currentUser.id,
       appointments: [
         {
-          time_slot_id: selectedSlot!.id + 1,
+          time_slot_id: selectedSlot!.id,
           notes: values.notes,
           date: values.appointmentDate.toDate(),
         },
       ],
     };
-
     try {
       const res = await createAppointment(payload);
       if (res.data.data) {
-        toast.success("Đặt lịch tư vấn thành công!");
-        setSelectedSlot(null);
         setIsAppointmentModalOpen(false);
+        setSelectedSlot(null);
+        setAppointmentDetails({
+          doctorName: `${doctorInfo.firstName} ${doctorInfo.lastName}`,
+          startTime: selectedSlot!.startTime,
+          endTime: selectedSlot!.endTime,
+          date: values.appointmentDate.format("DD/MM/YYYY"),
+        });
+        setIsConfirmationModalOpen(true);
       } else {
         toast.error("Đặt lịch tư vấn thất bại!");
       }
@@ -88,13 +92,11 @@ const PsychologistDetail = () => {
 
   const handleGetTimeSlot = async () => {
     const res = await getTimeSlotByDoctorId(id as string);
-    const resTimeSlotList = res.data.data.map(
-      (timeSlot: any, index: number) => ({
-        startTime: timeSlot.start_time,
-        endTime: timeSlot.end_time,
-        id: index,
-      })
-    );
+    const resTimeSlotList = res.data.data.map((timeSlot: any) => ({
+      startTime: timeSlot.start_time,
+      endTime: timeSlot.end_time,
+      id: parseFloat(timeSlot.time_slot_id),
+    }));
 
     setTimeSlotList(resTimeSlotList);
   };
@@ -154,7 +156,7 @@ const PsychologistDetail = () => {
               </div>
               <div className="doctor__detail__section1__schedule__price">
                 <span className="price-tag">300.000đ</span>
-                <span className="price-duration">/45 phút</span>
+                <span className="price-duration">/60 phút</span>
               </div>
             </div>
 
@@ -189,7 +191,7 @@ const PsychologistDetail = () => {
           <div className="session-info-card">
             <h3>Thông tin buổi tư vấn</h3>
             <ul>
-              <li>✓ Thời lượng: 45 phút</li>
+              <li>✓ Thời lượng: 60 phút</li>
               <li>✓ Tư vấn trực tuyến qua video</li>
               <li>✓ Chat với bác sĩ trước buổi tư vấn</li>
               <li>✓ Nhận tài liệu hỗ trợ sau buổi tư vấn</li>
@@ -327,21 +329,30 @@ const PsychologistDetail = () => {
           </li>
         </ul>
       </div>
-      <AppointmentForm
-        isOpen={isAppointmentModalOpen}
-        onClose={() => {
-          setIsAppointmentModalOpen(false);
-          setSelectedSlot(null);
-        }}
-        doctor={{
-          id: id as string,
-          name: "Bác sĩ Chuyên khoa | Nguyễn Tường Vũ",
-        }}
-        selectedSlot={selectedSlot}
-        selectedDate={selectedDate}
-        onSubmit={handleAppointmentSubmit}
-        disabledDate={disabledDate}
-      />
+      {doctorInfo && (
+        <AppointmentForm
+          isOpen={isAppointmentModalOpen}
+          onClose={() => {
+            setIsAppointmentModalOpen(false);
+            setSelectedSlot(null);
+          }}
+          doctor={{
+            id: doctorInfo.id,
+            name: doctorInfo.firstName + " " + doctorInfo.lastName,
+          }}
+          selectedSlot={selectedSlot}
+          selectedDate={selectedDate}
+          onSubmit={handleAppointmentSubmit}
+          disabledDate={disabledDate}
+        />
+      )}
+      {appointmentDetails && (
+        <SuccessModal
+          isOpen={isConfirmationModalOpen}
+          onClose={() => setIsConfirmationModalOpen(false)}
+          appointmentDetails={appointmentDetails}
+        />
+      )}
     </div>
   );
 };

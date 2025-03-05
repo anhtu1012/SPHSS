@@ -1,17 +1,19 @@
 import { LogoutOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { FaUserCircle } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout, selectUser } from "../../redux/features/userSlice";
+import { UserRole } from "../../models/enum";
+import { selectUser } from "../../redux/features/userSlice";
+import { logoutUser } from "../../services/auth/api";
 import { Logo } from "../Icons";
 import "./index.scss";
-import { FaUserCircle } from "react-icons/fa";
-import { UserRole } from "../../models/enum";
+import { FaCartShopping } from "react-icons/fa6";
 
 function Header() {
   const [activeItem, setActiveItem] = useState("home");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const user = useSelector(selectUser);
 
   const menuItems = [
@@ -28,8 +30,9 @@ function Header() {
     navigate(path);
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    // dispatch(logout());
+    await logoutUser();
     navigate("/login");
   };
 
@@ -60,6 +63,11 @@ function Header() {
         <div className="header__actions">
           {user ? (
             <div className="header__user">
+              <FaCartShopping
+                size={20}
+                className="header__cart__icon"
+                onClick={() => navigate("/user-cart")}
+              />
               <FaUserCircle
                 size={20}
                 className="header__user__icon"
