@@ -8,3 +8,7 @@ export const loginUser = (values: LoginFormValues) => {
 export const register = (data: RegisterFormValues) => {
   return api.post("/api/register", data);
 };
+
+export const logoutUser = () => {
+  return api.post("/api/auth/logout");
+};

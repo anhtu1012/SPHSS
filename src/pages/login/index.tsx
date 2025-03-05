@@ -92,6 +92,11 @@ const Login = () => {
           className="login__form"
           onFinish={handleLogin}
           layout={"vertical"}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              signInForm.submit();
+            }
+          }}
         >
           <Form.Item
             label="Username"

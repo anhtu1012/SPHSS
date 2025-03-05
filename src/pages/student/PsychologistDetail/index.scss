@@ -442,6 +442,38 @@ $text-color: #ffffff;
   }
 }
 
+.success-info {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+
+  .info-icon {
+    margin-right: 8px;
+    color: $primary-color;
+    font-size: 16px;
+  }
+
+  p {
+    margin: 8px 0;
+    padding: 8px 0;
+    border-bottom: 1px dashed #dee2e6;
+    display: flex;
+    align-items: center;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    strong {
+      color: $secondary-color;
+      min-width: 120px;
+      display: inline-block;
+    }
+  }
+}
+
 // Modal customization
 .ant-modal {
   .ant-modal-content {
@@ -464,8 +496,9 @@ $text-color: #ffffff;
     }
 
     .ant-modal-footer {
-      border-top: 1px solid #e9ecef;
+      border-top: none !important;
       padding: 15px 24px;
+      margin-top: -30px;
 
       .ant-btn {
         height: 40px;

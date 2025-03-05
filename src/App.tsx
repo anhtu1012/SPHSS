@@ -38,6 +38,7 @@ import UserProfile from "./pages/student/userProfile";
 import ManageCreateSurvey from "./pages/admin/ManageSurveyStudent/CreateSurvey";
 import ManageFormSurvey from "./pages/admin/ManageSurveyStudent/CreateSurvey/SurveyForm";
 import PsyProfile from "./pages/psychologist/psyProfile";
+import Cart from "./pages/student/cart";
 
 function App() {
   const { Manager, Parent, Psychologist } = UserRole;
@@ -89,6 +90,10 @@ function App() {
         {
           path: "/user-profile",
           element: <UserProfile />,
+        },
+        {
+          path: "/user-cart",
+          element: <Cart />,
         },
         {
           path: "/doctors",

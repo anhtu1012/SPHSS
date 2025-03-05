@@ -52,8 +52,6 @@ const AppointmentForm = ({
     return null;
   }
 
-  console.log(user);
-
   return (
     <Modal
       title="Đặt lịch tư vấn"
@@ -86,7 +84,7 @@ const AppointmentForm = ({
           </p>
           <p>
             <DollarOutlined className="info-icon" />
-            <strong>Phí tư vấn:</strong> 200.000đ
+            <strong>Phí tư vấn:</strong> 300.000đ
           </p>
         </div>
 

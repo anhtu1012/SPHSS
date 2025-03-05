@@ -129,10 +129,26 @@
 
   &__user__icon {
     margin-right: 8px; // Adjust the margin as needed
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__cart__icon {
+    margin-right: 8px; // Adjust the margin as needed
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   &__logout__icon {
     cursor: pointer;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 
