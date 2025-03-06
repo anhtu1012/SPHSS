@@ -23,6 +23,7 @@
   
       label {
         font-weight: bold;
+        font-size: 15px;
       }
       .inputField {
         margin-top: 5px;
@@ -58,6 +59,7 @@
       margin-top: 0.5rem;
   
       label {
+        font-size: 15px;
         font-weight: bold;
       }
   
@@ -126,3 +128,13 @@
     right: unset !important;
   }
   
+  .dateForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%; 
+  }
+  
+  .dateForm .ant-picker {
+    width: 100%; 
+  }

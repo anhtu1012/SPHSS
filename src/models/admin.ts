@@ -21,10 +21,10 @@ export interface CategorySurvey {
 }
 
 export interface Program {
-  programId: string; 
+  programId: string;
   title: string;
   description: string;
-  categoryId: number; 
+  categoryId: number;
   startDate: string;
   endDate: string;
   time: string;
@@ -34,14 +34,14 @@ export interface Program {
   organizerEmail: string;
   contactPhone: string;
   imageUrl: string;
-  price: number; 
-  rating: number; 
+  price: number;
+  rating: number;
 }
 
 export interface Program2 {
   title: string;
   description: string;
-  categoryId: number; 
+  categoryId: number;
   startDate: string;
   endDate: string;
   time: string;
@@ -51,6 +51,42 @@ export interface Program2 {
   organizerEmail: string;
   contactPhone: string;
   imageUrl: string;
-  price: number; 
-  rating: number; 
+  price: number;
+  rating: number;
+}
+
+export interface Report {
+  report_id: string;
+  appointment_id: string;
+  user_id: string;
+  health_level: string;
+  health_status: string;
+  feedback: string;
+  recommendations: string;
+  full_name_pys: string;
+  psychologist_id: string;
+  start_time: string;
+  end_time: string;
+}
+
+export interface Survey {
+  surveyId?: string;
+  title: string;
+  description: string;
+  categoryId?: number; 
+  questions: Question[];
+}
+
+export interface Question{
+  questionId?: string;
+  surveyId?: string;
+  questionText: string;
+  options: QuestionOption[];
+}
+
+export interface QuestionOption{
+  optionId?: string;
+  value: number; 
+  optionText: string;
+  questionId?: string;
 }

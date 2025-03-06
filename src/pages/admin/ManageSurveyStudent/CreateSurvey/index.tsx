@@ -16,53 +16,48 @@ const SurveyCreate = () => {
 
   useEffect(() => {
     getCategory()
-      .then((response) => {
-        console.log("Category get:", response.data);
-        const newData = response.data?.data || [];
-        setCategory((prev) => (JSON.stringify(prev) === JSON.stringify(newData) ? prev : newData));
+      .then(({ data }) => {
+        console.log("Category get:", data);
+        setCategory((prev) => (JSON.stringify(prev) === JSON.stringify(data?.data) ? prev : data?.data || []));
       })
       .catch((error) => console.error("Error fetching categories:", error));
   }, []);
 
   const handleNavigate = useCallback((categoryId: string) => {
-    console.log("➡️ Navigating to:", `form/${categoryId}`);
-    navigate(`form/${categoryId}`);
+    if (categoryId) {
+      console.log("➡️ Navigating to:", `form/${categoryId}`);
+      navigate(`form/${categoryId}`, { state: { categoryId } });
+    }
   }, [navigate]);
-
-  const handleAddClick = () => setIsAdding(true);
-  const handleCancel = () => {
-    setIsAdding(false);
-    setNewQuestion("");
-  };
-
-  const handleConfirmAdd = () => setIsConfirming(true);
 
   const handleAddQuestion = useCallback(() => {
     if (newQuestion.trim()) {
+      setIsConfirming(true);
       createCategory({ name: newQuestion, description: "" })
-        .then((response) => {
-          const newCategory = response.data.data;
-          setCategory((prevQuestions) => {
-            const safePrevQuestions = Array.isArray(prevQuestions) ? prevQuestions : [];
-            return [...safePrevQuestions, newCategory];
-          });
+        .then(({ data }) => {
+          setCategory((prev) => [...prev, data.data]);
           setNewQuestion("");
           setIsAdding(false);
           setIsConfirming(false);
         })
-        .catch((error) => console.error("Error adding category:", error));
+        .catch((error) => {
+          console.error("Error adding category:", error);
+          setIsConfirming(false);
+        });
     }
   }, [newQuestion]);
 
   const categoryList = useMemo(() => (
     category.map((categoryItem) => (
-      <Cbutton
-        key={categoryItem.categoryId}
-        className={styles.surveyButton}
-        onClick={() => handleNavigate(String(categoryItem.categoryId))}
-      >
-        {categoryItem.name}
-      </Cbutton>
+      categoryItem.categoryId && (
+        <Cbutton
+          key={categoryItem.categoryId}
+          className={styles.surveyButton}
+          onClick={() => handleNavigate(String(categoryItem.categoryId))}
+        >
+          {categoryItem.name}
+        </Cbutton>
+      )
     ))
   ), [category, handleNavigate]);
 
@@ -78,47 +73,28 @@ const SurveyCreate = () => {
               placeholder="Nhập loại khảo sát"
               value={newQuestion}
               onChange={(e) => setNewQuestion(e.target.value)}
-              onPressEnter={handleConfirmAdd}
+              onPressEnter={handleAddQuestion}
             />
             <div className={styles.actions}>
-              <Cbutton
-                className={styles.confirmButton}
-                onClick={handleConfirmAdd}
-              >
+              <Cbutton className={styles.confirmButton} onClick={handleAddQuestion}>
                 Thêm
               </Cbutton>
-              <Cbutton className={styles.cancelButton} onClick={handleCancel}>
+              <Cbutton className={styles.cancelButton} onClick={() => setIsAdding(false)}>
                 Hủy
               </Cbutton>
             </div>
           </div>
         ) : (
-          <div className={styles.addQuestionWrapper} onClick={handleAddClick}>
+          <div className={styles.addQuestionWrapper} onClick={() => setIsAdding(true)}>
             <PlusCircleOutlined className={styles.icon} />
-            <button className={styles.addQuestionButton}>
-              Bạn muốn thêm loại khảo sát ?
-            </button>
+            <button className={styles.addQuestionButton}>Bạn muốn thêm loại khảo sát ?</button>
           </div>
         )}
       </div>
       {isConfirming && (
         <div className={styles.overlay}>
           <div className={styles.confirmPopup}>
-            <h3>Bạn có chắc chắn muốn thêm câu hỏi này?</h3>
-            <div className={styles.popupActions}>
-              <Cbutton
-                className={styles.confirmButton}
-                onClick={handleAddQuestion}
-              >
-                Xác nhận
-              </Cbutton>
-              <Cbutton
-                className={styles.cancelButton}
-                onClick={() => setIsConfirming(false)}
-              >
-                Hủy
-              </Cbutton>
-            </div>
+            <h3>Đang thêm loại khảo sát...</h3>
           </div>
         </div>
       )}

@@ -1,53 +1,97 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../../../components/cSearchbar/SearchBar";
 import AntDComponent from "../../../components/cTableAntD";
 import Cbutton from "../../../components/cButton";
 import { ColumnsType } from "antd/es/table";
 import styles from "./ManageSurvey.module.scss";
-
-interface DataType {
-  key: string;
-  name: string;
-  type: string;
-  id: string;
-}
+import { getAllSurvey, getCategory } from "../../../services/admin/api";
+import { Survey, CategorySurvey } from "../../../models/admin";
 
 const ManageEffectConsult = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<DataType[]>([
+  const [data, setData] = useState<Survey[]>([]); 
+  const [categories, setCategories] = useState<CategorySurvey[]>([]); 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [surveyRes, categoryRes] = await Promise.all([
+          getAllSurvey(),
+          getCategory(),
+        ]);
+        const surveys = surveyRes.data.data;
+        const categories = categoryRes.data.data;
+        if (Array.isArray(surveys) && Array.isArray(categories)) {
+          setData(surveys);
+          setCategories(categories);
+        } else {
+          console.error("API trả về dữ liệu không hợp lệ:", {
+            surveys: surveyRes.data,
+            categories: categoryRes.data,
+          });
+          setData([]);
+          setCategories([]);
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu:", error);
+        setData([]);
+        setCategories([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const getCategoryName = (categoryId: string) => {
+    return categories.find((cat) => cat.categoryId === categoryId)?.name || "Không xác định";
+  };
+
+  const columns: ColumnsType<Survey> = [
     {
-      key: "1",
-      name: "Buổi tư vấn của CV Nguyễn Cảnh Hoàng",
-      type: "Khảo sát tư vấn",
-      id: "KSTV0002",
+      title: "Tên khảo sát",
+      dataIndex: "title",
+      key: "title",
+      render: (_, record) => (
+        <div className={styles.userInfoContainer}>
+          <span className={styles.surveyName}>{record.title}</span>
+          <br />
+          <span className={styles.id}>ID: {record.surveyId}</span>
+        </div>
+      ),
     },
     {
-      key: "2",
-      name: "HIV và những con số đáng kinh ngạc",
-      type: "Khảo sát chương trình",
-      id: "KSCT0009",
+      title: "Loại khảo sát",
+      dataIndex: "categoryId",
+      key: "categoryId",
+      render: (_, record) => {
+        const categoryName = record.categoryId !== undefined 
+          ? getCategoryName(record.categoryId.toString()) 
+          : "Không xác định"; 
+        return (
+          <div className={styles.surveyInfoContainer}>
+            <span className={styles.surveyType}>{categoryName}</span>
+          </div>
+        );
+      },
     },
     {
-      key: "3",
-      name: "Buổi tư vấn của CV Lương Mỹ Hoa",
-      type: "Khảo sát tư vấn",
-      id: "KSTV0007",
-    },
-    {
-      key: "4",
-      name: "Khảo sát tuần 3 kì SP24",
-      type: "Khảo sát mỗi tuần",
-      id: "KST0087",
-    },
-    {
-      key: "5",
-      name: "Buổi tư vấn của CV Nguyễn Như Ngọc",
-      type: "Khảo sát tư vấn",
-      id: "KSTV0019",
-    },
-  ]);
+      title: "Chi tiết",
+      key: "action",
+      render: (_, record) => (
+        <Cbutton
+          origin={{ bgcolor: "#ec744a", hoverBgColor: "#ff7875" }}
+          onClick={() => navigate(`view/${record.surveyId}`)}
+        >
+          Xem chi tiết
+        </Cbutton>
+      ),
+    },    
+  ];
 
   const handleSearch = (values: Record<string, string>) => {
     setLoading(true);
@@ -55,54 +99,19 @@ const ManageEffectConsult = () => {
       const filteredData = data.filter(
         (item) =>
           (values.name
-            ? item.name.toLowerCase().includes(values.name.toLowerCase())
+            ? item.title.toLowerCase().includes(values.name.toLowerCase())
             : true) &&
-          (values.type && values.type !== "Tất cả"
-            ? item.type === values.type
+          (values.surveyId
+            ? item.surveyId?.toLowerCase().includes(values.surveyId.toLowerCase())
             : true)
       );
-
-      setData(filteredData.length ? filteredData : []);
+  
+      setData(filteredData);
       setLoading(false);
     }, 1000);
   };
+  
 
-  const columns: ColumnsType<DataType> = [
-    {
-      title: "Tên khảo sát",
-      dataIndex: "name",
-      key: "name",
-      render: (_, record) => (
-        <div className={styles.userInfoContainer}>
-          <span className={styles.surveyName}>{record.name}</span>
-          <br />
-          <span className={styles.id}>{record.id || "Chưa có ID"}</span>
-        </div>
-      ),
-    },
-    {
-      title: "Kiểu khảo sát",
-      dataIndex: "type",
-      key: "type",
-      render: (_, record) => (
-        <div className={styles.surveyInfoContainer}>
-          <span className={styles.surveyType}>{record.type}</span>
-        </div>
-      ),
-    },
-    {
-      title: "Chi tiết",
-      key: "action",
-      render: () => (
-        <Cbutton
-          origin={{ bgcolor: "#ec744a", hoverBgColor: "#ff7875" }}
-          onClick={() => navigate("view")}
-        >
-          Xem chi tiết
-        </Cbutton>
-      ),
-    },
-  ];
   const handleNavigate = () => {
     navigate("create-survey");
   };
@@ -114,17 +123,7 @@ const ManageEffectConsult = () => {
           <SearchBar
             fields={[
               { key: "name", placeholder: "Tên khảo sát", type: "text" },
-              {
-                key: "type",
-                placeholder: "Loại khảo sát",
-                type: "dropdown",
-                options: [
-                  "Khảo sát tư vấn",
-                  "Khảo sát chương trình",
-                  "Khảo sát mỗi tuần",
-                  "Tất cả",
-                ],
-              },
+              { key: "surveyId", placeholder: "Mã khảo sát", type: "text" },
             ]}
             onSearch={handleSearch}
           />
@@ -139,7 +138,7 @@ const ManageEffectConsult = () => {
         <p className={styles.message}>Đang tải dữ liệu...</p>
       ) : (
         <div className={styles.tableContainer}>
-          <p className={styles.sectionTitle}>Danh sách chương trình</p>
+          <p className={styles.sectionTitle}>Danh sách khảo sát</p>
           <AntDComponent dataSource={data} columns={columns} />
         </div>
       )}

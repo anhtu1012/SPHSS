@@ -1,5 +1,33 @@
 import api from "../../config/axios";
-import { CategorySurvey, User, Program, Program2 } from "../../models/admin";
+import { CategorySurvey, User, Program, Program2, Survey, Question, QuestionOption } from "../../models/admin";
+
+export const createSurvey = (data: Survey) => {
+  return api.post("/api/survey", data);
+};
+
+export const createQuestion = (data: Question) => {
+  return api.post("/api/survey", data);
+};
+
+export const createOptionQuestion = (data: QuestionOption) => {
+  return api.post("/api/survey", data);
+};
+
+export const deleteSurveyId = (id: string) => {
+  return api.delete(`/api/survey/${id}`);
+};
+
+export const getSurveyId = (id: string) => {
+  return api.get(`/api/survey/${id}`);
+};
+
+export const getAllSurvey = () => {
+  return api.get("/api/survey");
+};
+
+export const getReportId = (id: string) => {
+  return api.get(`/api/reports/${id}`);
+};
 
 export const getCategory = () => {
   return api.get("/api/category");

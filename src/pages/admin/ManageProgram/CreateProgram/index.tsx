@@ -69,13 +69,22 @@ function ManageDashboard() {
   };
 
   const handleSave = async () => {
+    if (formData.startDate && formData.endDate) {
+      const start = dayjs(formData.startDate);
+      const end = dayjs(formData.endDate);
+      if (end.isBefore(start)) {
+        message.error("Ngày kết thúc không thể trước ngày bắt đầu!");
+        return;
+      }
+    }
+
     const payload: Program2 = {
       ...formData,
       categoryId: Number(formData.categoryId),
       price: Number(formData.price),
       rating: Number(formData.rating),
     };
-  
+
     try {
       await createProgram(payload);
       message.success("Tạo chương trình thành công!");
@@ -100,7 +109,7 @@ function ManageDashboard() {
       console.error("API Error:", error);
     }
   };
-  
+
   return (
     <div>
       <h2 className={styles.modalTitle}>TẠO CHƯƠNG TRÌNH</h2>
@@ -165,24 +174,6 @@ function ManageDashboard() {
             </div>
             <div className={styles.formGroups}>
               <div className={styles.formGroup}>
-                <label>Ngày bắt đầu</label>
-                <DatePicker
-                  value={formData.startDate ? dayjs(formData.startDate) : null}
-                  onChange={(date) => handleDateChange("startDate", date)}
-                  showTime
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Ngày kết thúc</label>
-                <DatePicker
-                  value={formData.endDate ? dayjs(formData.endDate) : null}
-                  onChange={(date) => handleDateChange("endDate", date)}
-                  showTime
-                />
-              </div>
-            </div>
-            <div className={styles.formGroups}>
-              <div className={styles.formGroup}>
                 <label>Giờ diễn ra</label>
                 <Input
                   placeholder="Nhập giờ diễn ra (VD: 19:00 - 21:00)"
@@ -221,7 +212,7 @@ function ManageDashboard() {
             </div>
             <div className={styles.formGroups}>
               <div className={styles.formGroup}>
-                <label>Giá</label>
+                <label>Giá vé vào cửa</label>
                 <Input
                   placeholder="Nhập giá"
                   value={formData.price}
@@ -239,6 +230,50 @@ function ManageDashboard() {
             </div>
             <div className={styles.formGroups}>
               <div className={styles.formGroup}>
+                <label>Ngày bắt đầu</label>
+                <div className={styles.dateForm}>
+                  <DatePicker
+                    value={
+                      formData.startDate ? dayjs(formData.startDate) : null
+                    }
+                    onChange={(date) => {
+                      if (date) {
+                        handleDateChange(
+                          "startDate",
+                          date.set("minute", 0).set("second", 0)
+                        );
+                      }
+                    }}
+                    format="YYYY-MM-DD HH:mm"
+                    showTime={{
+                      defaultValue: dayjs("00:00", "HH:mm"),
+                    }}
+                  />
+                </div>
+              </div>
+              <div className={styles.formGroup}>
+                <label>Ngày kết thúc</label>
+                <div className={styles.dateForm}>
+                  <DatePicker
+                    value={formData.endDate ? dayjs(formData.endDate) : null}
+                    onChange={(date) => {
+                      if (date) {
+                        handleDateChange(
+                          "endDate",
+                          date.set("minute", 0).set("second", 0)
+                        );
+                      }
+                    }}
+                    format="YYYY-MM-DD HH:mm"
+                    showTime={{
+                      defaultValue: dayjs("00:00", "HH:mm"),
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            {/* <div className={styles.formGroups}>
+              <div className={styles.formGroup}>
                 <label>Đánh giá</label>
                 <Input
                   placeholder="Nhập đánh giá"
@@ -246,7 +281,7 @@ function ManageDashboard() {
                   onChange={(e) => handleChange("rating", e.target.value)}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -268,4 +303,4 @@ function ManageDashboard() {
   );
 }
 
-export default ManageDashboard; 
+export default ManageDashboard;

@@ -1,16 +1,15 @@
 import Cbutton from "../../../../../components/cButton";
 import AntDComponent from "../../../../../components/cTableAntD";
 import { ColumnType } from "antd/es/table";
-import { Rate } from "antd";
 
 interface UserProfileTableProps {
   accountType: string;
-  showModal: (record: any) => void;
+  showModal: (record: any, type: "consult" | "survey") => void;
 }
 
 const UserProfileTable: React.FC<UserProfileTableProps> = ({ accountType, showModal }) => {
   const columns: ColumnType<any>[] =
-    ["Học/sinh viên", "Phụ huynh"].includes(accountType)
+    ["R1", "R2"].includes(accountType)
       ? [
           {
             title: "Ngày chẩn đoán",
@@ -24,13 +23,22 @@ const UserProfileTable: React.FC<UserProfileTableProps> = ({ accountType, showMo
             render: (text: string) => (text.length > 35 ? `${text.substring(0, 35)}...` : text),
           },
           {
-            title: "Xem chi tiết",
+            title: "Chi tiết báo cáo",
             dataIndex: "action",
-            key: "action",
+            key: "action_consult",
             render: (_, record) => (
-              <Cbutton onClick={() => showModal(record)}>Xem</Cbutton>
+              <Cbutton onClick={() => showModal(record, "consult")}>Báo cáo</Cbutton>
             ),
           },
+          {
+            title: "Chi tiết khảo sát",
+            dataIndex: "action",
+            key: "action_survey",
+            render: (_, record) => (
+              <Cbutton onClick={() => showModal(record, "survey")}>Khảo sát</Cbutton>
+            ),
+          },
+          
         ]
       : [
           {
@@ -44,22 +52,25 @@ const UserProfileTable: React.FC<UserProfileTableProps> = ({ accountType, showMo
             key: "date",
           },
           {
-            title: "Chi tiết khảo sát",
+            title: "Chi tiết báo cáo",
             dataIndex: "action",
-            key: "action",
+            key: "action_consult",
             render: (_, record) => (
-              <Cbutton onClick={() => showModal(record)}>Chi tiết</Cbutton>
+              <Cbutton onClick={() => showModal(record, "consult")}>Báo cáo</Cbutton>
             ),
           },
           {
-            title: "Đánh giá tư vấn",
-            dataIndex: "rating",
-            key: "rating",
-            render: (rating) => <Rate disabled value={rating || 0} />,
+            title: "Chi tiết khảo sát",
+            dataIndex: "action",
+            key: "action_survey",
+            render: (_, record) => (
+              <Cbutton onClick={() => showModal(record, "survey")}>Khảo sát</Cbutton>
+            ),
           },
+          
         ];
   const data =
-    ["Học/sinh viên", "Phụ huynh"].includes(accountType)
+    ["R1", "R2"].includes(accountType)
       ? [
           {
             key: "1",

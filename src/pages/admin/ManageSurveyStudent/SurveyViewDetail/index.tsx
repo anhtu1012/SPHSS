@@ -1,19 +1,15 @@
 import Cbutton from "../../../../components/cButton";
 import styles from "./SurveyView.module.scss";
-import {
-  UserOutlined,
-  PhoneOutlined,
-  MailOutlined,
-  HomeOutlined,
-} from "@ant-design/icons";
-import { Descriptions, Rate } from "antd";
 import AntDComponent from "../../../../components/cTableAntD";
 import { ColumnsType } from "antd/es/table";
-import { useState } from "react";
 import DetailPopup from "../PopupDetailSurvey";
 import DeletePopup from "../PopupDeleteSurvey";
 import ChangeInfoPopup from "../PopupChangeInfor";
 import dayjs from "dayjs";
+import { getSurveyId, getAllSurvey } from "../../../../services/admin/api";
+import { Survey, Question, QuestionOption } from "../../../../models/admin";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 interface DataType {
   key: string;
@@ -25,7 +21,56 @@ interface DataType {
   rating: number;
 }
 
-function UserProfile() {
+const ManageAdminSurvey = () => {
+  const { surveyId } = useParams();
+  const [survey, setSurvey] = useState<Survey | null>(null);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedSurvey, setSelectedSurvey] = useState<DataType | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isChangeInfoOpen, setIsChangeInfoOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchSurveyData = async () => {
+      if (!surveyId) return;
+
+      setLoading(true);
+      try {
+        const [allSurveysRes, surveyQuestionsRes] = await Promise.all([
+          getAllSurvey(),
+          getSurveyId(surveyId),
+        ]);
+        const allSurveys = allSurveysRes.data.data;
+        const matchedSurvey = allSurveys.find(
+          (s: Survey) => s.surveyId === surveyId
+        );
+        setSurvey(matchedSurvey || null);
+        const formattedQuestions: Question[] = surveyQuestionsRes.data.data.map(
+          (q: any) => ({
+            ...q,
+            options: q.options.map((opt: any) => ({
+              optionId: opt.optionId,
+              value: opt.value.toString(),
+              optionText: opt.optionText,
+              questionId: q.questionId,
+            })) as QuestionOption[],
+          })
+        );
+
+        setQuestions(formattedQuestions);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu khảo sát:", error);
+        setSurvey(null);
+        setQuestions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSurveyData();
+  }, [surveyId]);
+
   const data = [
     {
       key: "1",
@@ -46,11 +91,6 @@ function UserProfile() {
       rating: 3,
     },
   ];
-
-  const [selectedSurvey, setSelectedSurvey] = useState<DataType | null>(null);
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [isChangeInfoOpen, setIsChangeInfoOpen] = useState(false);
 
   const columns: ColumnsType<DataType> = [
     {
@@ -102,19 +142,21 @@ function UserProfile() {
     },
   ];
 
+  if (loading) return <p>Đang tải...</p>;
+  if (!survey) return <p>Không tìm thấy khảo sát.</p>;
+
   return (
     <div className={styles.userProfile}>
       <div className={styles.mainContent}>
         <div className={styles.leftProfile}>
           <div className={styles.profileHeader}>
             <div className={styles.profileName}>
-              <div className={styles.avatar}>
-                <UserOutlined />
-              </div>
               <div className={styles.profileInfo}>
-                <h2>HIV và những con số đáng ngạc nhiên</h2>
-                <p>KSCT0076</p>
-                <Rate className={styles.customRate} disabled defaultValue={4} />
+                <h2> {survey.title}</h2>
+                <p>
+                  <strong>ID:</strong> {survey.surveyId}
+                </p>
+                <p></p>
               </div>
             </div>
             <div className={styles.status}>
@@ -129,54 +171,36 @@ function UserProfile() {
           <AntDComponent dataSource={data} columns={columns} />
         </div>
         <div className={styles.rightProfile}>
-          <div className={styles.infoSection}>
-            <Descriptions
-              title="Thông tin khảo sát"
-              bordered
-              column={1}
-              size="small"
-            >
-              <Descriptions.Item label="Ngày bắt đầu">
-                14/09/2023
-              </Descriptions.Item>
-              <Descriptions.Item label="Ngày kết thúc">20/09/2023</Descriptions.Item>
-              <Descriptions.Item label="Trạng thái">
-                Đang diễn ra
-              </Descriptions.Item>
-              <Descriptions.Item label="Đối tượng">
-                Lớp SE1702
-              </Descriptions.Item>
-              <Descriptions.Item label="Loại khảo sát">
-                Khảo sát chương trình
-              </Descriptions.Item>
-            </Descriptions>
-            <Descriptions
-              title="Thông tin liên hệ"
-              bordered
-              column={1}
-              size="small"
-            >
-              <Descriptions.Item
-                label={<HomeOutlined style={{ color: "#EC744A" }} />}
-              >
-                Hội trường B - Đại học FPT HCM
-              </Descriptions.Item>
-              <Descriptions.Item
-                label={<PhoneOutlined style={{ color: "#EC744A" }} />}
-              >
-                84987654321
-              </Descriptions.Item>
-              <Descriptions.Item
-                label={<MailOutlined style={{ color: "#EC744A" }} />}
-              >
-                fpthealth@fu.vn
-              </Descriptions.Item>
-            </Descriptions>
-          </div>
-          <div className={styles.changeInfo}>
-            <Cbutton onClick={() => setIsChangeInfoOpen(true)}>
-              Thay đổi nội dung khảo sát
-            </Cbutton>
+          <div className={styles.surveyQuestion}>
+            <h2>CÂU HỎI KHẢO SÁT</h2>
+            {questions.length === 0 ? (
+              <p>Không có câu hỏi nào.</p>
+            ) : (
+              <ol>
+                {questions.map((q) => (
+                  <li key={q.questionId}>
+                    <p>
+                      <strong>{q.questionText}</strong>
+                    </p>
+                    <ul className={styles.readOnlyCheckboxList}>
+                      {q.options.map((opt) => (
+                        <li key={opt.optionId}>
+                          <input
+                            type="checkbox"
+                            checked={false}
+                            readOnly
+                            title="Lựa chọn không thể thay đổi"
+                            aria-label={opt.optionText}
+                          />
+
+                          {opt.optionText}
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ol>
+            )}
           </div>
         </div>
       </div>
@@ -211,6 +235,6 @@ function UserProfile() {
       />
     </div>
   );
-}
+};
 
-export default UserProfile;
+export default ManageAdminSurvey;
