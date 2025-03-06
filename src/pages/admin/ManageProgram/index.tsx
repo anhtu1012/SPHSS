@@ -168,15 +168,14 @@ const ManageProgram = () => {
     if (programToDelete) {
       try {
         await deleteProgramId(programToDelete.programId);
-        setPrograms((prev) =>
-          prev.filter((item) => item.programId !== programToDelete.programId)
-        );
+        await fetchPrograms(); 
         closeDeleteModal();
       } catch (error) {
         console.error("Lỗi khi xóa chương trình:", error);
       }
     }
   };
+  
 
   return (
     <div>

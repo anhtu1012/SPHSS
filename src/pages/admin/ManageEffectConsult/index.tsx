@@ -84,7 +84,7 @@ const ManageEffectConsult = () => {
       title: "Đánh giá",
       dataIndex: "rating",
       key: "rating",
-      render: (rating) => <Rate disabled defaultValue={rating} />,
+      render: () => <Rate disabled defaultValue={4} />,
     },
     {
       title: "Trạng thái tài khoản",
