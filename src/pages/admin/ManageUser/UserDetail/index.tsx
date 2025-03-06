@@ -6,7 +6,7 @@ import {
   MailOutlined,
   HomeOutlined,
 } from "@ant-design/icons";
-import { Descriptions, Rate } from "antd";
+import { Descriptions } from "antd";
 import { useEffect, useState } from "react";
 import PopupInfoConsult from "../PopupViewInfoConsult";
 import PopupSurveyDetail from "../../ManageSurveyStudent/PopupDetailSurvey";
@@ -38,14 +38,10 @@ function UserProfile() {
     R4: "Manager",
   };
 
-  const showModal = (record: any) => {
+  const showModal = (record: any, type: "consult" | "survey") => {
     setSelectedConsult(record);
     setIsModalOpen(true);
-    if (["R1", "R2"].includes(user.role)) {
-      setPopupType("consult");
-    } else {
-      setPopupType("survey");
-    }
+    setPopupType(type);
   };
 
   const updateUserState = (updatedUser: User) => {
@@ -93,13 +89,6 @@ function UserProfile() {
                   {`${user.firstName || ""} ${user.lastName || ""}`.trim()}
                 </h2>
                 <p>{user.userCode}</p>
-                {user.role === "R3" && (
-                  <Rate
-                    className={styles.customRate}
-                    disabled
-                    defaultValue={4}
-                  />
-                )}
               </div>
             </div>
             <div className={styles.status}>
@@ -169,20 +158,22 @@ function UserProfile() {
         </div>
       </div>
 
-      {popupType === "consult" && selectedConsult && (
+      {isModalOpen && selectedConsult && popupType === "consult" && (
         <PopupInfoConsult
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           consultData={selectedConsult}
         />
       )}
-      {popupType === "survey" && selectedConsult && (
+
+      {isModalOpen && selectedConsult && popupType === "survey" && (
         <PopupSurveyDetail
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           surveyData={selectedConsult}
         />
       )}
+
       {isStatusPopupOpen && user && id && (
         <PopupChangeStatus
           isOpen={isStatusPopupOpen}
