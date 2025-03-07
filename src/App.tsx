@@ -18,7 +18,6 @@ import ManageStudent from "./pages/parent/ManageStudent";
 import CreateBlog from "./pages/psychologist/CreateBlog";
 import ManageBlog from "./pages/psychologist/ManageBlog";
 import ManageReport from "./pages/psychologist/ManageReport";
-import ReportDetail from "./pages/psychologist/ManageReport/[id]";
 import ManageStudentPsy from "./pages/psychologist/ManageStudent";
 import StudentDetail from "./pages/psychologist/ManageStudent/[id]";
 import ManageSurvey from "./pages/psychologist/ManageSurvey";
@@ -39,8 +38,9 @@ import ManageCreateSurvey from "./pages/admin/ManageSurveyStudent/CreateSurvey";
 import ManageFormSurvey from "./pages/admin/ManageSurveyStudent/CreateSurvey/SurveyForm";
 import PsyProfile from "./pages/psychologist/psyProfile";
 import Cart from "./pages/student/cart";
-import ManageAdminSurvey from "./pages/admin/ManageSurveyStudent/SurveyViewDetail"
-import ManageCreateAcc from "./pages/admin/ManageUser/CreateAccount"
+import ManageAdminSurvey from "./pages/admin/ManageSurveyStudent/SurveyViewDetail";
+import ManageCreateAcc from "./pages/admin/ManageUser/CreateAccount";
+import DetailReport from "./pages/psychologist/ManageSurvey/[id]";
 
 function App() {
   const { Manager, Parent, Psychologist } = UserRole;
@@ -118,7 +118,7 @@ function App() {
     {
       path: "/manager",
       element: (
-        <ConfigProvider >
+        <ConfigProvider>
           <ProtectedRoute allowedRoles={Manager}>
             <Dashboard />
           </ProtectedRoute>
@@ -246,8 +246,8 @@ function App() {
           element: <ManageReport />,
         },
         {
-          path: "manage-report/:id",
-          element: <ReportDetail />,
+          path: "manage-survey/:id",
+          element: <DetailReport />,
         },
         {
           path: "psy-profile",

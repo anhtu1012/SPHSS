@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Radio, Progress, Tooltip } from "antd";
 import type { RadioChangeEvent } from "antd";
+import { Progress, Radio, Tooltip } from "antd";
 import { motion } from "framer-motion";
-import "./surveyQuestion.scss";
-import { mockQuestions } from "./mockQuestions";
+import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Bar,
   BarChart,
@@ -14,54 +13,113 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { QuestionAndAnswer } from "../../../models/student";
+import { SubmitResult } from "../../../models/surveyResult";
+import { RootState } from "../../../redux/RootReducer";
+import {
+  getSurveyResultById,
+  getSurveysAnswerAndQuestion,
+  submitSurvey,
+} from "../../../services/student/PsychologistDetail/api";
+import "./surveyQuestion.scss";
 
 function SurveyQuestion() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, number>>({});
+  const [answers, setAnswers] = useState<Record<string, number>>({});
   const [showResult, setShowResult] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+  const [questions, setQuestions] = useState<QuestionAndAnswer[]>([]);
+  const [chartData, setChartData] = useState<
+    { name: string; strength: number }[]
+  >([]);
+  const user = useSelector((state: RootState) => state.user) as any | null;
 
-  const questions = mockQuestions[id as keyof typeof mockQuestions] || [];
+  const handleSubmitSurvey = async () => {
+    const answersArray = Object.entries(answers).map(
+      ([questionIdx, optionId]) => {
+        const question = questions[parseInt(questionIdx)];
+        return {
+          questionId: parseInt(question.questionId),
+          optionId: optionId,
+        };
+      }
+    );
+
+    const result: SubmitResult = {
+      userId: parseFloat(user.id),
+      surveyId: 68,
+      answers: answersArray,
+    };
+
+    try {
+      const response = await submitSurvey(result);
+      if (response?.data?.data?.surveyResultId) {
+        fetchSurveyResult(response.data.data.surveyResultId);
+      } else {
+        console.warn("API không trả về surveyResultId. Kiểm tra lại API!");
+      }
+      console.log("Khảo sát đã được tạo thành công!");
+    } catch (error) {
+      console.error("Lỗi khi gửi khảo sát:", error);
+    }
+  };
+
+  const fetchSurveyResult = async (id: string) => {
+    try {
+      const res = await getSurveyResultById(id);
+      const resultData = res.data.data;
+      setFinalScore(
+        Number(resultData.depressionScore) +
+          Number(resultData.anxietyScore) +
+          Number(resultData.stressScore)
+      );
+      const chartValues = generateChartData(resultData);
+      setChartData(chartValues);
+
+      setShowResult(true);
+    } catch (error) {
+      console.error("Lỗi khi tải kết quả khảo sát:", error);
+    }
+  };
+
   const progress = (currentQuestion / questions.length) * 100;
 
-  //mock
-  const data = [
-    {
-      name: "trầm cảm",
-      strength: 1,
-    },
-    {
-      name: "lo âu",
-      strength: 2,
-    },
-    {
-      name: "căng thẳng",
-      strength: 4,
-    },
-  ];
+  function generateChartData(resultData: any) {
+    return [
+      { name: "Trầm cảm", strength: getStrength(resultData.depressionLevel) },
+      { name: "Lo âu", strength: getStrength(resultData.anxietyLevel) },
+      { name: "Căng thẳng", strength: getStrength(resultData.stressLevel) },
+    ];
+  }
+
+  const fetchSurveyDetail = useCallback(async () => {
+    if (id) {
+      try {
+        const res = await getSurveysAnswerAndQuestion(id);
+        const data = res.data.data;
+        setQuestions(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchSurveyDetail();
+  }, []);
 
   const handleAnswer = (e: RadioChangeEvent) => {
     setAnswers({ ...answers, [currentQuestion]: e.target.value });
-  };
-
-  const calculateResult = () => {
-    const totalScore = Object.values(answers).reduce(
-      (sum, value) => sum + value,
-      0
-    );
-
-    return totalScore;
   };
 
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      const result = calculateResult();
-      setFinalScore(result);
       setShowResult(true);
+      handleSubmitSurvey();
     }
   };
 
@@ -106,7 +164,7 @@ function SurveyQuestion() {
           <h2 className="survey-result__detail__title">Chi tiết kết quả</h2>
           <ResponsiveContainer width={"100%"} height={400}>
             <BarChart
-              data={data}
+              data={chartData}
               margin={{
                 top: 30,
                 right: 30,
@@ -204,7 +262,7 @@ function SurveyQuestion() {
         </div>
 
         <h2 className="survey-question__text">
-          {questions[currentQuestion].question}
+          {questions[currentQuestion]?.questionText}
         </h2>
 
         <motion.div
@@ -216,11 +274,11 @@ function SurveyQuestion() {
           <Radio.Group onChange={handleAnswer} value={answers[currentQuestion]}>
             {questions[currentQuestion].options.map((option) => (
               <Radio
-                key={option.value}
-                value={option.value}
+                key={option.optionId}
+                value={option.optionId}
                 className="survey-question__option"
               >
-                {option.label}
+                {option.optionText}
               </Radio>
             ))}
           </Radio.Group>
@@ -267,6 +325,24 @@ function getResultInterpretation(score: number) {
     return "Bạn đang có một số dấu hiệu của vấn đề tâm lý ở mức độ cao. Bạn nên tìm đến chuyên gia tâm lý càng sớm càng tốt.";
   }
   return "Kết quả của bạn ở mức báo động. Bạn cần tìm đến chuyên gia tâm lý ngay lập tức!.";
+}
+
+// Helper function to convert levels to numeric strength
+function getStrength(level: any) {
+  switch (level) {
+    case "Normal":
+      return 1;
+    case "Mild":
+      return 2;
+    case "Moderate":
+      return 3;
+    case "Severe":
+      return 4;
+    case "Extremely Severe":
+      return 5;
+    default:
+      return 0;
+  }
 }
 
 export default SurveyQuestion;

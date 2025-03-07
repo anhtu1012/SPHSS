@@ -40,6 +40,27 @@
     }
   }
 
+  &__carousel-button {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #4caf50;
+    color: black;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+      background-color: #4caf50;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+  }
+
   &__carousel-image-container {
     position: relative;
     width: 1000px;

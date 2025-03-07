@@ -7,6 +7,7 @@ import {
   RadarChartOutlined,
   UsergroupAddOutlined,
   PieChartOutlined,
+  LineChartOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
 import { UserRole } from "../../../models/enum";
@@ -21,11 +22,11 @@ const { Manager, Parent, Psychologist } = UserRole;
 const getMenuItems = (roleId: string) => {
   if (roleId === Manager) {
     return [
-      // {
-      //   label: "Tổng quan",
-      //   key: "/manager/dashboard",
-      //   icon: <LineChartOutlined />,
-      // },
+      {
+        label: "Tổng quan",
+        key: "/manager/dashboard",
+        icon: <LineChartOutlined />,
+      },
       {
         label: "Quản lý người dùng",
         key: "/manager/manage-user",
@@ -59,7 +60,7 @@ const getMenuItems = (roleId: string) => {
   } else if (roleId === Psychologist) {
     return [
       {
-        label: "Quản lý thời gian",
+        label: "Quản lý lịch hẹn",
         key: "/psychologist/manage-timeslot",
         icon: <AiOutlineSchedule />,
       },

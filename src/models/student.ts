@@ -40,3 +40,22 @@ export interface UpdateUser {
   image: string;
   email: string;
 }
+
+export interface Survey {
+  surveyId: string;
+  title: string;
+  description: string;
+  categoryId: string;
+}
+
+export interface QuestionAndAnswer {
+  questionId: string;
+  questionText: string;
+  options: Options[];
+}
+
+interface Options {
+  optionId: string;
+  value: number;
+  optionText: string;
+}

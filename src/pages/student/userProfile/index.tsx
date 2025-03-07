@@ -67,7 +67,6 @@ const UserProfile = () => {
   ];
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user) as any | null;
-  console.log(user);
 
   const [form] = Form.useForm();
   const [editable, setEditable] = useState(false);
@@ -260,22 +259,6 @@ const UserProfile = () => {
               </Cbutton>
             </div>
           </Form>
-
-          <div className="user-profile__health-status">
-            <h3>Tình trạng sức khỏe</h3>
-            <div className="status-item">
-              <span className="status-item__label">Trầm cảm</span>
-              <span className="status-item__value low">Thấp</span>
-            </div>
-            <div className="status-item">
-              <span className="status-item__label">Lo âu</span>
-              <span className="status-item__value medium">Trung bình</span>
-            </div>
-            <div className="status-item">
-              <span className="status-item__label">Stress</span>
-              <span className="status-item__value high">Cao</span>
-            </div>
-          </div>
         </div>
 
         <div className="user-profile__right-panel">

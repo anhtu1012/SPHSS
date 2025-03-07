@@ -8,11 +8,33 @@ import AntDComponent from "../../../components/cTableAntD";
 import { RootState } from "../../../redux/RootReducer";
 import { getAppointmentByUser } from "../../../services/student/PsychologistDetail/api";
 import { formatDate } from "../../../utils/dateUtils";
+import { getReports } from "../../../services/psychologist/api";
+import { useNavigate } from "react-router-dom";
+
+interface Report {
+  appointment_id: string;
+  report_id: string;
+}
 
 function BookingHistory() {
+  const navigate = useNavigate();
   const [booking, setBooking] = useState([]);
+  const [reportData, setReportData] = useState<Report[]>([]);
   const user = useSelector((state: RootState) => state.user) as any | null;
   const userID = user.id;
+
+  const handleNavigateToDetail = (appointmentId: string) => {
+    navigate(`/user-profile/${appointmentId}`);
+  };
+
+  const fetchReports = useCallback(async () => {
+    try {
+      const res = await getReports();
+      setReportData(res.data.data);
+    } catch (error: any) {
+      toast.error(error.response?.data || "Lỗi khi lấy danh sách báo cáo");
+    }
+  }, []);
 
   const fetchAppointment = useCallback(async () => {
     try {
@@ -50,6 +72,14 @@ function BookingHistory() {
     {
       title: "Link",
       dataIndex: "linkMeeting",
+      render: (link) =>
+        link ? (
+          <a href={link} target="_blank" rel="noopener noreferrer">
+            Link Meeting
+          </a>
+        ) : (
+          ""
+        ),
     },
     {
       title: "Trạng thái",
@@ -73,10 +103,28 @@ function BookingHistory() {
         );
       },
     },
+    {
+      title: "Báo cáo",
+      dataIndex: "report",
+      render: (_, record) => {
+        const report = reportData.find(
+          (r: any) => String(r.appointment_id) === record.appointment_id
+        );
+
+        return report ? (
+          <a onClick={() => handleNavigateToDetail(report.appointment_id)}>
+            Xem chi tiết
+          </a>
+        ) : (
+          ""
+        );
+      },
+    },
   ];
 
   useEffect(() => {
     fetchAppointment();
+    fetchReports();
   }, []);
 
   return (

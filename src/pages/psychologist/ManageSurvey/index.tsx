@@ -11,12 +11,21 @@ import { AppointmentData } from "../../../models/psy";
 import { RootState } from "../../../redux/RootReducer";
 import {
   getAppointmentsByPsychologist,
+  getReports,
   updateStatusAppointment,
 } from "../../../services/psychologist/api";
 import { formatDate } from "../../../utils/dateUtils";
+import { useNavigate } from "react-router-dom";
+
+interface Report {
+  appointment_id: string;
+  report_id: string;
+}
 
 function ManageSurvey() {
+  const navigate = useNavigate();
   const [rowData, setRowData] = useState<AppointmentData[]>([]);
+  const [reportData, setReportData] = useState<Report[]>([]);
   const [userID, setUserID] = useState("");
   const user = useSelector((state: RootState) => state.user) as any | null;
 
@@ -25,6 +34,19 @@ function ManageSurvey() {
       setUserID(user.id);
     }
   }, [user]);
+
+  const handleNavigateToDetail = (reportId: string) => {
+    navigate(`/psychologist/manage-survey/${reportId}`);
+  };
+
+  const fetchReports = useCallback(async () => {
+    try {
+      const res = await getReports();
+      setReportData(res.data.data);
+    } catch (error: any) {
+      toast.error(error.response?.data || "Lỗi khi lấy danh sách báo cáo");
+    }
+  }, []);
 
   const fetchAppointment = useCallback(async () => {
     try {
@@ -41,11 +63,12 @@ function ManageSurvey() {
 
   useEffect(() => {
     fetchAppointment();
-  }, [fetchAppointment, userID]);
+    fetchReports();
+  }, [fetchAppointment, fetchReports, userID]);
 
   const handleUpdateStatus = useCallback(
-    async (id: string, status: string) => {
-      const res = await updateStatusAppointment(id, { status });
+    async (id: string, status: string, linkMeeting?: string) => {
+      const res = await updateStatusAppointment(id, { status, linkMeeting });
       if (res) {
         toast.success(res?.data.message);
         fetchAppointment();
@@ -77,22 +100,44 @@ function ManageSurvey() {
     {
       title: "Trạng thái",
       dataIndex: "status",
-      render: (status) => {
+      render: (_, record) => {
         let color = "#08509F";
         let icon = <CheckCircleOutlined />;
 
-        if (status === "Pending") {
+        if (record.status === "Pending") {
           color = "#EC744A";
           icon = <AiOutlineLoading3Quarters />;
-        } else if (status === "Cancelled") {
+        } else if (record.status === "Cancelled") {
           color = "red";
           icon = <CloseCircleOutlined />;
         }
 
         return (
-          <span style={{ color }}>
-            {icon} {status}
-          </span>
+          <div>
+            <span style={{ color }}>
+              {icon} {record.status}
+            </span>
+            {record.status === "Approved" && record.linkMeeting && (
+              <div>
+                <a
+                  href={record.linkMeeting}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    border: "1px solid  #66a3ff",
+                    borderRadius: "10px",
+                    backgroundColor: " #66a3ff",
+                    color: "White",
+                    fontWeight: "bold",
+                    display: "block",
+                    marginTop: "5px",
+                  }}
+                >
+                  Link Meeting
+                </a>
+              </div>
+            )}
+          </div>
         );
       },
     },
@@ -112,7 +157,11 @@ function ManageSurvey() {
             color="orange"
             onClick={() => {
               if (record.status == "Pending") {
-                handleUpdateStatus(record.appointment_id, "Approved");
+                handleUpdateStatus(
+                  record.appointment_id,
+                  "Approved",
+                  "https://meet.google.com/zdo-mqvm-fcm"
+                );
               }
             }}
           />
@@ -132,6 +181,23 @@ function ManageSurvey() {
           />
         </div>
       ),
+    },
+    {
+      title: "Báo cáo",
+      dataIndex: "report",
+      render: (_, record) => {
+        const report = reportData.find(
+          (r: any) => String(r.appointment_id) === record.appointment_id
+        );
+
+        return report ? (
+          <a onClick={() => handleNavigateToDetail(report.appointment_id)}>
+            Xem chi tiết
+          </a>
+        ) : (
+          ""
+        );
+      },
     },
   ];
 

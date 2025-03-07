@@ -2,6 +2,7 @@ import api from "../../config/axios";
 import {
   AppointmentUpdateValue,
   BlogData,
+  ReportData,
   TimeSlotCreateValues,
   TimeSlotUpdateValues,
 } from "../../models/psy";
@@ -83,4 +84,24 @@ export const getProgramDetail = (id: string) => {
 // Danh sách bác sĩ
 export const getListDoctors = (roleCode: string) => {
   return api.get(`api/users/${roleCode}`);
+};
+
+// Danh sách cuộc hẹn đã thành công
+export const getFinishAppointment = (id: string) => {
+  return api.get(
+    `/api/appointmentsByPychologist?user_id=${id}&status=Approved`
+  );
+};
+
+// Tạo báo cáo
+export const createReport = (id: string, data: ReportData) => {
+  return api.post(`/api/reports/appointment/${id}`, data);
+};
+
+export const getReports = () => {
+  return api.get("/api/reports");
+};
+
+export const getDetailReport = (id: string) => {
+  return api.get(`/api/reports/appointment/${id}`);
 };

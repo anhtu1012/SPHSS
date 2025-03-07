@@ -19,6 +19,7 @@
     "express": "^4.21.2",
     "firebase": "^11.1.0",
     "framer-motion": "^12.4.3",
+    "html2canvas": "^1.4.1",
     "i18next": "^24.2.1",
     "lucide-react": "^0.475.0",
     "markdown-it": "^14.1.0",

@@ -40,6 +40,7 @@ export interface AppointmentData {
 
 export interface AppointmentUpdateValue {
   status: string;
+  linkMeeting?: string;
 }
 
 export interface BlogData {
@@ -67,4 +68,11 @@ export interface ProgramData {
   price: number;
   rating: number;
   categoryId: string;
+}
+
+export interface ReportData {
+  health_level: string;
+  health_status: string;
+  feedback: string;
+  recommendations: string;
 }

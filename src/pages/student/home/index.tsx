@@ -114,7 +114,7 @@ export default function Home() {
           </span>
         </h2>
         <div className="home__featured__doctors__list">
-          {doctorList.slice(0, 3).map((doctor, index) => (
+          {doctorList.slice(0, 4).map((doctor, index) => (
             <DoctorCard key={index} {...doctor} />
           ))}
         </div>
