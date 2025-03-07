@@ -22,7 +22,7 @@ const ManageAdminSurvey = () => {
   const [popupType, setPopupType] = useState<"survey" | "result" | null>(null);
   const [selectedSurveyResult, setSelectedSurveyResult] =
     useState<SurveyResult | null>(null);
-
+    
   useEffect(() => {
     const fetchSurveyData = async () => {
       if (!surveyId) return;
@@ -63,6 +63,18 @@ const ManageAdminSurvey = () => {
     fetchSurveyData();
   }, [surveyId]);
 
+  const translateLevel = (level: string) => {
+    const mapping: { [key: string]: string } = {
+      "Normal": "Bình thường",
+      "Extremely Severe": "Cực kỳ nghiêm trọng",
+      "Severe": "Nghiêm trọng",
+      "Mild": "Nhẹ",
+      "Moderate": "Trung bình",
+    };
+    return mapping[level] || level;
+  };
+  
+
   const columns: ColumnsType<SurveyResult> = [
     {
       title: "Họ tên",
@@ -89,16 +101,19 @@ const ManageAdminSurvey = () => {
       title: "Mức trầm cảm",
       dataIndex: ["depressionLevel"],
       key: "depressionLevel",
+      render: (level) => <span>{translateLevel(level)}</span>,
     },
     {
       title: "Mức lo lắng",
       dataIndex: ["anxietyLevel"],
       key: "anxietyLevel",
+      render: (level) => <span>{translateLevel(level)}</span>,
     },
     {
       title: "Mức căng thẳng",
       dataIndex: ["stressLevel"],
       key: "stressLevel",
+      render: (level) => <span>{translateLevel(level)}</span>,
     },
     {
       title: "Chi tiết",
@@ -146,9 +161,6 @@ const ManageAdminSurvey = () => {
                 <Cbutton onClick={() => showPopup("survey")}>
                   Biểu mẫu khảo sát
                 </Cbutton>
-              </div>
-              <div className={styles.status}>
-                <Cbutton className={styles.deleteButton}>Xóa khảo sát</Cbutton>
               </div>
             </div>
           </div>
@@ -262,21 +274,21 @@ const ManageAdminSurvey = () => {
                       <strong>Trầm cảm</strong>
                     </td>
                     <td>{selectedSurveyResult.depressionScore}</td>
-                    <td>{selectedSurveyResult.depressionLevel}</td>
+                    <td>{translateLevel(selectedSurveyResult.depressionLevel)}</td>
                   </tr>
                   <tr>
                     <td>
                       <strong>Lo âu</strong>
                     </td>
                     <td>{selectedSurveyResult.anxietyScore}</td>
-                    <td>{selectedSurveyResult.anxietyLevel}</td>
+                    <td>{translateLevel(selectedSurveyResult.anxietyLevel)}</td>
                   </tr>
                   <tr>
                     <td>
                       <strong>Căng thẳng</strong>
                     </td>
                     <td>{selectedSurveyResult.stressScore}</td>
-                    <td>{selectedSurveyResult.stressLevel}</td>
+                    <td>{translateLevel(selectedSurveyResult.stressLevel)}</td>
                   </tr>
                 </tbody>
               </table>

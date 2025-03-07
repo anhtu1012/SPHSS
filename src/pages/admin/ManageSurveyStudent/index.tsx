@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { message, Modal } from "antd";
 import SearchBar from "../../../components/cSearchbar/SearchBar";
 import AntDComponent from "../../../components/cTableAntD";
 import Cbutton from "../../../components/cButton";
 import { ColumnsType } from "antd/es/table";
 import styles from "./ManageSurvey.module.scss";
-import { getAllSurvey, getCategory } from "../../../services/admin/api";
+import { getAllSurvey, getCategory, deleteSurveyId } from "../../../services/admin/api";
 import { Survey, CategorySurvey } from "../../../models/admin";
 
 const ManageEffectConsult = () => {
@@ -18,20 +19,14 @@ const ManageEffectConsult = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [surveyRes, categoryRes] = await Promise.all([
-          getAllSurvey(),
-          getCategory(),
-        ]);
+        const [surveyRes, categoryRes] = await Promise.all([getAllSurvey(), getCategory()]);
         const surveys = surveyRes.data.data;
         const categories = categoryRes.data.data;
         if (Array.isArray(surveys) && Array.isArray(categories)) {
           setData(surveys);
           setCategories(categories);
         } else {
-          console.error("API trả về dữ liệu không hợp lệ:", {
-            surveys: surveyRes.data,
-            categories: categoryRes.data,
-          });
+          console.error("API trả về dữ liệu không hợp lệ:", surveyRes.data, categoryRes.data);
           setData([]);
           setCategories([]);
         }
@@ -43,12 +38,36 @@ const ManageEffectConsult = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  const getCategoryName = (categoryId: string) => {
+  const getCategoryName = (categoryId?: string) => {
     return categories.find((cat) => cat.categoryId === categoryId)?.name || "Không xác định";
+  };
+
+  const handleDeleteSurvey = async (id?: string) => {
+    if (!id) {
+      message.error("Không thể xác định ID khảo sát để xóa.");
+      return;
+    }
+
+    Modal.confirm({
+      title: "Xác nhận xóa",
+      content: "Bạn có chắc chắn muốn xóa khảo sát này không?",
+      okText: "Xóa",
+      cancelText: "Hủy",
+      onOk: async () => {
+        try {
+          console.log("Gửi request DELETE với ID:", id);
+          await deleteSurveyId(id);
+          message.success("Xóa khảo sát thành công");
+          setData((prevData) => prevData.filter((survey) => survey.surveyId !== id));
+        } catch (error: any) {
+          console.error("Lỗi khi xóa khảo sát:", error);
+          message.error(`Xóa khảo sát thất bại: ${error.response?.data?.message || "Lỗi không xác định"}`);
+        }
+      },
+    });
   };
 
   const columns: ColumnsType<Survey> = [
@@ -68,16 +87,11 @@ const ManageEffectConsult = () => {
       title: "Loại khảo sát",
       dataIndex: "categoryId",
       key: "categoryId",
-      render: (_, record) => {
-        const categoryName = record.categoryId !== undefined 
-          ? getCategoryName(record.categoryId.toString()) 
-          : "Không xác định"; 
-        return (
-          <div className={styles.surveyInfoContainer}>
-            <span className={styles.surveyType}>{categoryName}</span>
-          </div>
-        );
-      },
+      render: (_, record) => (
+        <div className={styles.surveyInfoContainer}>
+          <span className={styles.surveyType}>{getCategoryName(record.categoryId)}</span>
+        </div>
+      ),
     },
     {
       title: "Chi tiết",
@@ -91,6 +105,18 @@ const ManageEffectConsult = () => {
         </Cbutton>
       ),
     },    
+    {
+      title: "Xóa khảo sát",
+      key: "delete",
+      render: (_, record) => (
+        <Cbutton
+          origin={{ bgcolor: "red", hoverBgColor: "#ff4d4f" }}
+          onClick={() => handleDeleteSurvey(record.surveyId)}
+        >
+          Xóa
+        </Cbutton>
+      ),
+    },   
   ];
 
   const handleSearch = (values: Record<string, string>) => {
@@ -98,19 +124,13 @@ const ManageEffectConsult = () => {
     setTimeout(() => {
       const filteredData = data.filter(
         (item) =>
-          (values.name
-            ? item.title.toLowerCase().includes(values.name.toLowerCase())
-            : true) &&
-          (values.surveyId
-            ? item.surveyId?.toLowerCase().includes(values.surveyId.toLowerCase())
-            : true)
+          (values.name ? item.title.toLowerCase().includes(values.name.toLowerCase()) : true) &&
+          (values.surveyId ? item.surveyId?.toLowerCase().includes(values.surveyId.toLowerCase()) : true)
       );
-  
       setData(filteredData);
       setLoading(false);
     }, 1000);
   };
-  
 
   const handleNavigate = () => {
     navigate("create-survey");
@@ -128,7 +148,6 @@ const ManageEffectConsult = () => {
             onSearch={handleSearch}
           />
         </div>
-
         <Cbutton className={styles.navigateButton} onClick={handleNavigate}>
           Tạo khảo sát
         </Cbutton>
