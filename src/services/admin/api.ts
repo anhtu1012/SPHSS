@@ -1,5 +1,14 @@
 import api from "../../config/axios";
-import { CategorySurvey, User, Program, Program2, Survey, Question, QuestionOption, Account } from "../../models/admin";
+import {
+  CategorySurvey,
+  User,
+  Program,
+  Program2,
+  Survey,
+  Question,
+  QuestionOption,
+  Account,
+} from "../../models/admin";
 
 export const createUser = (data: Account) => {
   return api.post("/api/register", data);
@@ -13,8 +22,16 @@ export const getSurveyDetailId = (id: string) => {
   return api.get(`/api/survey/detail/${id}`);
 };
 
-export const getReportAppointmentId = (appointment_id: string) => {
-  const url = `/api/reports?appointment_id=${appointment_id}`;
+import { AppointmentStatus } from "../../models/enum";
+
+export const getReportAppointmentId = (
+  appointment_id: string,
+  report_id?: string
+) => {
+  let url = `/api/reports/appointment/${appointment_id}`;
+  if (report_id) {
+    url += `?report_id=${report_id}`;
+  }
   return api.get(url);
 };
 
@@ -23,9 +40,13 @@ export const updateQuestionId = (userCode: string, data: User) => {
 };
 
 export const getAppointmentsByPsychologist = (
-  id: string
+  id: string,
+  status?: AppointmentStatus | null
 ) => {
-  const url = `/api/appointmentsByPychologist?user_id=${id}&status=Completed`;
+  let url = `/api/appointmentsByPychologist?user_id=${id}`;
+  if (status) {
+    url += `&status=${status}`;
+  }
   return api.get(url);
 };
 
@@ -33,9 +54,7 @@ export const getReportId = () => {
   return api.get(`/api/reports`);
 };
 
-export const getAppointmentByUser = (
-  id: string
-) => {
+export const getAppointmentByUser = (id: string) => {
   const url = `/api/appointmentsByUser?user_id=${id}&status=Completed`;
   return api.get(url);
 };

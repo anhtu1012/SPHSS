@@ -12,7 +12,7 @@ export interface User {
   description: string;
   image: string;
   roleCode: string;
-  password:string;
+  password: string;
   createdBy: string;
 }
 
@@ -25,7 +25,7 @@ export interface Account {
   lastName: string;
   firstName: string;
   roleCode: string;
-  password:string;
+  password: string;
   createdBy: string;
 }
 
@@ -82,11 +82,11 @@ export interface Report {
   psychologist_id: string;
   start_time: string;
   end_time: string;
-  full_name:string;
-  appointment_date:string;
+  full_name: string;
+  appointment_date: string;
   pys_email: string;
   pys_phone: string;
-  student_id:string;
+  student_id: string;
   createdAt: string;
 }
 
@@ -101,7 +101,7 @@ export interface Survey {
 
 export interface SurveyResult {
   surveyResultId: string;
-  userId?:string;
+  userId?: string;
   surveyId?: string;
   depressionScore: string;
   anxietyScore: string;
@@ -131,5 +131,7 @@ export interface AppointmentByUser {
   appointment_id: string;
   status: string;
   date: string;
+  start_time: string;
+  end_time: string;
   fullName: string;
 }
