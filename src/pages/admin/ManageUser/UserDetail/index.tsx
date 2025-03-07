@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Cbutton from "../../../../components/cButton";
 import styles from "./userProfile.module.scss";
 import {
@@ -6,7 +7,7 @@ import {
   MailOutlined,
   HomeOutlined,
 } from "@ant-design/icons";
-import { Descriptions } from "antd";
+import { Col, Descriptions, Row } from "antd";
 import { useEffect, useState } from "react";
 import PopupInfoConsult from "../PopupViewInfoConsult";
 import PopupSurveyDetail from "../../ManageSurveyStudent/PopupDetailSurvey";
@@ -38,8 +39,13 @@ function UserProfile() {
     R4: "Manager",
   };
 
-  const showModal = (record: any, type: "consult" | "survey") => {
-    setSelectedConsult(record);
+  const showModal = (
+    record: any,
+    type: "consult" | "survey",
+    dataReport: any
+  ) => {
+    console.log("Dữ liệu từ API:", record);
+    setSelectedConsult(dataReport);
     setIsModalOpen(true);
     setPopupType(type);
   };
@@ -69,8 +75,8 @@ function UserProfile() {
 
   return (
     <div className={styles.userProfile}>
-      <div className={styles.mainContent}>
-        <div className={styles.leftProfile}>
+      <Row className={styles.mainContent}>
+        <Col span={17} className={styles.leftProfile}>
           <div className={styles.profileHeader}>
             <div className={styles.profileName}>
               <div className={styles.avatar}>
@@ -103,10 +109,14 @@ function UserProfile() {
               : "Lịch sử điều trị tâm lý của học/sinh viên"}
           </p>
           {user.role !== "R4" && (
-            <UserProfileTable accountType={user.role} showModal={showModal} userId={user.id} />
+            <UserProfileTable
+              accountType={user.role}
+              showModal={showModal}
+              userId={user.id}
+            />
           )}
-        </div>
-        <div className={styles.rightProfile}>
+        </Col>
+        <Col span={6} className={styles.rightProfile}>
           <div className={styles.infoSection}>
             <Descriptions
               title="Thông tin cá nhân"
@@ -155,8 +165,8 @@ function UserProfile() {
               Thay đổi thông tin
             </Cbutton>
           </div>
-        </div>
-      </div>
+        </Col>
+      </Row>
 
       {isModalOpen && selectedConsult && popupType === "consult" && (
         <PopupInfoConsult
