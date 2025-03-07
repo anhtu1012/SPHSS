@@ -1,6 +1,10 @@
 import api from "../../config/axios";
 import { CategorySurvey, User, Program, Program2, Survey, Question, QuestionOption } from "../../models/admin";
 
+export const getSurveyDetailId = (id: string) => {
+  return api.get(`/api/survey/detail/${id}`);
+};
+
 export const getReportAppointmentId = (appointment_id: string) => {
   const url = `/api/reports?appointment_id=${appointment_id}`;
   return api.get(url);

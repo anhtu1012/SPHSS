@@ -57,7 +57,7 @@ export interface Program2 {
 
 export interface Report {
   report_id: string;
-  appointment_id: string;
+  appointment_id: number;
   user_id: string;
   health_level: string;
   health_status: string;
@@ -68,21 +68,34 @@ export interface Report {
   start_time: string;
   end_time: string;
   full_name:string;
-}
-
-
-export interface SurveyResult {
-  surveyResultId: string;
-  userId:string;
-  surveyId: string;
+  appointment_date:string;
+  pys_email: string;
+  pys_phone: string;
+  student_id:string;
+  createdAt: string;
 }
 
 export interface Survey {
   surveyId?: string;
   title: string;
   description: string;
-  categoryId?: number;
-  questions: Question[];
+  categoryId?: string;
+  questions?: Question[];
+  results?: SurveyResult[];
+}
+
+export interface SurveyResult {
+  surveyResultId: string;
+  userId?:string;
+  surveyId?: string;
+  depressionScore: string;
+  anxietyScore: string;
+  stressScore: string;
+  depressionLevel: string;
+  stressLevel: string;
+  anxietyLevel: string;
+  user: User;
+  createdAt: string;
 }
 
 export interface Question {
@@ -105,18 +118,3 @@ export interface AppointmentByUser {
   date: string;
   fullName: string;
 }
-
-export interface Report {
-  report_id: string;
-  appointment_id: string;
-  user_id: string;
-  health_level: string;
-  health_status: string;
-  feedback: string;
-  recommendations: string;
-  createdAt: string;
-  appointment_date: string;
-  psychologist_id: string;
-  full_name_pys: string;
-}
-

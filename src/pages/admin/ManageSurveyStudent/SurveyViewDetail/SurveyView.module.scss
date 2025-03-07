@@ -4,18 +4,14 @@
   padding: 20px 0;
 }
 
-.avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: #ccc;
+.buttonS {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 32px;
-  margin-right: 15px;
+  gap: 10px;
 }
 
+.deleteButton {
+  background-color: #969696 !important;
+}
 .profileInfo h2 {
   margin: 0;
   font-size: 22px;
@@ -34,54 +30,41 @@
   gap: 15px;
 }
 
-.rightProfile {
-  flex: 35%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px; 
-  border: 1px solid #ec744a; 
-  border-radius: 8px; 
-  padding: 15px;
-  background-color: #ec744a;
-  color:#fff;
+.questionItem {
+  margin: 20px;
 }
 
-.rightProfile h2 {
+.popupContent h2 {
   text-align: center;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  color: #ec744a;
 }
 
-.rightProfile p {
-  font-size: 14px;
-  margin-top: 15px;
+.popupContent p {
+  font-size: 15px;
+  margin-bottom: 8px;
 }
 
-.rightProfile ul {
-  list-style-type: none; 
+.popupContent ul {
+  list-style-type: none;
   padding: 0;
 }
 
-.rightProfile li {
-  font-size: 13px;
+.readOnlyCheckboxList {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
-.readOnlyCheckboxList {
-  list-style-type: none;
-
-  li {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  input[type="checkbox"] {
-    width: 13px;
-    height: 13px;
-    accent-color: #ccc; 
-    cursor: not-allowed;
-  }
+.readOnlyCheckboxList li {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  white-space: nowrap;
+  gap: 5px;
 }
 
 .surveyQuestion {
@@ -122,5 +105,82 @@
 }
 
 :global(.ant-rate-star-full) {
-  color: #08509F !important;
+  color: #08509f !important;
+}
+
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popupContent {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 800px;
+  position: relative;
+  max-height: 90%;
+  overflow-y: scroll;
+}
+
+.popupContent::-webkit-scrollbar {
+  display: none;
+}
+
+.closePopupButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.infoSurveyResult {
+  margin-top: 20px;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; 
+  }
+
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+
+  th:first-child,
+  td:first-child {
+    width: 50%;
+  }
+
+  th:not(:first-child),
+  td:not(:first-child) {
+    width: 50%;
+  }
+}
+
+.headerResult {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+justify-content: space-around;
 }
