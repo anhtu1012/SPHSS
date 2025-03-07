@@ -10,6 +10,10 @@ import {
   Account,
 } from "../../models/admin";
 
+export const deleteSurveyId = (id: string) => {
+  return api.delete(`/api/survey/${id}`);
+};
+
 export const createUser = (data: Account) => {
   return api.post("/api/register", data);
 };
@@ -69,10 +73,6 @@ export const createQuestion = (data: Question) => {
 
 export const createOptionQuestion = (data: QuestionOption) => {
   return api.post("/api/survey", data);
-};
-
-export const deleteSurveyId = (id: string) => {
-  return api.delete(`/api/survey/${id}`);
 };
 
 export const getSurveyId = (id: string) => {
