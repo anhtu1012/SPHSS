@@ -77,7 +77,7 @@ const SurveyForm = () => {
     const surveyData = {
       title,
       description,
-      categoryId: Number(categoryId), 
+      categoryId: String(categoryId),
       questions,
     };
     

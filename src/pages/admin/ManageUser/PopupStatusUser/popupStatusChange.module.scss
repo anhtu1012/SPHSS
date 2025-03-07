@@ -8,6 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000; 
 }
 
 .popup {
@@ -18,6 +19,7 @@
   text-align: center;
   min-width: 300px;
   position: relative;
+  z-index: 1001;
 }
 
 .closeButton {
@@ -29,11 +31,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white !important; /* Đặt nền trắng */
-  border: 2px solid orange !important; /* Viền cam */
-  border-radius: 50% !important; /* Đảm bảo tròn */
+  background: white !important; 
+  border: 2px solid orange !important; 
+  border-radius: 50% !important; 
   cursor: pointer;
-  color: orange !important; /* Màu icon */
+  color: orange !important; 
   transition: background 0.3s ease, transform 0.2s ease, color 0.2s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   padding: 0 !important;
@@ -41,20 +43,20 @@
 }
 
 .closeButton svg {
-  color: orange !important; /* Màu chữ của icon `X` */
-  stroke: orange !important; /* Màu viền của icon */
+  color: orange !important; 
+  stroke: orange !important; 
   width: 20px;
   height: 20px;
 }
 
 .closeButton:hover {
-  background: #ffebcc !important; /* Nền cam nhạt khi hover */
-  color: red !important; /* Màu `X` thành đỏ */
+  background: #ffebcc !important; 
+  color: red !important; 
   transform: scale(1.1);
 }
 
 .closeButton:hover svg {
-  stroke: red !important; /* Đổi màu `X` khi hover */
+  stroke: red !important;
 }
 
 .modalTitle {
