@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import api from "../../../config/axios";
-import { UpdateUser } from "../../../models/student";
+import { UpdateUser, UserProgram } from "../../../models/student";
 import { SubmitResult } from "../../../models/surveyResult";
 
 export const getTimeSlotByDoctorId = (doctorId: string) => {
@@ -60,4 +60,13 @@ export const getSurveyResultById = (id: string) => {
 
 export const getSurveyByUserId = (id: string) => {
   return api.get(`/api/survey-result/user/${id}`);
+};
+
+// Chương trình
+export const payProgram = (data: UserProgram) => {
+  return api.post("/api/program/join", data);
+};
+
+export const getProgramByUserId = (id: string) => {
+  return api.get(`/api/program/user/${id}`);
 };

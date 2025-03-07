@@ -59,3 +59,8 @@ interface Options {
   value: number;
   optionText: string;
 }
+
+export interface UserProgram {
+  userId: number;
+  programIds: number[];
+}

@@ -105,7 +105,7 @@ function ProgramDetail() {
             </div>
           </div>
 
-          <div className="program-detail__price">{program.price} VNĐ</div>
+          {/* <div className="program-detail__price">{program.price} VNĐ</div> */}
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <a
               className={`program-detail__addToCart ${
