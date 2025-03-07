@@ -1,0 +1,75 @@
+.popupContainer {
+  border-radius: 10px;
+}
+
+.title {
+  text-align: center;
+  color: #51b748;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.infoGrid {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.infoGrid div {
+  flex: 1;
+  text-align: center;
+}
+
+.infoGrid p {
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  font-size: 15px;
+}
+
+.highlight {
+  color: #ec744a;
+  font-weight: bold;
+}
+
+.infoDetails {
+  margin-top: 20px;
+}
+
+.infoDetails table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Ensures that column width can be controlled */
+}
+
+.infoDetails td {
+  padding: 8px;
+  border: 1px solid #ec744a;
+  text-align: left;
+}
+
+.infoDetails th {
+  padding: 8px;
+  border: 1px solid #ec744a;
+  background-color: #f2f2f2;
+}
+
+.infoDetails td:first-child {
+  width: 35%; /* Cột đầu tiên chiếm 35% chiều rộng */
+}
+
+.infoDetails td:last-child {
+  width: 65%; /* Cột thứ hai chiếm phần còn lại */
+}
+
+.infoDetails strong {
+  color: black;
+}
+
+.footerReport {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  margin-top: 10px;
+}

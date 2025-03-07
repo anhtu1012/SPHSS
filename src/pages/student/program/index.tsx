@@ -56,7 +56,7 @@ function Program() {
                 <Rate disabled defaultValue={program.rating} />
                 <span>({program.rating} đánh giá)</span>
               </div>
-              <div className="program__card-price">{program.price} VNĐ</div>
+              {/* <div className="program__card-price">{program.price} VNĐ</div> */}
               <button className="program__card-button">Xem chi tiết</button>
             </div>
           </div>

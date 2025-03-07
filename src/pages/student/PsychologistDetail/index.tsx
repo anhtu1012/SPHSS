@@ -155,8 +155,8 @@ const PsychologistDetail = () => {
                 Lịch tư vấn
               </div>
               <div className="doctor__detail__section1__schedule__price">
-                <span className="price-tag">300.000đ</span>
-                <span className="price-duration">/60 phút</span>
+                <span className="price-tag">60 phút</span>
+                {/* <span className="price-duration">/60 phút</span> */}
               </div>
             </div>
 

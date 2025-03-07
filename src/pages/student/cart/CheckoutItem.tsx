@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
-import "./index.scss";
 import { Program } from "../../../models/program";
 import { remove } from "../../../redux/features/cartSlice";
+import "./index.scss";
 
 const CheckoutItem = ({ cartItem }: { cartItem: Program }) => {
-  const { imageUrl, title, description, price } = cartItem;
+  const { imageUrl, title, description } = cartItem;
   const dispatch = useDispatch();
   const removeFromCart = (programId: string) => {
     dispatch(remove(programId));
@@ -21,9 +21,9 @@ const CheckoutItem = ({ cartItem }: { cartItem: Program }) => {
       <div className="checkout-column">
         <span className="checkout-description">{description}</span>
       </div>
-      <div className="checkout-column">
+      {/* <div className="checkout-column">
         <span className="checkout-price">{price.toLocaleString()} VND</span>
-      </div>
+      </div> */}
       <div className="checkout-column">
         <button
           className="checkout-remove"
