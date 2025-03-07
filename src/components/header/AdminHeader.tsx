@@ -7,7 +7,7 @@ function AdminHeader() {
       <div className="headerAdmin__container">
         <div className="headerAdmin__logo">
           <Logo />
-          <span>YAG HEALTH - Manager</span>
+          <span>YAG HEALTH - Quản lý</span>
         </div>
       </div>
     </header>

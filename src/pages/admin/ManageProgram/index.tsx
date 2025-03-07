@@ -5,7 +5,7 @@ import {
   DeleteOutlined,
   MoreOutlined,
   EditOutlined,
-  MoneyCollectOutlined,
+  DollarOutlined,
   UsergroupAddOutlined,
   CalendarOutlined,
 } from "@ant-design/icons";
@@ -168,14 +168,13 @@ const ManageProgram = () => {
     if (programToDelete) {
       try {
         await deleteProgramId(programToDelete.programId);
-        await fetchPrograms(); 
+        await fetchPrograms();
         closeDeleteModal();
       } catch (error) {
         console.error("Lỗi khi xóa chương trình:", error);
       }
     }
   };
-  
 
   return (
     <div>
@@ -198,7 +197,7 @@ const ManageProgram = () => {
       </div>
       {loading ? (
         <p className={styles.message}>Đang tải dữ liệu...</p>
-      ): filteredData.length === 0 ? (
+      ) : filteredData.length === 0 ? (
         <p className={styles.message}>Không có thông tin</p>
       ) : (
         <div className={styles.tagContainer}>
@@ -211,28 +210,31 @@ const ManageProgram = () => {
                   <ProgramActions
                     onView={() =>
                       navigate(
-                        `/manager/list-support-program/view/${item.programId}`, {
-                state: item,
-              }
+                        `/manager/list-support-program/view/${item.programId}`,
+                        {
+                          state: item,
+                        }
                       )
                     }
                     onEdit={() => openEditModal(item)}
                     onDelete={() => openDeleteModal(item)}
                   />
                 </div>
-                <p className={styles.price}>
-                  <MoneyCollectOutlined /> {item.price}
-                </p>
-                <p>
-                  <CalendarOutlined />{" "}
-                  {dayjs(item.startDate).format("DD/MM/YYYY")} -{" "}
-                  {dayjs(item.endDate).format("DD/MM/YYYY")}
-                </p>
-                <p className={styles.price}>
-                  {" "}
-                  <UsergroupAddOutlined />
-                  {item.targetAudience}
-                </p>
+                <div className={styles.detail}>
+                  <p>
+                    <DollarOutlined /> {item.price}
+                  </p>
+                  <p>
+                    <CalendarOutlined />{" "}
+                    {dayjs(item.startDate).format("DD/MM/YYYY")} -{" "}
+                    {dayjs(item.endDate).format("DD/MM/YYYY")}
+                  </p>
+                  <p>
+                    {" "}
+                    <UsergroupAddOutlined />
+                    {item.targetAudience}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

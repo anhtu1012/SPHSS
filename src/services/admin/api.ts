@@ -1,5 +1,13 @@
 import api from "../../config/axios";
-import { CategorySurvey, User, Program, Program2, Survey, Question, QuestionOption } from "../../models/admin";
+import { CategorySurvey, User, Program, Program2, Survey, Question, QuestionOption, Account } from "../../models/admin";
+
+export const createUser = (data: Account) => {
+  return api.post("/api/register", data);
+};
+
+export const deleteCategoryId = (id: string) => {
+  return api.delete(`/api/category/${id}`);
+};
 
 export const getSurveyDetailId = (id: string) => {
   return api.get(`/api/survey/detail/${id}`);
@@ -31,7 +39,6 @@ export const getAppointmentByUser = (
   const url = `/api/appointmentsByUser?user_id=${id}&status=Completed`;
   return api.get(url);
 };
-
 
 export const createSurvey = (data: Survey) => {
   return api.post("/api/survey", data);

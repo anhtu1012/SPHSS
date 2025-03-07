@@ -25,3 +25,17 @@
   font-weight: bold;
   font-size: 15px;
 }
+
+.headerLine{
+  display:flex;
+}
+
+.searchBarName {
+  padding: 0 !important;
+  width:100% !important;
+}
+.navigateButton{
+  margin: 11px;
+  padding:20px;
+  background-color: #0BA02C  !important;
+}
