@@ -38,7 +38,7 @@ function ManageUser() {
 
   const handleSearch = (values: Record<string, string>) => {
     const searchName = values.name?.toLowerCase().trim() || "";
-    const searchRole = values.role?.trim(); 
+    const searchRole = values.role?.trim();
     if (!searchName && (!searchRole || searchRole === "Tất cả")) {
       setFilteredData(data);
       return;
@@ -58,10 +58,10 @@ function ManageUser() {
   };
 
   const roleMap: Record<string, string> = {
-    R1: "Student",
-    R2: "Parent",
-    R3: "Psychologist",
-    R4: "Manager",
+    R1: "Sinh viên",
+    R2: "Phụ huynh",
+    R3: "Tư vấn viên",
+    R4: "Quản lý",
   };
   const statusMap: Record<string, string> = {
     true: "Đang hoạt động",
@@ -111,20 +111,37 @@ function ManageUser() {
       ),
     },
   ];
+  const handleNavigate = () => {
+    navigate("create-account");
+  };
   return (
     <div>
-      <SearchBar
-        fields={[
-          { key: "name", placeholder: "Tên tài khoản", type: "text" },
-          {
-            key: "role",
-            placeholder: "Loại tài khoản",
-            type: "dropdown",
-            options: ["Student", "Parent", "Psychologist", "Manager", "Tất cả"],
-          },
-        ]}
-        onSearch={handleSearch}
-      />
+      <div className={styles.headerLine}>
+        <div className={styles.searchBarName}>
+          <SearchBar
+            fields={[
+              { key: "name", placeholder: "Tên tài khoản", type: "text" },
+              {
+                key: "role",
+                placeholder: "Loại tài khoản",
+                type: "dropdown",
+                options: [
+                  "Sinh viên",
+                  "Phụ huynh",
+                  "Tư vấn viên",
+                  "Quản lý",
+                  "Tất cả",
+                ],
+              },
+            ]}
+            onSearch={handleSearch}
+          />
+        </div>
+        <Cbutton className={styles.navigateButton} onClick={handleNavigate}>
+          Tạo mới tài khoản
+        </Cbutton>
+      </div>
+
       {loading ? (
         <p className={styles.message}>Đang tải dữ liệu...</p>
       ) : filteredData.length === 0 ? (

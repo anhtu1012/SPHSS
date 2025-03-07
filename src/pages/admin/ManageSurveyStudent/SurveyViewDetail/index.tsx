@@ -71,9 +71,18 @@ const ManageAdminSurvey = () => {
       render: (_, surveyResult) => (
         <div className={styles.userInfoContainer}>
           <span className={styles.surveyName}>
-            {surveyResult.user.firstName} {surveyResult.user.lastName}
+            <strong>{surveyResult.user.firstName} {surveyResult.user.lastName}</strong>
+            <br/>
+            MSSV:{surveyResult.user.id}
           </span>
         </div>
+      ),
+    },
+    {
+      title: "Ngày khảo sát",
+      key: "createdAt",
+      render: (_, surveyResult) => (
+        <span>{dayjs(surveyResult.createdAt).format("DD/MM/YYYY")}</span>
       ),
     },
     {
@@ -90,13 +99,6 @@ const ManageAdminSurvey = () => {
       title: "Mức căng thẳng",
       dataIndex: ["stressLevel"],
       key: "stressLevel",
-    },
-    {
-      title: "Ngày khảo sát",
-      key: "createdAt",
-      render: (_, surveyResult) => (
-        <span>{dayjs(surveyResult.createdAt).format("DD/MM/YYYY")}</span>
-      ),
     },
     {
       title: "Chi tiết",

@@ -12,6 +12,21 @@ export interface User {
   description: string;
   image: string;
   roleCode: string;
+  password:string;
+  createdBy: string;
+}
+
+export interface Account {
+  username: string;
+  email: string;
+  userCode: string;
+  phone: string;
+  gender: string;
+  lastName: string;
+  firstName: string;
+  roleCode: string;
+  password:string;
+  createdBy: string;
 }
 
 export interface CategorySurvey {

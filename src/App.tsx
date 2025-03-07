@@ -40,6 +40,7 @@ import ManageFormSurvey from "./pages/admin/ManageSurveyStudent/CreateSurvey/Sur
 import PsyProfile from "./pages/psychologist/psyProfile";
 import Cart from "./pages/student/cart";
 import ManageAdminSurvey from "./pages/admin/ManageSurveyStudent/SurveyViewDetail"
+import ManageCreateAcc from "./pages/admin/ManageUser/CreateAccount"
 
 function App() {
   const { Manager, Parent, Psychologist } = UserRole;
@@ -117,7 +118,7 @@ function App() {
     {
       path: "/manager",
       element: (
-        <ConfigProvider>
+        <ConfigProvider >
           <ProtectedRoute allowedRoles={Manager}>
             <Dashboard />
           </ProtectedRoute>
@@ -163,6 +164,10 @@ function App() {
         {
           path: "manage-user",
           element: <ManageUser />,
+        },
+        {
+          path: "manage-user/create-account",
+          element: <ManageCreateAcc />,
         },
         {
           path: ":section/detail/:id",
