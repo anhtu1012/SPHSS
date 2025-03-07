@@ -1,43 +1,14 @@
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Carousel from "../../../components/Carousel";
+import { getSurveys } from "../../../services/student/PsychologistDetail/api";
 import "./survey.scss";
-
-const surveys = [
-  {
-    id: "depression",
-    title: "Trắc nghiệm đánh giá trầm cảm",
-    description:
-      "Đánh giá mức độ trầm cảm thông qua bộ câu hỏi Beck Depression Inventory (BDI)",
-    duration: "10-15 phút",
-    questions: 21,
-  },
-  {
-    id: "anxiety",
-    title: "Trắc nghiệm đánh giá lo âu",
-    description:
-      "Đánh giá mức độ lo âu dựa trên thang đánh giá Hamilton Anxiety Rating Scale (HAM-A)",
-    duration: "8-12 phút",
-    questions: 14,
-  },
-  {
-    id: "stress",
-    title: "Trắc nghiệm đánh giá stress",
-    description: "Đánh giá mức độ stress dựa trên Perceived Stress Scale (PSS)",
-    duration: "5-8 phút",
-    questions: 10,
-  },
-  {
-    id: "personality",
-    title: "Trắc nghiệm tính cách",
-    description: "Đánh giá các đặc điểm tính cách dựa trên mô hình Big Five",
-    duration: "15-20 phút",
-    questions: 25,
-  },
-];
+import { Survey } from "../../../models/student";
 
 const surveyData = [
   {
-    id: "depression",
+    id: "68",
     title: "Trắc nghiệm đánh giá trầm cảm",
     description:
       "Đánh giá mức độ trầm cảm thông qua bộ câu hỏi Beck Depression Inventory (BDI).",
@@ -45,7 +16,7 @@ const surveyData = [
       "https://suckhoedoisong.qltns.mediacdn.vn/324455921873985536/2025/1/8/3-1736310917246225981750.jpg",
   },
   {
-    id: "anxiety",
+    id: "68",
     title: "Trắc nghiệm đánh giá lo âu",
     description:
       "Đánh giá mức độ lo âu dựa trên thang đánh giá Hamilton Anxiety Rating Scale (HAM-A).",
@@ -53,7 +24,7 @@ const surveyData = [
       "https://iphd.vn/wp-content/uploads/2024/09/bai-test-roi-loan-lo-au-5-1.jpg",
   },
   {
-    id: "personality",
+    id: "68",
     title: "Trắc nghiệm tính cách",
     description: "Đánh giá các đặc điểm tính cách dựa trên mô hình Big Five.",
     image: "https://innocom.vn/wp-content/uploads/2020/04/pic_MTBI.jpg",
@@ -62,6 +33,20 @@ const surveyData = [
 
 function SurveyList() {
   const navigate = useNavigate();
+  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const fetchAllSurveys = useCallback(async () => {
+    try {
+      const res = await getSurveys();
+      const data = res.data.data;
+      setSurveys(data);
+    } catch (error) {
+      toast.error("Lỗi xảy ra khi lấy dữ liệu: " + error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAllSurveys();
+  }, []);
 
   return (
     <div className="survey__container">
@@ -69,7 +54,7 @@ function SurveyList() {
       <p className="survey__subtitle">
         Chọn một bài trắc nghiệm dưới đây để bắt đầu đánh giá tâm lý của bạn
       </p>
-      <Carousel
+      <Carousel                                                                                                                                
         items={surveyData}
         renderItem={(survey) => (
           <div
@@ -83,6 +68,12 @@ function SurveyList() {
                 alt={survey.title}
                 className="survey__carousel-image"
               />
+              <button
+                className="survey__carousel-button"
+                onClick={() => navigate(`/survey/${survey.id}`)}
+              >
+                Bắt đầu khảo sát
+              </button>
               <div className="survey__carousel-overlay">
                 <h3 className="survey__carousel-title">{survey.title}</h3>
                 <p className="survey__carousel-description">
@@ -96,18 +87,13 @@ function SurveyList() {
 
       <div className="survey__grid">
         {surveys.map((survey) => (
-          <div
-            key={survey.id}
-            className="survey__card"
-            onClick={() => navigate(`/survey/${survey.id}`)}
-          >
+          <div key={survey.surveyId} className="survey__card">
             <h2 className="survey__card-title">{survey.title}</h2>
             <p className="survey__card-description">{survey.description}</p>
             <div className="survey__card-meta">
-              <span>⏱ {survey.duration}</span>
-              <span>❓ {survey.questions} câu hỏi</span>
+              <span>⏱ 10-20 phút</span>
+              <span>❓ 21 câu hỏi</span>
             </div>
-            <button className="survey__start-button">Bắt đầu làm bài</button>
           </div>
         ))}
       </div>

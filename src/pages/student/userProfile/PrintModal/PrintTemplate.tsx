@@ -1,16 +1,52 @@
-import { Card } from "antd";
-import React from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Rectangle,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
+import React, { useEffect, useRef, useState } from "react";
+import html2canvas from "html2canvas";
+import { Survey } from "../surveyHistory";
+import { formatDate } from "../../../../utils/dateUtils";
 
 interface PrintTemplateProps {
-  survey?: {
-    title: string;
-    date: string;
-    responses: { question: string; answer: string; score: number }[];
-  } | null;
+  survey?: Survey;
+  onImageReady?: () => void;
 }
 
 const PrintTemplate = React.forwardRef<HTMLDivElement, PrintTemplateProps>(
-  ({ survey }, ref) => {
+  ({ survey, onImageReady }, ref) => {
+    const chartRef = useRef<HTMLDivElement>(null);
+    const [chartImage, setChartImage] = useState<string | null>(null);
+
+    useEffect(() => {
+      const captureChart = async () => {
+        if (chartRef.current) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
+          const canvas = await html2canvas(chartRef.current, {
+            backgroundColor: null,
+            scale: 2,
+            useCORS: true,
+            foreignObjectRendering: true,
+          });
+
+          const imageData = canvas.toDataURL("image/png");
+          console.log("Chart Image Data:", imageData); // 🔍 Debug: Xem ảnh có được tạo không
+          setChartImage(imageData);
+          if (onImageReady) {
+            onImageReady();
+          }
+        }
+      };
+
+      captureChart();
+    }, [survey, onImageReady]);
+
+
     if (!survey) {
       return (
         <div ref={ref} style={{ padding: "20px", fontSize: "10px" }}>
@@ -20,9 +56,9 @@ const PrintTemplate = React.forwardRef<HTMLDivElement, PrintTemplateProps>(
     }
 
     const chartData = [
-      { name: "Trầm cảm", strength: 1 },
-      { name: "Lo âu", strength: 2 },
-      { name: "Căng thẳng", strength: 4 },
+      { name: "Trầm cảm", strength: getStrength(survey.depressionLevel) },
+      { name: "Lo âu", strength: getStrength(survey.anxietyLevel) },
+      { name: "Căng thẳng", strength: getStrength(survey.stressLevel) },
     ];
 
     const formatYAxis = (value: number) => {
@@ -36,13 +72,13 @@ const PrintTemplate = React.forwardRef<HTMLDivElement, PrintTemplateProps>(
 
     return (
       <div ref={ref} style={{ padding: "20px", fontSize: "12px" }}>
-        {/* Survey Title & Date */}
         <h2 style={{ textAlign: "center", color: "#08509f" }}>
-          {survey.title}
+          {survey.survey.title}
         </h2>
-        <p style={{ textAlign: "center" }}>Ngày: {survey.date}</p>
+        <p style={{ textAlign: "center" }}>
+          Ngày: {formatDate(survey.survey.createdAt)}
+        </p>
 
-        {/* Survey Score */}
         <h3 style={{ textAlign: "center", color: "#08509f" }}>
           Kết quả khảo sát
         </h3>
@@ -54,42 +90,40 @@ const PrintTemplate = React.forwardRef<HTMLDivElement, PrintTemplateProps>(
             color: "#D32F2F",
           }}
         >
-          63
+          {survey.depressionScore + survey.anxietyScore + survey.stressScore}
         </div>
         <p style={{ textAlign: "center", marginBottom: "10px" }}>
           Điểm của bạn
         </p>
 
-        {/* Chart as Table */}
         <h3 style={{ textAlign: "center", color: "#08509f" }}>
           Chi tiết kết quả
         </h3>
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            textAlign: "center",
-            marginBottom: "20px",
-          }}
-          border={1}
-        >
-          <thead>
-            <tr style={{ backgroundColor: "#f5f5f5" }}>
-              <th>Danh mục</th>
-              <th>Mức độ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {chartData.map((item, index) => (
-              <tr key={index}>
-                <td>{item.name}</td>
-                <td>{formatYAxis(item.strength)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
 
-        {/* Recommendation */}
+        {/* Nếu đang in, hiển thị ảnh, nếu không hiển thị biểu đồ */}
+        {chartImage ? (
+          <img src={chartImage} alt="Chart" style={{ width: "100%" }} />
+        ) : (
+          <div ref={chartRef}>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis
+                  tickFormatter={formatYAxis}
+                  domain={[0, 5]}
+                  tickCount={6}
+                />
+                <Bar
+                  dataKey="strength"
+                  fill="#B3CDAD"
+                  activeBar={<Rectangle fill="pink" stroke="blue" />}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
         <h3 style={{ textAlign: "center", color: "#08509f" }}>Lời khuyên</h3>
         <p
           style={{
@@ -99,33 +133,10 @@ const PrintTemplate = React.forwardRef<HTMLDivElement, PrintTemplateProps>(
             marginBottom: "10px",
           }}
         >
-          Kết quả của bạn ở mức báo động. Bạn cần tìm đến chuyên gia tâm lý ngay
-          lập tức!
+          {getResultInterpretation(
+            survey.depressionScore + survey.anxietyScore + survey.stressScore
+          )}
         </p>
-
-        {/* Survey Responses */}
-        <h3 style={{ textAlign: "center", color: "#08509f" }}>
-          Chi tiết câu trả lời
-        </h3>
-        {survey.responses.map((response, index) => (
-          <Card
-            key={index}
-            style={{
-              width: "100%",
-              marginBottom: "10px",
-              fontSize: "12px",
-              fontWeight: "bold",
-            }}
-          >
-            <div style={{ fontSize: "12px", color: "#08509f" }}>
-              {response.question}
-            </div>
-            <div className="answer" style={{ fontSize: "12px", color: "#333" }}>
-              <strong>Trả lời:</strong> {response.answer} (Điểm:{" "}
-              {response.score})
-            </div>
-          </Card>
-        ))}
       </div>
     );
   }
@@ -133,3 +144,33 @@ const PrintTemplate = React.forwardRef<HTMLDivElement, PrintTemplateProps>(
 
 PrintTemplate.displayName = "PrintTemplate";
 export { PrintTemplate };
+
+function getResultInterpretation(score: number) {
+  if (score >= 0 && score <= 9) {
+    return "Bạn đang ở mức bình thường. Tiếp tục duy trì lối sống lành mạnh.";
+  } else if (score >= 10 && score <= 13) {
+    return "Bạn có dấu hiệu nhẹ của vấn đề tâm lý. Hãy theo dõi sức khỏe tinh thần.";
+  } else if (score >= 14 && score <= 20) {
+    return "Bạn đang có dấu hiệu trung bình của vấn đề tâm lý. Nên tìm chuyên gia tư vấn.";
+  } else if (score >= 21 && score <= 27) {
+    return "Mức độ cao, nên tìm chuyên gia càng sớm càng tốt.";
+  }
+  return "Mức báo động! Cần hỗ trợ tâm lý ngay lập tức!";
+}
+
+function getStrength(level: any) {
+  switch (level) {
+    case "Normal":
+      return 1;
+    case "Mild":
+      return 2;
+    case "Moderate":
+      return 3;
+    case "Severe":
+      return 4;
+    case "Extremely Severe":
+      return 5;
+    default:
+      return 0;
+  }
+}

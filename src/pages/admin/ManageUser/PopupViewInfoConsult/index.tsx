@@ -20,7 +20,6 @@ const PopupInfoConsult: React.FC<PopupInfoConsultProps> = ({
   if (!consultData) return null;
   const {
     appointment_date,
-    appointment_id,
     appointment_status,
     end_time,
     feedback,

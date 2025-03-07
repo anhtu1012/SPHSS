@@ -1,6 +1,8 @@
 import { Modal, Tooltip } from "antd";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useReactToPrint } from "react-to-print";
+import { toast } from "react-toastify";
 import {
   Bar,
   BarChart,
@@ -11,43 +13,108 @@ import {
   YAxis,
 } from "recharts";
 import Cbutton from "../../../components/cButton";
-import "./userProfile.scss";
+import { RootState } from "../../../redux/RootReducer";
+import { getSurveyByUserId } from "../../../services/student/PsychologistDetail/api";
+import { formatDate } from "../../../utils/dateUtils";
 import { PrintTemplate } from "./PrintModal/PrintTemplate";
+import "./userProfile.scss";
 
-interface SurveyResponse {
-  question: string;
-  answer: string;
-  score: number;
-}
-
-interface Survey {
-  id: number;
-  title: string;
-  date: string;
-  responses: SurveyResponse[];
+export interface Survey {
+  surveyResultId: string;
+  survey: {
+    surveyId: string;
+    title: string;
+    description: string;
+    categoryId: string;
+    createdAt: string;
+  };
+  user: {
+    id: string;
+    userCode: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+    email: string;
+    phone: string;
+    gender: string;
+    image: string;
+    description: string | null;
+  };
+  depressionScore: number;
+  anxietyScore: number;
+  stressScore: number;
+  depressionLevel: string;
+  anxietyLevel: string;
+  stressLevel: string;
 }
 
 function SurveyHistory() {
-  const [selectedSurvey, setSelectedSurvey] = useState<{
-    id: number;
-    title: string;
-    date: string;
-    responses: { question: string; answer: string; score: number }[];
-  } | null>(null);
-  const data = [
-    {
-      name: "trầm cảm",
-      strength: 1,
+  const [selectedSurvey, setSelectedSurvey] = useState<Survey>({
+    surveyResultId: "",
+    survey: {
+      surveyId: "",
+      title: "",
+      description: "",
+      categoryId: "",
+      createdAt: "",
     },
-    {
-      name: "lo âu",
-      strength: 2,
+    user: {
+      id: "",
+      userCode: "",
+      firstName: "",
+      lastName: "",
+      username: "",
+      email: "",
+      phone: "",
+      gender: "",
+      image: "",
+      description: null,
     },
-    {
-      name: "căng thẳng",
-      strength: 4,
-    },
-  ];
+    depressionScore: 0,
+    anxietyScore: 0,
+    stressScore: 0,
+    depressionLevel: "",
+    anxietyLevel: "",
+    stressLevel: "",
+  });
+  const user = useSelector((state: RootState) => state.user) as any | null;
+  const [surveyData, setSurveyData] = useState([]);
+  const [chartData, setChartData] = useState<
+    { name: string; strength: number }[]
+  >([]);
+
+  const fetchSurveyHistory = useCallback(async () => {
+    try {
+      const res = await getSurveyByUserId(user.id);
+      setSurveyData(res.data.data);
+    } catch (error: any) {
+      toast.error(error.response?.data || "Lỗi khi lấy danh sách khảo sát");
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSurveyHistory();
+  }, []);
+
+  function generateChartData(resultData: any) {
+    return [
+      {
+        name: "Trầm cảm",
+        strength: getStrength(resultData.depressionLevel),
+        label: getVietnameseLabel(resultData.depressionLevel),
+      },
+      {
+        name: "Lo âu",
+        strength: getStrength(resultData.anxietyLevel),
+        label: getVietnameseLabel(resultData.anxietyLevel),
+      },
+      {
+        name: "Căng thẳng",
+        strength: getStrength(resultData.stressLevel),
+        label: getVietnameseLabel(resultData.stressLevel),
+      },
+    ];
+  }
 
   const formatYAxis = (value: any) => {
     if (value === 1) return "Bình thường";
@@ -61,13 +128,11 @@ function SurveyHistory() {
   // Phần in
   const componentRef = React.useRef(null);
   const handleAfterPrint = React.useCallback(() => {
-    console.log("`onAfterPrint` called");
     // Reset any changes made during printing
     document.body.style.overflow = "";
   }, []);
 
   const handleBeforePrint = React.useCallback(() => {
-    console.log("`onBeforePrint` called");
     // Add any pre-print preparation if needed
     document.body.style.overflow = "visible";
     return Promise.resolve();
@@ -78,73 +143,59 @@ function SurveyHistory() {
     documentTitle: "Chi tiết bài khảo sát",
     onBeforePrint: handleBeforePrint,
     onAfterPrint: handleAfterPrint,
+    pageStyle: `
+    @media print {
+         .modal-cell {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+
+    // Đảm bảo background color được in
+    &[style*="background-color"] {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+      forced-color-adjust: none !important;
+    }
+  }`,
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // Mock data for survey responses
-  const surveyResponses = [
-    {
-      id: 1,
-      title: "Khảo sát trầm cảm",
-      date: "05/01/2023",
-      responses: [
-        {
-          question: "Bạn có thường xuyên cảm thấy buồn không?",
-          answer: "Thỉnh thoảng",
-          score: 2,
-        },
-        {
-          question: "Bạn có gặp khó khăn khi ngủ không?",
-          answer: "Hiếm khi",
-          score: 1,
-        },
-        {
-          question: "Bạn có cảm thấy mệt mỏi và thiếu năng lượng không?",
-          answer: "Thường xuyên",
-          score: 3,
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "Khảo sát lo âu",
-      date: "10/02/2023",
-      responses: [
-        {
-          question: "Bạn có thường xuyên cảm thấy căng thẳng không?",
-          answer: "Thường xuyên",
-          score: 3,
-        },
-        {
-          question: "Bạn có hay lo lắng về tương lai không?",
-          answer: "Rất thường xuyên",
-          score: 4,
-        },
-      ],
-    },
-  ];
 
   const showSurveyDetail = (survey: Survey) => {
     setSelectedSurvey(survey);
+    setChartData(generateChartData(survey));
     setIsModalOpen(true);
+  };
+
+  const handlePrint = () => {
+    const handleImageReady = () => {
+      printFn();
+    };
+
+    setSelectedSurvey((prevSurvey) => ({
+      ...prevSurvey,
+      onImageReady: handleImageReady,
+    }));
   };
 
   return (
     <>
       <div className="user-profile__survey-list">
-        {surveyResponses.map((survey) => (
+        {surveyData.map((survey: any) => (
           <div
-            key={survey.id}
+            key={survey.surveyResultId}
             className="survey-list-item"
             onClick={() => showSurveyDetail(survey)}
           >
-            <div className="survey-list-item__title">{survey.title}</div>
-            <div className="survey-list-item__date">{survey.date}</div>
+            <div className="survey-list-item__title">{survey.survey.title}</div>
+            <div className="survey-list-item__date">
+              {formatDate(survey.survey.createdAt)}
+            </div>
           </div>
         ))}
       </div>
       <Modal
-        title={selectedSurvey?.title}
+        title={selectedSurvey?.survey.title}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={[
@@ -162,7 +213,11 @@ function SurveyHistory() {
           <h2 style={{ textAlign: "center", color: "#08509f" }}>
             Kết quả khảo sát
           </h2>
-          <div className="survey-result__score__value">63</div>
+          <div className="survey-result__score__value">
+            {Number(selectedSurvey.depressionScore) +
+              Number(selectedSurvey.anxietyScore) +
+              Number(selectedSurvey.stressScore)}
+          </div>
           <div className="survey-result__score__label">Điểm của bạn</div>
         </div>
         <h2 style={{ textAlign: "center", color: "#08509f" }}>
@@ -170,7 +225,7 @@ function SurveyHistory() {
         </h2>
         <ResponsiveContainer width={"100%"} height={400}>
           <BarChart
-            data={data}
+            data={chartData}
             margin={{
               top: 30,
               right: 30,
@@ -197,31 +252,91 @@ function SurveyHistory() {
         <div className="survey-result__interpretation">
           <h2 style={{ textAlign: "center", color: "#08509f" }}>Lời khuyên</h2>
           <p className="survey-result__interpretation__text">
-            Kết quả của bạn ở mức báo động. Bạn cần tìm đến chuyên gia tâm lý
-            ngay lập tức!.
+            {getResultInterpretation(
+              Number(selectedSurvey.depressionScore) +
+                Number(selectedSurvey.anxietyScore) +
+                Number(selectedSurvey.stressScore)
+            )}
           </p>
         </div>
-        {selectedSurvey && (
-          <div className="survey-detail-modal">
-            <h2 style={{ textAlign: "center", color: "#08509f" }}>
-              Chi tiết câu trả lời
-            </h2>
-            {selectedSurvey.responses.map((response, index) => (
-              <div key={index} className="survey-detail-modal__item">
-                <div className="question">{response.question}</div>
-                <div className="answer">
-                  Trả lời: {response.answer} (Điểm: {response.score})
-                </div>
-              </div>
-            ))}
+        <div className="user-profile__health-status">
+          <h3>Tình trạng sức khỏe</h3>
+          <div className="status-item">
+            <span className="status-item__label">Trầm cảm</span>
+            <span className="status-item__value low">
+              {getVietnameseLabel(selectedSurvey.depressionLevel)}
+            </span>
           </div>
-        )}
+          <div className="status-item">
+            <span className="status-item__label">Lo âu</span>
+            <span className="status-item__value medium">
+              {getVietnameseLabel(selectedSurvey.anxietyLevel)}
+            </span>
+          </div>
+          <div className="status-item">
+            <span className="status-item__label">Stress</span>
+            <span className="status-item__value high">
+              {getVietnameseLabel(selectedSurvey.stressLevel)}
+            </span>
+          </div>
+        </div>
       </Modal>
       <div style={{ display: "none" }}>
-        <PrintTemplate ref={componentRef} survey={selectedSurvey} />
+        <PrintTemplate
+          ref={componentRef}
+          survey={selectedSurvey}
+          onImageReady={handlePrint}
+        />
       </div>
     </>
   );
+}
+
+function getResultInterpretation(score: number) {
+  if (score >= 0 && score <= 9) {
+    return "Kết quả cho thấy bạn đang có dấu hiệu của vấn đề tâm lý ở mức độ bình thường. Tiếp tục duy trì lối sống lành mạnh và cân bằng.";
+  } else if (score >= 10 && score <= 13) {
+    return "Bạn đang có một số dấu hiệu của vấn đề tâm lý ở mức độ nhẹ. Nên theo dõi và chú ý đến sức khỏe tinh thần của mình.";
+  } else if (score >= 14 && score <= 20) {
+    return "Bạn đang có một số dấu hiệu của vấn đề tâm lý ở mức độ trung bình. Bạn nên tìm đến chuyên gia tâm lý để được tư vấn.";
+  } else if (score >= 21 && score <= 27) {
+    return "Bạn đang có một số dấu hiệu của vấn đề tâm lý ở mức độ cao. Bạn nên tìm đến chuyên gia tâm lý càng sớm càng tốt.";
+  }
+  return "Kết quả của bạn ở mức báo động. Bạn cần tìm đến chuyên gia tâm lý ngay lập tức!.";
+}
+
+function getStrength(level: any) {
+  switch (level) {
+    case "Normal":
+      return 1;
+    case "Mild":
+      return 2;
+    case "Moderate":
+      return 3;
+    case "Severe":
+      return 4;
+    case "Extremely Severe":
+      return 5;
+    default:
+      return 0;
+  }
+}
+
+function getVietnameseLabel(level: string) {
+  switch (level) {
+    case "Normal":
+      return "Bình thường";
+    case "Mild":
+      return "Nhẹ";
+    case "Moderate":
+      return "Trung bình";
+    case "Severe":
+      return "Nặng";
+    case "Extremely Severe":
+      return "Báo động";
+    default:
+      return "Không xác định";
+  }
 }
 
 export default SurveyHistory;
