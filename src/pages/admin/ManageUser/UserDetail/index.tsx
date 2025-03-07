@@ -103,7 +103,7 @@ function UserProfile() {
               : "Lịch sử điều trị tâm lý của học/sinh viên"}
           </p>
           {user.role !== "R4" && (
-            <UserProfileTable accountType={user.role} showModal={showModal} />
+            <UserProfileTable accountType={user.role} showModal={showModal} userId={user.id} />
           )}
         </div>
         <div className={styles.rightProfile}>

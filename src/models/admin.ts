@@ -67,26 +67,56 @@ export interface Report {
   psychologist_id: string;
   start_time: string;
   end_time: string;
+  full_name:string;
+}
+
+
+export interface SurveyResult {
+  surveyResultId: string;
+  userId:string;
+  surveyId: string;
 }
 
 export interface Survey {
   surveyId?: string;
   title: string;
   description: string;
-  categoryId?: number; 
+  categoryId?: number;
   questions: Question[];
 }
 
-export interface Question{
+export interface Question {
   questionId?: string;
   surveyId?: string;
   questionText: string;
   options: QuestionOption[];
 }
 
-export interface QuestionOption{
+export interface QuestionOption {
   optionId?: string;
-  value: number; 
+  value: number;
   optionText: string;
   questionId?: string;
 }
+
+export interface AppointmentByUser {
+  appointment_id: string;
+  status: string;
+  date: string;
+  fullName: string;
+}
+
+export interface Report {
+  report_id: string;
+  appointment_id: string;
+  user_id: string;
+  health_level: string;
+  health_status: string;
+  feedback: string;
+  recommendations: string;
+  createdAt: string;
+  appointment_date: string;
+  psychologist_id: string;
+  full_name_pys: string;
+}
+

@@ -12,14 +12,14 @@ const SurveyForm = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [questions, setQuestions] = useState([
-    { questionText: "", options: [{ value: 1, optionText: "" }] },
+    { questionText: "", options: [{ value: 0, optionText: "" }] },
   ]);
   const [message, setMessage] = useState("");
 
   const addQuestion = () => {
     setQuestions([
       ...questions,
-      { questionText: "", options: [{ value: 1, optionText: "" }] },
+      { questionText: "", options: [{ value: 0, optionText: "" }] },
     ]);
   };
 
@@ -30,20 +30,22 @@ const SurveyForm = () => {
   };
 
   const updateQuestionText = (index: number, text: string) => {
+    console.log("User nhập:", text); 
     const updatedQuestions = [...questions];
     updatedQuestions[index].questionText = text;
     setQuestions(updatedQuestions);
   };
-
+  
   const addOption = (qIndex: number) => {
     const updatedQuestions = [...questions];
     const newOption = {
-      value: updatedQuestions[qIndex].options.length + 1,
+      value: 0, 
       optionText: "",
     };
     updatedQuestions[qIndex].options.push(newOption);
     setQuestions(updatedQuestions);
   };
+  
 
   const removeOption = (qIndex: number, oIndex: number) => {
     const updatedQuestions = [...questions];
@@ -57,6 +59,12 @@ const SurveyForm = () => {
     setQuestions(updatedQuestions);
   };
 
+  const updateValue = (qIndex: number, oIndex: number, value: string) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[qIndex].options[oIndex].value = Number(value) || 0; 
+    setQuestions(updatedQuestions);
+  };
+
   const handleCreateSurvey = () => {
     if (
       !title.trim() ||
@@ -66,14 +74,15 @@ const SurveyForm = () => {
       setMessage("⚠️ Vui lòng nhập đầy đủ thông tin.");
       return;
     }
-
     const surveyData = {
       title,
       description,
-      categoryId,
+      categoryId: Number(categoryId), 
       questions,
     };
-
+    
+    console.log("Dữ liệu gửi đi:", surveyData);
+  
     createSurvey(surveyData)
       .then((res) => {
         console.log("Survey created:", res.data);
@@ -86,10 +95,11 @@ const SurveyForm = () => {
         setTimeout(() => setMessage(""), 5000);
       })
       .catch((err) => {
-        console.error("Error creating survey:", err);
+        console.error("Lỗi API:", err);
         setMessage("❌ Có lỗi xảy ra. Vui lòng thử lại.");
       });
   };
+  
 
   return (
     <div className={styles.surveyContainer}>
@@ -142,6 +152,16 @@ const SurveyForm = () => {
                       updateOptionText(qIndex, oIndex, e.target.value)
                     }
                     placeholder={`Nhập lựa chọn ${oIndex + 1}`}
+                  />
+
+                  <input
+                    className={styles.inputField}
+                    type="number"
+                    value={opt.value}
+                    onChange={(e) =>
+                      updateValue(qIndex, oIndex, e.target.value)
+                    }
+                    placeholder={`Nhập điểm`}
                   />
 
                   <Cbutton

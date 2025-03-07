@@ -1,6 +1,34 @@
 import api from "../../config/axios";
 import { CategorySurvey, User, Program, Program2, Survey, Question, QuestionOption } from "../../models/admin";
 
+export const getReportAppointmentId = (appointment_id: string) => {
+  const url = `/api/reports?appointment_id=${appointment_id}`;
+  return api.get(url);
+};
+
+export const updateQuestionId = (userCode: string, data: User) => {
+  return api.put(`/api/profile/${userCode}`, data);
+};
+
+export const getAppointmentsByPsychologist = (
+  id: string
+) => {
+  const url = `/api/appointmentsByPychologist?user_id=${id}&status=Completed`;
+  return api.get(url);
+};
+
+export const getReportId = () => {
+  return api.get(`/api/reports`);
+};
+
+export const getAppointmentByUser = (
+  id: string
+) => {
+  const url = `/api/appointmentsByUser?user_id=${id}&status=Completed`;
+  return api.get(url);
+};
+
+
 export const createSurvey = (data: Survey) => {
   return api.post("/api/survey", data);
 };
@@ -23,10 +51,6 @@ export const getSurveyId = (id: string) => {
 
 export const getAllSurvey = () => {
   return api.get("/api/survey");
-};
-
-export const getReportId = (id: string) => {
-  return api.get(`/api/reports/${id}`);
 };
 
 export const getCategory = () => {
