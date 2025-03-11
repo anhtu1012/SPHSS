@@ -108,7 +108,7 @@ export default function Home() {
         viewport={{ once: true }}
       >
         <h2 className="home__featured__doctors__title">
-          Bác sĩ nổi bật
+          Chuyên viên tư vấn nổi bật
           <span className="home__featured__doctors__title--highlight">
             &nbsp;của chúng tôi
           </span>

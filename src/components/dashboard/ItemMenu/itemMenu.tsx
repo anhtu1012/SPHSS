@@ -1,32 +1,31 @@
-import React from "react";
-import { Menu } from "antd";
-import { Link } from "react-router-dom";
 import {
-  ProfileOutlined,
   FormOutlined,
-  RadarChartOutlined,
-  UsergroupAddOutlined,
-  PieChartOutlined,
-  LineChartOutlined,
   LogoutOutlined,
+  PieChartOutlined,
+  ProfileOutlined,
+  RadarChartOutlined,
+  UsergroupAddOutlined
 } from "@ant-design/icons";
+import { Menu } from "antd";
+import React from "react";
+import { AiOutlineSchedule } from "react-icons/ai";
+import { FaRegFileAlt } from "react-icons/fa";
+import { GrSchedule } from "react-icons/gr";
+import { TbReportAnalytics } from "react-icons/tb";
+import { Link } from "react-router-dom";
 import { UserRole } from "../../../models/enum";
 import styles from "./itemMenu.module.scss";
-import { FaRegFileAlt } from "react-icons/fa";
-import { AiOutlineSchedule } from "react-icons/ai";
-import { TbReportAnalytics } from "react-icons/tb";
-import { GrSchedule } from "react-icons/gr";
 
 const { Manager, Parent, Psychologist } = UserRole;
 
 const getMenuItems = (roleId: string) => {
   if (roleId === Manager) {
     return [
-      {
-        label: "Tổng quan",
-        key: "/manager/dashboard",
-        icon: <LineChartOutlined />,
-      },
+      // {
+      //   label: "Tổng quan",
+      //   key: "/manager/dashboard",
+      //   icon: <LineChartOutlined />,
+      // },
       {
         label: "Quản lý người dùng",
         key: "/manager/manage-user",
